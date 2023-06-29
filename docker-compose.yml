@@ -1,0 +1,41 @@
+services:
+  pgadmin:
+    container_name: pgadmin
+    image: "dpage/pgadmin4"
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "${DB_EMAIL}"
+      PGADMIN_DEFAULT_PASSWORD: "${DB_PASSWORD}"
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - aniway-network
+    env_file:
+      - ./.env
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+  database:
+    container_name: database
+    image: "postgres:15-alpine"
+    environment:
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_NAME}"
+      PGDATA: /data/postgres
+    volumes:
+      - database:/data/postgres
+    restart: always
+    networks: 
+      - aniway-network
+    env_file:
+      - ./.env
+
+volumes:
+  database:
+  pgadmin:
+
+networks:
+  aniway-network:
+    driver: bridge
