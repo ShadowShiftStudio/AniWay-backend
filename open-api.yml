@@ -1,0 +1,129 @@
+openapi: 3.0.0
+# servers:
+#   # Added by API Auto Mocking Plugin
+#   - description: SwaggerHub API Auto Mocking
+#     url: https://virtserver.swaggerhub.com/DANILKA108_1/AniWay/1.0.0
+info:
+  version: 1.0.0
+  title: AniWay
+  description: The API for AniWay service
+paths:
+  /auth/login:
+    post:
+      summary: LoginRequest
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              : '#/components/schemas/LoginRequest'
+      responses:
+        '401':
+          description: Invalid password or login
+        '200':
+          description: Successfull auth
+          content:
+            application/json:
+              schema:
+                : '#/components/schemas/LoginResponse'
+  /manga/{mangaId}/page:
+    get:
+      summary: Get manga page
+      tags:
+        - Manga
+      responses:
+        '200':
+          description: Manga page
+          content:
+            application/json:
+              schema:
+                : '#/components/schemas/MangaPageResponse'
+  /manga/{mangaId}/preview:
+    get:
+      summary: Get manga preview
+      tags:
+        - Manga
+      responses:
+        '200':
+          description: Manga preview
+          content:
+            application/json:
+              schema:
+                : '#/components/schemas/MangaPreviewResponse'
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    LoginResponse:
+      type: object
+      properties:
+        userId:
+          type: integer
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+    MangaPreviewResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: array
+          items:
+            type: string
+        likes_count:
+          type: integer
+        views_count:
+          type: integer
+        chapters_count:
+          type: integer
+        type:
+          type: string
+        rating:
+          type: number
+    MangaPageResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: array
+          items:
+            type: string
+        year:
+          type: string
+        status:
+          type: string
+        type:
+          type: string
+        bookmarks_count:
+          type: integer
+        likes_count:
+          type: integer
+        views_count:
+          type: integer
+        chapters_count:
+          type: integer
+        gengers:
+          type: array
+          items:
+            type: string
+        similar:
+          type: array
+          items:
+            type: integer
+        is_in_favorites:
+          type: boolean
+        rating:
+          type: number
+
