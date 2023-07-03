@@ -19,12 +19,12 @@ CREATE TYPE "manga_type" AS ENUM (
   'cartoon'
 );
 
-CREATE TABLE "Badge" (
+CREATE TABLE "badge" (
   "id" BIGSERIAL PRIMARY KEY,
   "name" varchar(20)
 );
 
-CREATE TABLE "User" (
+CREATE TABLE "user" (
   "id" BIGSERIAL PRIMARY KEY,
   "nickname" varchar(20),
   "xp" integer,
@@ -34,25 +34,25 @@ CREATE TABLE "User" (
   "password" text
 );
 
-CREATE TABLE "Interpreter" (
+CREATE TABLE "translator" (
   "id" BIGSERIAL PRIMARY KEY,
   "nickname" varchar(20),
   "user_id" BIGSERIAL
 );
 
-CREATE TABLE "InterpreterManga" (
-  "interpreter_id" BIGSERIAL,
+CREATE TABLE "translator_manga" (
+  "translator_id" BIGSERIAL,
   "manga_id" BIGSERIAL
 );
 
-CREATE TABLE "UserManga" (
+CREATE TABLE "user_manga" (
   "user_id" BIGSERIAL,
   "manga_id" BIGSERIAL,
   "status" reading_status,
   "rating" integer
 );
 
-CREATE TABLE "Manga" (
+CREATE TABLE "manga" (
   "id" BIGSERIAL PRIMARY KEY,
   "name" varchar(100),
   "year" date,
@@ -61,7 +61,7 @@ CREATE TABLE "Manga" (
   "manga_type" manga_type
 );
 
-CREATE TABLE "Chapter" (
+CREATE TABLE "chapter" (
   "id" BIGSERIAL PRIMARY KEY,
   "manga_id" BIGSERIAL,
   "name" varchar(100),
@@ -70,74 +70,74 @@ CREATE TABLE "Chapter" (
   "views" integer
 );
 
-CREATE TABLE "UserChapter" (
+CREATE TABLE "user_chapter" (
   "user_id" BIGSERIAL,
   "chapter_id" BIGSERIAL,
   "is_liked" boolean
 );
 
-CREATE TABLE "InterpreterChapter" (
-  "interpreter_id" BIGSERIAL,
+CREATE TABLE "translator_chapter" (
+  "translator_id" BIGSERIAL,
   "chapter_id" BIGSERIAL
 );
 
-CREATE TABLE "Message" (
+CREATE TABLE "message" (
   "id" BIGSERIAL PRIMARY KEY,
   "message" varchar(150)
 );
 
-CREATE TABLE "Comment" (
+CREATE TABLE "comment" (
   "id" BIGSERIAL PRIMARY KEY,
   "user_id" BIGSERIAL,
   "manga_id" BIGSERIAL,
   "message_id" BIGSERIAL
 );
 
-CREATE TABLE "Genre" (
+CREATE TABLE "genre" (
   "id" BIGSERIAL PRIMARY KEY,
   "name" varchar(50)
 );
 
-CREATE TABLE "MangaGenre" (
+CREATE TABLE "manga_genre" (
   "manga_id" BIGSERIAL,
   "genre_id" BIGSERIAL
 );
 
-CREATE TABLE "UserBadge" (
+CREATE TABLE "user_badge" (
   "user_id" BIGSERIAL,
   "badge_id" BIGSERIAL
 );
 
-ALTER TABLE "Chapter" ADD FOREIGN KEY ("manga_id") REFERENCES "Manga" ("id");
+ALTER TABLE "chapter" ADD FOREIGN KEY ("manga_id") REFERENCES "manga" ("id");
 
-ALTER TABLE "InterpreterManga" ADD FOREIGN KEY ("interpreter_id") REFERENCES "Interpreter" ("id");
+ALTER TABLE "translator_manga" ADD FOREIGN KEY ("translator_id") REFERENCES "translator" ("id");
 
-ALTER TABLE "InterpreterManga" ADD FOREIGN KEY ("manga_id") REFERENCES "Manga" ("id");
+ALTER TABLE "translator_chapter" ADD FOREIGN KEY ("translator_id") REFERENCES "translator" ("id");
 
-ALTER TABLE "UserManga" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE "translator_manga" ADD FOREIGN KEY ("manga_id") REFERENCES "manga" ("id");
 
-ALTER TABLE "UserManga" ADD FOREIGN KEY ("manga_id") REFERENCES "Manga" ("id");
+ALTER TABLE "user_manga" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "UserChapter" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE "user_manga" ADD FOREIGN KEY ("manga_id") REFERENCES "manga" ("id");
 
-ALTER TABLE "UserChapter" ADD FOREIGN KEY ("chapter_id") REFERENCES "Chapter" ("id");
+ALTER TABLE "user_chapter" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "InterpreterChapter" ADD FOREIGN KEY ("interpreter_id") REFERENCES "Interpreter" ("id");
+ALTER TABLE "user_chapter" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapter" ("id");
 
-ALTER TABLE "InterpreterChapter" ADD FOREIGN KEY ("chapter_id") REFERENCES "Chapter" ("id");
+ALTER TABLE "translator_chapter" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapter" ("id");
 
-ALTER TABLE "Comment" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE "comment" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "Comment" ADD FOREIGN KEY ("manga_id") REFERENCES "Manga" ("id");
+ALTER TABLE "comment" ADD FOREIGN KEY ("manga_id") REFERENCES "manga" ("id");
 
-ALTER TABLE "Comment" ADD FOREIGN KEY ("message_id") REFERENCES "Message" ("id");
+ALTER TABLE "comment" ADD FOREIGN KEY ("message_id") REFERENCES "message" ("id");
 
-ALTER TABLE "MangaGenre" ADD FOREIGN KEY ("manga_id") REFERENCES "Manga" ("id");
+ALTER TABLE "manga_genre" ADD FOREIGN KEY ("manga_id") REFERENCES "manga" ("id");
 
-ALTER TABLE "MangaGenre" ADD FOREIGN KEY ("genre_id") REFERENCES "Genre" ("id");
+ALTER TABLE "manga_genre" ADD FOREIGN KEY ("genre_id") REFERENCES "genre" ("id");
 
-ALTER TABLE "UserBadge" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE "user_badge" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "UserBadge" ADD FOREIGN KEY ("badge_id") REFERENCES "Badge" ("id");
+ALTER TABLE "user_badge" ADD FOREIGN KEY ("badge_id") REFERENCES "badge" ("id");
 
-ALTER TABLE "Interpreter" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE "translator" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
