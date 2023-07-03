@@ -18,7 +18,7 @@ paths:
         content:
           application/json:
             schema:
-              : '#/components/schemas/LoginRequest'
+              $ref: '#/components/schemas/LoginRequest'
       responses:
         '401':
           description: Invalid password or login
@@ -27,7 +27,7 @@ paths:
           content:
             application/json:
               schema:
-                : '#/components/schemas/LoginResponse'
+                $ref: '#/components/schemas/LoginResponse'
   /manga/{mangaId}/page:
     get:
       summary: Get manga page
@@ -39,7 +39,14 @@ paths:
           content:
             application/json:
               schema:
-                : '#/components/schemas/MangaPageResponse'
+                $ref: '#/components/schemas/MangaPageResponse'
+      parameters: 
+      - name: mangaId
+        in: path
+        required: true
+        description: manga ID
+        schema: 
+          type: number
   /manga/{mangaId}/preview:
     get:
       summary: Get manga preview
@@ -51,7 +58,71 @@ paths:
           content:
             application/json:
               schema:
-                : '#/components/schemas/MangaPreviewResponse'
+                $ref: '#/components/schemas/MangaPreviewResponse'
+      parameters: 
+      - name: mangaId
+        in: path
+        required: true
+        description: manga ID
+        schema: 
+          type: number
+  /comment/{commentId}:
+    get:
+      summary: Get comment
+      tags: 
+        - Comment
+      responses: 
+        '200':
+          description: comment
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+      parameters:
+      - name: commentId
+        in: path
+        required: true
+        description: comment ID
+        schema: 
+          type: number
+  /user/{userId}:
+    get:
+      summary: Get user
+      tags:
+        - User
+      responses:
+        '200':
+          description: user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserResponse'
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        description: user ID
+        schema: 
+          type: number
+    put:
+      summary: Update user info
+      tags: 
+        - User
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        description: user ID
+        schema: 
+          type: number
+      requestBody:
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutUserRequest'
+      responses:
+        '200':
+          description: update user
 components:
   schemas:
     LoginRequest:
@@ -126,4 +197,76 @@ components:
           type: boolean
         rating:
           type: number
+        comments:
+          type: array
+          items: 
+            type: integer
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId: 
+          type: integer
+        message:
+          type: string
+        mangaId: 
+          type: integer
+    GetUserResponse:
+      type: object
+      properties:
+        id: 
+          type: integer
+        nickname: 
+          type: string
+        xp_level:
+          type: integer
+        badge:
+          type: integer
+        chapters_read_count: 
+          type: integer
+        chapters_likes_count: 
+          type: integer
+        comments_count:
+          type: integer 
+        favorite:
+          type: array
+          items:
+            type: integer
+        achievements: 
+          type: array
+          items:
+            type: string
+        comments: 
+          type: array
+          items:
+            type: integer
+    PutUserRequest:
+      type: object
+      properties:
+        nickname: 
+          type: string
+          minLength: 3
+          maxLength: 20
+        badge: 
+          type: integer
+        sex:
+          type: string
+          enum: 
+            - male
+            - female
+        is_hentai_hidden:
+          type: boolean
+        is_yuri_hidden:
+          type: boolean
+        is_yaoi_hidden:
+          type: boolean
+          
+            
+      
+        
+              
+            
+          
+    
 
