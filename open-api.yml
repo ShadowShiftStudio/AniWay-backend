@@ -7,30 +7,107 @@ info:
   version: 1.0.0
   title: AniWay
   description: The API for AniWay service
+security:
+  - UserAuth:
+    - reader
+    - translator
 paths:
-  /auth/login:
-    post:
-      summary: LoginRequest
+  /user/{userId}/page:
+    get:
+      summary: Get user
       tags:
-        - Auth
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
+        - User
       responses:
-        '401':
-          description: Invalid password or login
         '200':
-          description: Successfull auth
+          description: user
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
-  /manga/{mangaId}/page:
+                $ref: '#/components/schemas/UserPage'
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+  # /user/{userId}:
+  #   post:
+  #     summary: Create user
+  #     tags: 
+  #       - User
+  #     parameters:
+  #       - $ref: '#/components/parameters/UserId'
+  #     requestBody:
+  #       content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/UserCreation'
+  #     responses:
+  #       '200':
+  #         description: User created successfully
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/AuthData'
+  #   delete:
+  #     summary: Delete user
+  #     security:
+  #       - Auth: [reader_user, translator_user]
+  #     tags:
+  #       - User
+  #     parameters:
+  #       - $ref: '#/components/parameters/UserId'
+  #     responses:
+  #       '200':
+  #         description: User deleted successfully
+  /user/{userId}/settings:
     get:
-      summary: Get manga page
+      summary: Get user settings
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSettings'
+    put:
+      summary: Update user settings
+      tags: 
+        - User
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSettings'
+      responses:
+        '200':
+          description: User updated successfully
+  /manga/{mangaId}:
+    post:
+      summary: Create manga
+      security:
+        - UserAuth: [translator]
+      tags:
+        - Manga
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MangaCreation'
+      responses:
+        '200':
+          description: Manga created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+    get:
+      summary: Get manga info
       tags:
         - Manga
       responses:
@@ -39,27 +116,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MangaPageResponse'
+                oneOf:
+                  - $ref: '#/components/schemas/MangaPage'
+                  - $ref: '#/components/schemas/MangaPreview'
       parameters: 
-      - name: mangaId
-        in: path
+      - name: typeOfContent
+        in: query
         required: true
-        description: manga ID
-        schema: 
-          type: number
-  /manga/{mangaId}/preview:
-    get:
-      summary: Get manga preview
-      tags:
-        - Manga
-      responses:
-        '200':
-          description: Manga preview
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MangaPreviewResponse'
-      parameters: 
+        schema:
+          type: string
+          enum: ["preview", "page"]
       - name: mangaId
         in: path
         required: true
@@ -85,65 +151,30 @@ paths:
         description: comment ID
         schema: 
           type: number
-  /user/{userId}:
-    get:
-      summary: Get user
-      tags:
-        - User
-      responses:
-        '200':
-          description: user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetUserResponse'
-      parameters:
-      - name: userId
-        in: path
-        required: true
-        description: user ID
-        schema: 
-          type: number
-    put:
-      summary: Update user info
-      tags: 
-        - User
-      parameters:
-      - name: userId
-        in: path
-        required: true
-        description: user ID
-        schema: 
-          type: number
-      requestBody:
-        content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PutUserRequest'
-      responses:
-        '200':
-          description: update user
 components:
+  parameters:
+    UserId:
+        name: userId
+        in: path
+        required: true
+        description: user ID
+        schema: 
+          type: number
+  securitySchemes:
+    UserAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    AdminAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
-    LoginRequest:
+    MangaPreview:
       type: object
       properties:
-        email:
-          type: string
-        password:
-          type: string
-    LoginResponse:
-      type: object
-      properties:
-        userId:
+        id:
           type: integer
-        accessToken:
-          type: string
-        refreshToken:
-          type: string
-    MangaPreviewResponse:
-      type: object
-      properties:
         name:
           type: string
         description:
@@ -160,13 +191,14 @@ components:
           type: string
         rating:
           type: number
-    MangaPageResponse:
+    MangaPage:
       type: object
       properties:
         id:
           type: integer
         name:
           type: string
+          maxLength: 100
         description:
           type: array
           items:
@@ -175,8 +207,18 @@ components:
           type: string
         status:
           type: string
+          enum:
+            - "ongoing"
+            - "finished"
+            - "freezed"
+            - "announced" 
         type:
           type: string
+          enum:
+            - "manhwa"
+            - "manhua"
+            - "manga"
+            - "cartoon"
         bookmarks_count:
           type: integer
         likes_count:
@@ -200,7 +242,37 @@ components:
         comments:
           type: array
           items: 
-            type: integer
+            type: integer 
+    MangaCreation:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: array
+          items:
+            type: string
+        year:
+          type: string
+        status:
+          type: string
+          enum:
+            - "ongoing"
+            - "finished"
+            - "freezed"
+            - "announced" 
+        type:
+          type: string
+          enum:
+            - "manhwa"
+            - "manhua"
+            - "manga"
+            - "cartoon"
+        gengers:
+          type: array
+          items:
+            type: string
     Comment:
       type: object
       properties:
@@ -210,15 +282,18 @@ components:
           type: integer
         message:
           type: string
+          maxLength: 350
         mangaId: 
           type: integer
-    GetUserResponse:
+    UserPage:
       type: object
       properties:
-        id: 
+        id:
           type: integer
         nickname: 
           type: string
+          minLength: 3
+          maxLength: 20
         xp_level:
           type: integer
         badge:
@@ -241,7 +316,30 @@ components:
           type: array
           items:
             type: integer
-    PutUserRequest:
+    UserCreation:
+      type: object
+      properties:
+        nickname:
+          type: string
+        sex:
+          type: string
+          enum: 
+            - male
+            - female
+        email:
+          type: string
+        password:
+          type: string
+          maxLength: 100
+          minLength: 8
+    AuthData:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+    UserSettings:
       type: object
       properties:
         nickname: 
@@ -261,12 +359,35 @@ components:
           type: boolean
         is_yaoi_hidden:
           type: boolean
-          
-            
-      
-        
-              
-            
-          
-    
-
+    Badge:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          maxLength: 20
+      required:
+        - id
+        - name
+    Chapter:
+      type: object
+      properties:
+        id:
+          type: integer
+        manga_id:
+          type: integer
+        name:
+          type: string
+          maxLength: 100
+        number:
+          type: integer
+    translator_user:
+      type: object
+      properties:
+        id:
+          type: integer
+        nickname:
+          type: string
+        user_id:
+          type: integer
