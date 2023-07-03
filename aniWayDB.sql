@@ -81,7 +81,7 @@ CREATE TABLE "translator_chapter" (
 
 CREATE TABLE "message" (
   "id" BIGSERIAL PRIMARY KEY,
-  "message" varchar(150)
+  "message" varchar(350)
 );
 
 CREATE TABLE "comment" (
