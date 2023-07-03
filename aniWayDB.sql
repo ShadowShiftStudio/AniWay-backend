@@ -66,8 +66,6 @@ CREATE TABLE "chapter" (
   "manga_id" BIGSERIAL,
   "name" varchar(100),
   "number" integer,
-  "likes" integer,
-  "views" integer
 );
 
 CREATE TABLE "user_chapter" (
