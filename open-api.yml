@@ -151,6 +151,54 @@ paths:
         description: comment ID
         schema: 
           type: number
+#----------------------------------------------
+    delete:
+       summary: Delete comment
+       security:
+            - UserAuth: [reader]
+            - AdminAuth: [admin]
+       tags:
+         - Comment
+       parameters:
+         - $ref: '#/components/parameters/CommentId'
+       responses:
+          '200':
+           description: Comment deleted successfully
+    post:
+          summary: Create comment
+          security:
+            - UserAuth: [reader]
+          tags:
+            - Comment
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Comment'
+          responses:
+            '200':
+              description: Comment created successfully
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+    put:
+      summary: Update comment
+      tags: 
+        - Comment
+      parameters:
+        - $ref: '#/components/parameters/CommentId'
+      requestBody:
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+      responses:
+        '200':
+          description: Comment updated successfully
   /badge/{badgeId}:
     get:
         summary: Get badge
@@ -170,6 +218,38 @@ paths:
           description: badge ID
           schema: 
             type: number
+    post:
+          summary: Create badge
+          security:
+            - AdminAuth: [admin]
+          tags:
+            - Badge
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Badge'
+          responses:
+            '200':
+              description: Badge created successfully
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+    delete:
+       summary: Delete badge
+       security:
+            - AdminAuth: [admin]
+       tags:
+         - Badge
+       parameters:
+         - $ref: '#/components/parameters/BadgeId'
+       responses:
+          '200':
+           description: Badge deleted successfully
   /chapter/{chapterId}:
     get:
         summary: Get chapter
@@ -189,7 +269,55 @@ paths:
           description: chapter ID
           schema: 
             type: number
-  
+    put:
+      summary: Update chapter
+      tags: 
+        - Chapter
+      security:
+            - UserAuth: [translator]
+      parameters:
+        - $ref: '#/components/parameters/ChapterId'
+      requestBody:
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chapter'
+      responses:
+        '200':
+          description: Chapter updated successfully
+    post:
+          summary: Create chapter
+          security:
+            - UserAuth: [translator]
+          tags:
+            - Chapter
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Chapter'
+          responses:
+            '200':
+              description: Chapter created successfully
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+    delete:
+       summary: Delete chapter
+       security:
+            - UserAuth: [tranlator]
+       tags:
+         - Chapter
+       parameters:
+         - $ref: '#/components/parameters/ChapterId'
+       responses:
+          '200':
+           description: Chapter deleted successfully
+#-----------------------------------------------------------
 components:
   parameters:
     UserId:
@@ -199,6 +327,29 @@ components:
         description: user ID
         schema: 
           type: number
+#=================
+    CommentId:
+        name: commentId
+        in: path
+        required: true
+        description: comment ID
+        schema: 
+          type: number
+    ChapterId:
+        name: chapterId
+        in: path
+        required: true
+        description: chapter ID
+        schema: 
+          type: number
+    BadgeId:
+        name: badgeId
+        in: path
+        required: true
+        description: badge ID
+        schema: 
+          type: number
+#================
   securitySchemes:
     UserAuth:
       type: http
