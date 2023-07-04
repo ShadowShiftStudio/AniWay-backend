@@ -151,6 +151,45 @@ paths:
         description: comment ID
         schema: 
           type: number
+  /badge/{badgeId}:
+    get:
+        summary: Get badge
+        tags: 
+          - Badge
+        responses: 
+          '200':
+            description: badge
+            content: 
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Badge'
+        parameters:
+        - name: badgeId
+          in: path
+          required: true
+          description: badge ID
+          schema: 
+            type: number
+  /chapter/{chapterId}:
+    get:
+        summary: Get chapter
+        tags: 
+          - Chapter
+        responses: 
+          '200':
+            description: chapter
+            content: 
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Chapter'
+        parameters:
+        - name: chapterId
+          in: path
+          required: true
+          description: chapter ID
+          schema: 
+            type: number
+  
 components:
   parameters:
     UserId:
@@ -297,7 +336,7 @@ components:
         xp_level:
           type: integer
         badge:
-          type: integer
+          type: integer 
         chapters_read_count: 
           type: integer
         chapters_likes_count: 
