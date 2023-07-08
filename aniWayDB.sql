@@ -1,3 +1,22 @@
+CREATE TYPE "sex" AS ENUM (
+  'male',
+  'female'
+);
+
+CREATE TYPE "title_status" AS ENUM (
+  'ongoing',
+  'finished',
+  'freezed',
+  'announced'
+);
+
+CREATE TYPE "title_type" AS ENUM (
+  'manhwa',
+  'manhua',
+  'manga',
+  'cartoon'
+);
+
 CREATE TYPE "reading_status" AS ENUM (
   'in_progress',
   'planned',
@@ -5,137 +24,165 @@ CREATE TYPE "reading_status" AS ENUM (
   'postponed'
 );
 
-CREATE TYPE "manga_status" AS ENUM (
-  'ongoing',
-  'finished',
-  'freezed',
-  'announced'
-);
-
-CREATE TYPE "manga_type" AS ENUM (
-  'manhwa',
-  'manhua',
-  'manga',
-  'cartoon'
-);
-
-CREATE TABLE "badge" (
+CREATE TABLE "users" (
   "id" BIGSERIAL PRIMARY KEY,
-  "name" varchar(20)
-);
-
-CREATE TABLE "user" (
-  "id" BIGSERIAL PRIMARY KEY,
-  "nickname" varchar(20),
+  "nickname" varchar(20) UNIQUE,
+  "email" varchar(100),
+  "password" varchar(100),
+  "sex" sex,
+  "user_id" BIGSERIAL,
   "xp" integer,
   "pass_xp" integer,
   "balance" integer,
-  "email" text,
-  "password" text
+  "is_hentai_hidden" boolean,
+  "is_yuri_hidden" boolean,
+  "is_yaoi_hidden" boolean,
+  "created_at" timestamp
 );
 
-CREATE TABLE "translator" (
+CREATE TABLE "teams" (
   "id" BIGSERIAL PRIMARY KEY,
-  "nickname" varchar(20),
-  "user_id" BIGSERIAL
+  "owner_id" BIGSERIAL,
+  "name" varchar(20),
+  "description" varchar(150),
+  "created_at" timestamp
 );
 
-CREATE TABLE "translator_manga" (
-  "translator_id" BIGSERIAL,
-  "manga_id" BIGSERIAL
+CREATE TABLE "titles" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "name" varchar(100),
+  "original_name" varchar(100),
+  "year" integer,
+  "description" text[],
+  "status" title_status,
+  "type" title_type,
+  "views" integer
 );
 
-CREATE TABLE "user_manga" (
+CREATE TABLE "chapters" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "title_id" BIGSERIAL,
+  "team_id" BIGSERIAL,
+  "name" varchar(300),
+  "number" integer,
+  "volume" integer,
+  "views" integer,
+  "created_at" timestamp,
+  "updated_at" timestamp
+);
+
+CREATE TABLE "genres" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "name" varchar(20) UNIQUE
+);
+
+CREATE TABLE "badges" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "name" varchar(20) UNIQUE,
+  "created_at" timestamp
+);
+
+CREATE TABLE "title_comments" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "title_id" BIGSERIAL,
+  "author_id" BIGSERIAL,
+  "text" BIGSERIAL,
+  "created_at" timestamp,
+  "updated_at" timestamp
+);
+
+CREATE TABLE "chapter_comments" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "chapter_id" BIGSERIAL,
+  "author_id" BIGSERIAL,
+  "text" BIGSERIAL,
+  "created_at" timestamp,
+  "updated_at" timestamp
+);
+
+CREATE TABLE "related_titles" (
+  "base_title_id" BIGSERIAL,
+  "related_title_id" BIGSERIAL
+);
+
+CREATE TABLE "comment_texts" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "text" varchar(350)
+);
+
+CREATE TABLE "user_info_of_chapters" (
+  "chapter_id" BIGSERIAL,
   "user_id" BIGSERIAL,
-  "manga_id" BIGSERIAL,
-  "status" reading_status,
+  "is_liked" boolean,
+  "is_readed" boolean
+);
+
+CREATE TABLE "user_info_of_titles" (
+  "title_id" BIGSERIAL,
+  "user_id" BIGSERIAL,
+  "reading_status" reading_status,
+  "bookmarked" boolean,
   "rating" integer
 );
 
-CREATE TABLE "manga" (
-  "id" BIGSERIAL PRIMARY KEY,
-  "name" varchar(100),
-  "year" date,
-  "description" text[],
-  "status" manga_status,
-  "manga_type" manga_type
-);
-
-CREATE TABLE "chapter" (
-  "id" BIGSERIAL PRIMARY KEY,
-  "manga_id" BIGSERIAL,
-  "name" varchar(100),
-  "number" integer,
-);
-
-CREATE TABLE "user_chapter" (
+CREATE TABLE "team_users" (
   "user_id" BIGSERIAL,
-  "chapter_id" BIGSERIAL,
-  "is_liked" boolean
+  "team_id" BIGSERIAL,
+  "status" varchar(20)
 );
 
-CREATE TABLE "translator_chapter" (
-  "translator_id" BIGSERIAL,
-  "chapter_id" BIGSERIAL
-);
-
-CREATE TABLE "message" (
-  "id" BIGSERIAL PRIMARY KEY,
-  "message" varchar(350)
-);
-
-CREATE TABLE "comment" (
-  "id" BIGSERIAL PRIMARY KEY,
-  "user_id" BIGSERIAL,
-  "manga_id" BIGSERIAL,
-  "message_id" BIGSERIAL
-);
-
-CREATE TABLE "genre" (
-  "id" BIGSERIAL PRIMARY KEY,
-  "name" varchar(50)
-);
-
-CREATE TABLE "manga_genre" (
-  "manga_id" BIGSERIAL,
-  "genre_id" BIGSERIAL
-);
-
-CREATE TABLE "user_badge" (
+CREATE TABLE "users_badges" (
   "user_id" BIGSERIAL,
   "badge_id" BIGSERIAL
 );
 
-ALTER TABLE "chapter" ADD FOREIGN KEY ("manga_id") REFERENCES "manga" ("id");
+CREATE TABLE "titles_genres" (
+  "title_id" BIGSERIAL,
+  "genre_id" BIGSERIAL
+);
 
-ALTER TABLE "translator_manga" ADD FOREIGN KEY ("translator_id") REFERENCES "translator" ("id");
+COMMENT ON COLUMN "user_info_of_titles"."rating" IS 'min 1 max 5';
 
-ALTER TABLE "translator_chapter" ADD FOREIGN KEY ("translator_id") REFERENCES "translator" ("id");
+ALTER TABLE "users" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-ALTER TABLE "translator_manga" ADD FOREIGN KEY ("manga_id") REFERENCES "manga" ("id");
+ALTER TABLE "teams" ADD FOREIGN KEY ("owner_id") REFERENCES "users" ("id");
 
-ALTER TABLE "user_manga" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "chapters" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
 
-ALTER TABLE "user_manga" ADD FOREIGN KEY ("manga_id") REFERENCES "manga" ("id");
+ALTER TABLE "chapters" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id");
 
-ALTER TABLE "user_chapter" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "title_comments" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
 
-ALTER TABLE "user_chapter" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapter" ("id");
+ALTER TABLE "title_comments" ADD FOREIGN KEY ("author_id") REFERENCES "users" ("id");
 
-ALTER TABLE "translator_chapter" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapter" ("id");
+ALTER TABLE "title_comments" ADD FOREIGN KEY ("text") REFERENCES "comment_texts" ("id");
 
-ALTER TABLE "comment" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "chapter_comments" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapters" ("id");
 
-ALTER TABLE "comment" ADD FOREIGN KEY ("manga_id") REFERENCES "manga" ("id");
+ALTER TABLE "chapter_comments" ADD FOREIGN KEY ("author_id") REFERENCES "users" ("id");
 
-ALTER TABLE "comment" ADD FOREIGN KEY ("message_id") REFERENCES "message" ("id");
+ALTER TABLE "chapter_comments" ADD FOREIGN KEY ("text") REFERENCES "comment_texts" ("id");
 
-ALTER TABLE "manga_genre" ADD FOREIGN KEY ("manga_id") REFERENCES "manga" ("id");
+ALTER TABLE "related_titles" ADD FOREIGN KEY ("base_title_id") REFERENCES "titles" ("id");
 
-ALTER TABLE "manga_genre" ADD FOREIGN KEY ("genre_id") REFERENCES "genre" ("id");
+ALTER TABLE "related_titles" ADD FOREIGN KEY ("related_title_id") REFERENCES "titles" ("id");
 
-ALTER TABLE "user_badge" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "user_info_of_chapters" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapters" ("id");
 
-ALTER TABLE "user_badge" ADD FOREIGN KEY ("badge_id") REFERENCES "badge" ("id");
+ALTER TABLE "user_info_of_chapters" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-ALTER TABLE "translator" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "user_info_of_titles" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
+
+ALTER TABLE "user_info_of_titles" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "team_users" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "team_users" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id");
+
+ALTER TABLE "users_badges" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "users_badges" ADD FOREIGN KEY ("badge_id") REFERENCES "badges" ("id");
+
+ALTER TABLE "titles_genres" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
+
+ALTER TABLE "titles_genres" ADD FOREIGN KEY ("genre_id") REFERENCES "genres" ("id");
