@@ -23,9 +23,12 @@ services:
       POSTGRES_USER: "${DB_USER}"
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
       POSTGRES_DB: "${DB_NAME}"
-      PGDATA: /data/postgres
+      PG_DATA: "database:/data/postgres"
     volumes:
-      - database:/data/postgres
+      - .:/docker-entrypoint-initdb.d
+      - database:/data/postgres 
+    ports:
+      - "5431:5432"  
     restart: always
     networks:
       - aniway-network
