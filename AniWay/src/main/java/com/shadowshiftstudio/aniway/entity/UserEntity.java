@@ -43,10 +43,18 @@ public class UserEntity implements UserDetails {
     private int xp;
     private int pass_xp;
     private int balance;
-    private boolean is_hentai_hidden;
-    private boolean is_yuri_hidden;
-    private boolean is_yaoi_hidden;
-    private LocalDateTime created_at;
+
+    @Column(name="is_hentai_hidden")
+    private boolean isHentaiHidden;
+
+    @Column(name="is_yuri_hidden")
+    private boolean isYuriHidden;
+
+    @Column(name="is_yaoi_hidden")
+    private boolean isYaoiHidden;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

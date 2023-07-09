@@ -23,6 +23,4 @@ public class UserService {
             throw new UserNotFoundException("User not found!");
         }
     }
-
-    public
 }

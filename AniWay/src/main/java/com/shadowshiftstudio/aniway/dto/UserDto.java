@@ -14,10 +14,10 @@ public class UserDto {
     private int xp;
     private int pass_xp;
     private int balance;
-    private boolean is_hentai_hidden;
-    private boolean is_yuri_hidden;
-    private boolean is_yaoi_hidden;
-    private LocalDateTime created_at;
+    private boolean isHentaiHidden;
+    private boolean isYuriHidden;
+    private boolean isYaoiHidden;
+    private LocalDateTime createdAt;
 
     public static UserDto toDto(UserEntity entity) {
         UserDto dto = new UserDto();
@@ -27,10 +27,10 @@ public class UserDto {
         dto.xp = entity.getXp();
         dto.pass_xp = entity.getPass_xp();
         dto.balance = entity.getBalance();
-        dto.is_hentai_hidden = entity.is_hentai_hidden();
-        dto.is_yuri_hidden = entity.is_yuri_hidden();
-        dto.is_yaoi_hidden = entity.is_yaoi_hidden();
-        dto.created_at = entity.getCreated_at();
+        dto.isHentaiHidden = entity.isHentaiHidden();
+        dto.isYuriHidden = entity.isYuriHidden();
+        dto.isYaoiHidden = entity.isYaoiHidden();
+        dto.createdAt = entity.getCreatedAt();
 
         return dto;
     }
