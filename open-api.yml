@@ -12,7 +12,7 @@ security:
     - reader
     - translator
 paths:
-  /user/{userId}/page:
+  /user/{userId}:
     get:
       summary: Get user
       tags:

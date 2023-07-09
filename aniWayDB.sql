@@ -26,18 +26,17 @@ CREATE TYPE "reading_status" AS ENUM (
 
 CREATE TABLE "users" (
   "id" BIGSERIAL PRIMARY KEY,
-  "nickname" varchar(20) UNIQUE,
+  "username" varchar(20) UNIQUE,
   "email" varchar(100),
   "password" varchar(100),
   "sex" sex,
-  "user_id" BIGSERIAL,
   "xp" integer,
   "pass_xp" integer,
   "balance" integer,
   "is_hentai_hidden" boolean,
   "is_yuri_hidden" boolean,
   "is_yaoi_hidden" boolean,
-  "created_at" timestamp
+  "created_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "teams" (
@@ -45,7 +44,7 @@ CREATE TABLE "teams" (
   "owner_id" BIGSERIAL,
   "name" varchar(20),
   "description" varchar(150),
-  "created_at" timestamp
+  "created_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "titles" (
@@ -67,8 +66,8 @@ CREATE TABLE "chapters" (
   "number" integer,
   "volume" integer,
   "views" integer,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "created_at" TIMESTAMP WITHOUT TIME ZONE,
+  "updated_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "genres" (
@@ -79,7 +78,7 @@ CREATE TABLE "genres" (
 CREATE TABLE "badges" (
   "id" BIGSERIAL PRIMARY KEY,
   "name" varchar(20) UNIQUE,
-  "created_at" timestamp
+  "created_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "title_comments" (
@@ -87,8 +86,8 @@ CREATE TABLE "title_comments" (
   "title_id" BIGSERIAL,
   "author_id" BIGSERIAL,
   "text" BIGSERIAL,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "created_at" TIMESTAMP WITHOUT TIME ZONE,
+  "updated_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "chapter_comments" (
@@ -96,8 +95,8 @@ CREATE TABLE "chapter_comments" (
   "chapter_id" BIGSERIAL,
   "author_id" BIGSERIAL,
   "text" BIGSERIAL,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "created_at" TIMESTAMP WITHOUT TIME ZONE,
+  "updated_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "related_titles" (
