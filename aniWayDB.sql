@@ -93,17 +93,17 @@ CREATE TABLE "chapter_comments" (
   "comment_id" BIGSERIAL
 );
 
-CREATE TABLE "related_titles" (
-  "base_title_id" BIGSERIAL,
-  "related_title_id" BIGSERIAL
-);
-
-CREATE TABLE "comment" (
+CREATE TABLE "comments" (
   "id" BIGSERIAL PRIMARY KEY,
   "author_id" BIGSERIAL,
   "text" varchar(350),
   "created_at" TIMESTAMP WITHOUT TIME ZONE,
   "updated_at" TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE TABLE "related_titles" (
+  "base_title_id" BIGSERIAL,
+  "related_title_id" BIGSERIAL
 );
 
 CREATE TABLE "user_info_of_chapters" (
@@ -139,25 +139,21 @@ CREATE TABLE "titles_genres" (
 
 COMMENT ON COLUMN "user_info_of_titles"."rating" IS 'min 1 max 5';
 
-ALTER TABLE "users" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
-
 ALTER TABLE "teams" ADD FOREIGN KEY ("owner_id") REFERENCES "users" ("id");
 
 ALTER TABLE "chapters" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
 
 ALTER TABLE "chapters" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id");
 
+ALTER TABLE "comments" ADD FOREIGN KEY ("author_id") REFERENCES "users" ("id");
+
+ALTER TABLE "title_comments" ADD FOREIGN KEY ("comment_id") REFERENCES "comments" ("id");
+
 ALTER TABLE "title_comments" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
 
-ALTER TABLE "title_comments" ADD FOREIGN KEY ("author_id") REFERENCES "users" ("id");
-
-ALTER TABLE "title_comments" ADD FOREIGN KEY ("text") REFERENCES "comment_texts" ("id");
+ALTER TABLE "chapter_comments" ADD FOREIGN KEY ("comment_id") REFERENCES "comments" ("id");
 
 ALTER TABLE "chapter_comments" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapters" ("id");
-
-ALTER TABLE "chapter_comments" ADD FOREIGN KEY ("author_id") REFERENCES "users" ("id");
-
-ALTER TABLE "chapter_comments" ADD FOREIGN KEY ("text") REFERENCES "comment_texts" ("id");
 
 ALTER TABLE "related_titles" ADD FOREIGN KEY ("base_title_id") REFERENCES "titles" ("id");
 
