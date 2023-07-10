@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 import static jakarta.persistence.EnumType.STRING;
 
 @Entity
@@ -41,4 +43,18 @@ public class TitleEntity {
     private TitleType type;
 
     private int views;
+
+    @OneToMany(mappedBy = "chapters")
+    private Set<ChapterEntity> chapters;
+
+    @ManyToMany()
+    @JoinTable(
+            name = "titles_genres",
+            joinColumns = @JoinColumn(name="title_id"),
+            inverseJoinColumns = @JoinColumn(name="genre_id")
+    )
+    private Set<GenreEntity> genres;
+
+    @OneToMany(mappedBy = "title_comments")
+    private Set<TitleCommentsEntity> comments;
 }

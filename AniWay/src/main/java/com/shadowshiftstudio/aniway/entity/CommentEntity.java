@@ -8,26 +8,29 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="badges")
-public class BadgeEntity {
+@Table(name="comment")
+public class CommentEntity {
     @Id
     @GeneratedValue
     private long id;
 
-    @Size(min = 3, message = "{validation.name.size.too_short}")
-    @Size(max = 20, message = "{validation.name.size.too_long}")
-    private String name;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="author_id", referencedColumnName = "id")
+    private UserEntity author;
 
-    @Column(name = "created_at")
+    @Size(min = 3, message = "{validation.name.size.too_short}")
+    @Size(max = 300, message = "{validation.name.size.too_long}")
+    private String text;
+
+    @Column(name="created_at")
     private LocalDateTime createdAt;
 
-    @ManyToMany
-    private Set<UserEntity> users;
+    @Column(name="updated_at")
+    private LocalDateTime updatedAt;
 }

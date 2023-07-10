@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Set;
 
 import static jakarta.persistence.EnumType.STRING;
 
@@ -41,7 +42,9 @@ public class UserEntity implements UserDetails {
     @Enumerated(STRING)
     private Sex sex;
     private int xp;
-    private int pass_xp;
+
+    @Column(name="pass_xp")
+    private int passXp;
     private int balance;
 
     @Column(name="is_hentai_hidden")
@@ -55,6 +58,14 @@ public class UserEntity implements UserDetails {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_badges",
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="badge_id")
+    )
+    private Set<BadgeEntity> badges;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

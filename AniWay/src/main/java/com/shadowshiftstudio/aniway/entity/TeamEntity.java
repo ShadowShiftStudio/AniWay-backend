@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Data
@@ -20,7 +21,6 @@ public class TeamEntity {
     @GeneratedValue
     private long id;
 
-    // TODO LINK
     @Column(name="owner_id")
     private long ownerId;
 
@@ -34,4 +34,7 @@ public class TeamEntity {
 
     @Column(name="created_at")
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "chapters")
+    private Set<ChapterEntity> chapters;
 }

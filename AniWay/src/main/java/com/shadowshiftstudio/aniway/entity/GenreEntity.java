@@ -1,14 +1,13 @@
 package com.shadowshiftstudio.aniway.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Entity
 @Data
@@ -24,4 +23,7 @@ public class GenreEntity {
     @Size(min = 3, message = "{validation.name.size.too_short}")
     @Size(max = 20, message = "{validation.name.size.too_long}")
     private String name;
+
+    @ManyToMany
+    private Set<TitleEntity> titles;
 }

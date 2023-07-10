@@ -84,19 +84,13 @@ CREATE TABLE "badges" (
 CREATE TABLE "title_comments" (
   "id" BIGSERIAL PRIMARY KEY,
   "title_id" BIGSERIAL,
-  "author_id" BIGSERIAL,
-  "text" BIGSERIAL,
-  "created_at" TIMESTAMP WITHOUT TIME ZONE,
-  "updated_at" TIMESTAMP WITHOUT TIME ZONE
+  "comment_id" BIGSERIAL
 );
 
 CREATE TABLE "chapter_comments" (
   "id" BIGSERIAL PRIMARY KEY,
   "chapter_id" BIGSERIAL,
-  "author_id" BIGSERIAL,
-  "text" BIGSERIAL,
-  "created_at" TIMESTAMP WITHOUT TIME ZONE,
-  "updated_at" TIMESTAMP WITHOUT TIME ZONE
+  "comment_id" BIGSERIAL
 );
 
 CREATE TABLE "related_titles" (
@@ -104,9 +98,12 @@ CREATE TABLE "related_titles" (
   "related_title_id" BIGSERIAL
 );
 
-CREATE TABLE "comment_texts" (
+CREATE TABLE "comment" (
   "id" BIGSERIAL PRIMARY KEY,
-  "text" varchar(350)
+  "author_id" BIGSERIAL,
+  "text" varchar(350),
+  "created_at" TIMESTAMP WITHOUT TIME ZONE,
+  "updated_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "user_info_of_chapters" (

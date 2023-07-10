@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -23,12 +24,15 @@ public class ChapterEntity {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "title_id")
+    @JoinColumn(name = "title_id", insertable = false, updatable = false)
     private TitleEntity title;
 
     @ManyToOne
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_id", insertable = false, updatable = false)
     private TeamEntity team;
+
+    @OneToMany(mappedBy = "chapter_comments")
+    private Set<ChapterCommentsEntity> comments;
 
     @Size(min = 3, message = "{validation.name.size.too_short}")
     @Size(max = 300, message = "{validation.name.size.too_long}")
