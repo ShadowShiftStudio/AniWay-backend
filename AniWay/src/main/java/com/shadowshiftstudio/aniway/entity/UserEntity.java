@@ -67,6 +67,12 @@ public class UserEntity implements UserDetails {
     )
     private Set<BadgeEntity> badges;
 
+    @OneToMany(mappedBy = "user")
+    private Set<UserInfoOfTitlesEntity> titlesInfo;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserInfoOfChaptersEntity> chaptersInfo;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

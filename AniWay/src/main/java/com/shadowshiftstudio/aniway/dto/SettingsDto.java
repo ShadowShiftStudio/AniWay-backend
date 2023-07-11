@@ -1,14 +1,12 @@
 package com.shadowshiftstudio.aniway.dto;
 
+import com.shadowshiftstudio.aniway.entity.UserEntity;
 import com.shadowshiftstudio.aniway.enums.Sex;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class SettingsDto {
     private String username;
     private String badge;
@@ -17,7 +15,12 @@ public class SettingsDto {
     private boolean isYuriHidden;
     private boolean isYaoiHidden;
 
-    public static SettingsDto getSettingsDto(Long id) {
+    public static SettingsDto getSettingsDto(UserEntity entity) {
+        SettingsDto dto = new SettingsDto();
 
+        dto.username = entity.getUsername();
+        //TODO
+
+        return dto;
     }
 }

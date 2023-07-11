@@ -4,11 +4,11 @@ import com.shadowshiftstudio.aniway.entity.UserEntity;
 import com.shadowshiftstudio.aniway.enums.Sex;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 public class UserDto {
+    private long id;
     private String username;
     private Sex sex;
     private int xp;
@@ -22,10 +22,11 @@ public class UserDto {
     public static UserDto toDto(UserEntity entity) {
         UserDto dto = new UserDto();
 
+        dto.id = entity.getId();
         dto.username = entity.getUsername();
         dto.sex = entity.getSex();
         dto.xp = entity.getXp();
-        dto.pass_xp = entity.getPass_xp();
+        dto.pass_xp = entity.getPassXp();
         dto.balance = entity.getBalance();
         dto.isHentaiHidden = entity.isHentaiHidden();
         dto.isYuriHidden = entity.isYuriHidden();

@@ -37,4 +37,12 @@ public class TeamEntity {
 
     @OneToMany(mappedBy = "chapters")
     private Set<ChapterEntity> chapters;
+
+    @ManyToMany()
+    @JoinTable(
+            name = "team_users",
+            joinColumns = @JoinColumn(name="team_id"),
+            inverseJoinColumns = @JoinColumn(name="user_id")
+    )
+    private Set<UserEntity> users;
 }

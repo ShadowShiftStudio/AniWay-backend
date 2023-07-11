@@ -47,7 +47,7 @@ public class TitleEntity {
     @OneToMany(mappedBy = "chapters")
     private Set<ChapterEntity> chapters;
 
-    @ManyToMany()
+    @ManyToMany
     @JoinTable(
             name = "titles_genres",
             joinColumns = @JoinColumn(name="title_id"),
@@ -57,4 +57,18 @@ public class TitleEntity {
 
     @OneToMany(mappedBy = "title_comments")
     private Set<TitleCommentsEntity> comments;
+
+    @OneToMany
+    @JoinTable(
+            name = "related_titles",
+            joinColumns = @JoinColumn(name="base_title_id"),
+            inverseJoinColumns = @JoinColumn(name = "related_title_id")
+    )
+    private Set<TitleEntity> relatedTitles;
+
+    @OneToMany(mappedBy = "title")
+    private Set<UserInfoOfTitlesEntity> titlesInfo;
+
+    @OneToMany(mappedBy = "title")
+    private Set<UserInfoOfChaptersEntity> chaptersInfo;
 }
