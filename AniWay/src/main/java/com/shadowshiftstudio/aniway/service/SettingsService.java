@@ -13,7 +13,6 @@ public class SettingsService {
     public SettingsDto getSettingsDto(Long id) throws UserNotFoundException {
         try {
             UserDto user = userService.getUser(id);
-
         }
     }
 }
