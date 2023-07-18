@@ -1,27 +1,20 @@
 package com.shadowshiftstudio.aniway.controller;
 
-
-import com.shadowshiftstudio.aniway.dto.UserDto;
 import com.shadowshiftstudio.aniway.exception.UserNotFoundException;
-import com.shadowshiftstudio.aniway.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
-public class UserController {
-
+@RequestMapping("/comment")
+public class CommentController {
     @Autowired
-    private UserService userService;
+    private CommentService commentService;
 
     @GetMapping("/{id}")
-    public ResponseEntity getUser(@PathVariable Long id) {
+    public ResponseEntity getComment(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(userService.getUser(id));
+            return ResponseEntity.ok(commentService.getComment(id));
         } catch (UserNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -29,14 +22,24 @@ public class UserController {
         }
     }
 
-    @GetMapping("/settings")
-    public ResponseEntity getSettings(@PathVariable Long id) {
+    @PostMapping("/{id}")
+    public ResponseEntity createComment(@PathVariable Long id) {
+        //TODO
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteComment(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(userService.getSettings(id));
+            return ResponseEntity.ok(commentService.deleteComment(id));
         } catch (UserNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity updateComment(@PathVariable Long id) {
+        //TODO
     }
 }

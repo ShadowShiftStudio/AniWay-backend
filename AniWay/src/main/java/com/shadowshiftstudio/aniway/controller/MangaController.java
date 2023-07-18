@@ -1,27 +1,22 @@
 package com.shadowshiftstudio.aniway.controller;
 
-
-import com.shadowshiftstudio.aniway.dto.UserDto;
 import com.shadowshiftstudio.aniway.exception.UserNotFoundException;
 import com.shadowshiftstudio.aniway.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
-public class UserController {
-
+@RequestMapping("/manga")
+public class MangaController {
     @Autowired
-    private UserService userService;
+    private MangaService mangaService;
 
+    // TODO add query params [preview, page] 122 string in open-api.yml
     @GetMapping("/{id}")
-    public ResponseEntity getUser(@PathVariable Long id) {
+    public ResponseEntity getManga(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(userService.getUser(id));
+            return ResponseEntity.ok(mangaService.getManga(id));
         } catch (UserNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -29,10 +24,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/settings")
-    public ResponseEntity getSettings(@PathVariable Long id) {
+    @PostMapping("/{id}")
+    public ResponseEntity createManga(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(userService.getSettings(id));
+            return ResponseEntity.ok(mangaService.createManga(id));
         } catch (UserNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
