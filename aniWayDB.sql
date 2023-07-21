@@ -33,10 +33,12 @@ CREATE TABLE "users" (
   "xp" integer,
   "pass_xp" integer,
   "balance" integer,
-  "is_hentai_hidden" boolean,
-  "is_yuri_hidden" boolean,
-  "is_yaoi_hidden" boolean,
   "created_at" TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE TABLE "settings" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "user_id" BIGSERIAL PRIMARY KEY,
 );
 
 CREATE TABLE "teams" (
@@ -138,6 +140,8 @@ CREATE TABLE "titles_genres" (
 );
 
 COMMENT ON COLUMN "user_info_of_titles"."rating" IS 'min 1 max 5';
+
+ALTER TABLE "teams" ADD FOREIGN KEY ("owner_id") REFERENCES "users" ("id");
 
 ALTER TABLE "teams" ADD FOREIGN KEY ("owner_id") REFERENCES "users" ("id");
 
