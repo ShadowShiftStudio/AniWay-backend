@@ -5,9 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = "com.shadowshiftstudio.aniway")
 public class AniwayApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(AniwayApplication.class, args);
 	}
-
 }

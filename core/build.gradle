@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.0-SNAPSHOT' apply false
 	id 'io.spring.dependency-management' version '1.1.2'
+  id("io.freefair.lombok") version "8.1.0"
 }
 
 group = 'com.shadowshiftstudio.aniway'
@@ -25,6 +26,9 @@ dependencyManagement {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.1.2'
+  implementation 'org.springframework.boot:spring-boot-starter-validation:3.1.1'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
