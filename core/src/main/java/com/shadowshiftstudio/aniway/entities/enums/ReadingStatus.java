@@ -1,4 +1,4 @@
-package com.shadowshiftstudio.aniway.entities;
+package com.shadowshiftstudio.aniway.entities.enums;
 
 public enum ReadingStatus {
     IN_PROGRESS,
