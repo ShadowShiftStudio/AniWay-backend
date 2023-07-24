@@ -19,7 +19,7 @@ import java.util.function.Function;
 public class JwtService {
     // TODO Temporary 256-bit hex secret key. Change it in next versions. BASE64 required
     private static final String SECRET_KEY = "e6620c7252a94eb85d59399f3a07cc66c10f700365532dacf5dc234b1edf3c7c";
-    private final Integer MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+    private final Integer HALF_AN_HOUR = 1000 * 60 * 30;
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -33,7 +33,7 @@ public class JwtService {
                .setClaims(extraClaims)
                .setSubject(userDetails.getUsername())
                .setIssuedAt(new Date(System.currentTimeMillis()))
-               .setExpiration(new Date(System.currentTimeMillis() + MILLISECONDS_IN_DAY))
+               .setExpiration(new Date(System.currentTimeMillis() + HALF_AN_HOUR))
                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                .compact();
     }

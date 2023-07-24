@@ -1,5 +1,6 @@
-package com.shadowshiftstudio.aniway.controller;
+package com.shadowshiftstudio.aniway.dto;
 
+import com.shadowshiftstudio.aniway.entity.RefreshToken;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,5 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponse {
+    private String accessToken;
+
     private String token;
 }
