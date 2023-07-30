@@ -25,20 +25,4 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    @GetMapping("/settings")
-    public ResponseEntity getSettings(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(userService.getSettings(id));
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @PutMapping("/settings")
-    public ResponseEntity updateSettings(@RequestBody UserDto updaterUser) {
-
-    }
 }

@@ -1,6 +1,6 @@
 package com.shadowshiftstudio.aniway.service;
 
-import com.shadowshiftstudio.aniway.controller.AuthenticationRequest;
+import com.shadowshiftstudio.aniway.dto.AuthenticationRequest;
 import com.shadowshiftstudio.aniway.dto.AuthenticationResponse;
 import com.shadowshiftstudio.aniway.controller.RegisterRequest;
 import com.shadowshiftstudio.aniway.entity.RefreshToken;

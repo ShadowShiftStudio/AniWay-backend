@@ -1,5 +1,6 @@
 package com.shadowshiftstudio.aniway.controller;
 
+import com.shadowshiftstudio.aniway.dto.AuthenticationRequest;
 import com.shadowshiftstudio.aniway.dto.AuthenticationResponse;
 import com.shadowshiftstudio.aniway.dto.RefreshTokenRequest;
 import com.shadowshiftstudio.aniway.entity.RefreshToken;
@@ -22,17 +23,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     private final AuthenticationService service;
     private final JwtService jwtService;
-    @Autowired
-    private RefreshTokenService refreshTokenService;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(service.register(request));
+    public ResponseEntity register(@RequestBody RegisterRequest request) {
+        try {
+            return ResponseEntity.ok(service.register(request));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity authenticate(@RequestBody AuthenticationRequest request) {
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(request.getUsername());
         try {
             return ResponseEntity.ok(service.authenticate(request));
         } catch (UserNotFoundException e) {

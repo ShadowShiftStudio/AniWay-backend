@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Data
@@ -29,8 +30,12 @@ public class CommentEntity {
     private String text;
 
     @Column(name="created_at")
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
     @Column(name="updated_at")
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name="chapter_id", nullable = false)
+    private ChapterEntity chapter;
 }

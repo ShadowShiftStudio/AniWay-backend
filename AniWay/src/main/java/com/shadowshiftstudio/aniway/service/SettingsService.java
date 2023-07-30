@@ -10,9 +10,4 @@ import org.springframework.stereotype.Service;
 public class SettingsService {
     @Autowired
     private UserService userService;
-    public SettingsDto getSettingsDto(Long id) throws UserNotFoundException {
-        try {
-            UserDto user = userService.getUser(id);
-        }
-    }
 }

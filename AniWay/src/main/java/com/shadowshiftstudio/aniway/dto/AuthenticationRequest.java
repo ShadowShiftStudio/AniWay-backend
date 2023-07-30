@@ -1,4 +1,4 @@
-package com.shadowshiftstudio.aniway.controller;
+package com.shadowshiftstudio.aniway.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
