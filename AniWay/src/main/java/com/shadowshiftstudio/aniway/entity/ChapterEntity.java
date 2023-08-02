@@ -31,7 +31,8 @@ public class ChapterEntity {
     @JoinColumn(name = "team_id", insertable = false, updatable = false)
     private TeamEntity team;
 
-    @OneToMany(mappedBy = "")
+    @OneToMany(targetEntity = CommentEntity.class, cascade = ALL)
+    @JoinColumn(referencedColumnName = "id")
     private Set<CommentEntity> comments;
 
     @Size(min = 3, message = "{validation.name.size.too_short}")

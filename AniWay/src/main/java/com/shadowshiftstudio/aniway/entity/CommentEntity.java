@@ -34,8 +34,4 @@ public class CommentEntity {
 
     @Column(name="updated_at")
     private Date updatedAt;
-
-    @ManyToOne
-    @JoinColumn(name="chapter_id", nullable = false)
-    private ChapterEntity chapter;
 }

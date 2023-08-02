@@ -2,11 +2,13 @@ package com.shadowshiftstudio.aniway.service;
 
 import com.shadowshiftstudio.aniway.dto.AuthenticationRequest;
 import com.shadowshiftstudio.aniway.dto.AuthenticationResponse;
-import com.shadowshiftstudio.aniway.controller.RegisterRequest;
+import com.shadowshiftstudio.aniway.dto.RegisterRequest;
 import com.shadowshiftstudio.aniway.entity.RefreshToken;
 import com.shadowshiftstudio.aniway.entity.UserEntity;
 import com.shadowshiftstudio.aniway.enums.Role;
+import com.shadowshiftstudio.aniway.exception.AccountEmailExistsException;
 import com.shadowshiftstudio.aniway.exception.UserNotFoundException;
+import com.shadowshiftstudio.aniway.exception.UsernameIsOccupiedException;
 import com.shadowshiftstudio.aniway.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,31 +17,36 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
     @Autowired
-    private final UserRepository repository;
+    private UserRepository repository;
 
     @Autowired
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private final JwtService jwtService;
+    private JwtService jwtService;
 
     @Autowired
-    private final AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    private final RefreshTokenService refreshTokenService;
+    private RefreshTokenService refreshTokenService;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequest request) throws UsernameIsOccupiedException, AccountEmailExistsException {
+        validateRegisterRequest(request);
         var user = UserEntity.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
+                .sex(request.getSex())
+                .createdAt(new Date(System.currentTimeMillis()))
                 .build();
 
         repository.save(user);
@@ -53,6 +60,7 @@ public class AuthenticationService {
                 .token(refreshToken.getToken())
                 .build();
     }
+
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) throws UserNotFoundException {
         authenticationManager.authenticate(
@@ -72,5 +80,11 @@ public class AuthenticationService {
                 .accessToken(jwtToken)
                 .token(refreshToken.getToken())
                 .build();
+    }
+    private void validateRegisterRequest(RegisterRequest request) throws AccountEmailExistsException, UsernameIsOccupiedException {
+        if (repository.findByEmail(request.getEmail()).isPresent())
+            throw new AccountEmailExistsException("Account with this email is already registered");
+        if (repository.findByUsername(request.getUsername()).isPresent())
+            throw new UsernameIsOccupiedException("Account with this username is already registered");
     }
 }

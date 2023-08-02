@@ -18,7 +18,7 @@ public class BadgeController {
     @GetMapping("/{id}")
     public ResponseEntity getBadge(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(badgeService.getBadges(id));
+            return ResponseEntity.ok(badgeService.getBadge(id));
         } catch (BadgeNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

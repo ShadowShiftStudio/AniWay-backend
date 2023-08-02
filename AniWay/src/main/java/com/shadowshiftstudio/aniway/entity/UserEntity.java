@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -26,9 +27,10 @@ import static jakarta.persistence.EnumType.STRING;
 @AllArgsConstructor
 @Table(name="users")
 public class UserEntity implements UserDetails {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue
+    private Long id;
 
     @Size(min = 3, message = "{validation.name.size.too_short}")
     @Size(max = 20, message = "{validation.name.size.too_long}")
@@ -37,6 +39,9 @@ public class UserEntity implements UserDetails {
     @Size(min = 1, message = "{validation.name.size.too_short}")
     @Size(max = 100, message = "{validation.name.size.too_long}")
     private String email;
+
+    @Column(name="email_verified")
+    private boolean emailVerified;
 
     @Size(min = 10, message = "{validation.name.size.too_short}")
     @Size(max = 100, message = "{validation.name.size.too_long}")
@@ -50,17 +55,8 @@ public class UserEntity implements UserDetails {
     private int passXp;
     private int balance;
 
-    @Column(name="is_hentai_hidden")
-    private boolean isHentaiHidden;
-
-    @Column(name="is_yuri_hidden")
-    private boolean isYuriHidden;
-
-    @Column(name="is_yaoi_hidden")
-    private boolean isYaoiHidden;
-
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
     @ManyToMany
     @JoinTable(

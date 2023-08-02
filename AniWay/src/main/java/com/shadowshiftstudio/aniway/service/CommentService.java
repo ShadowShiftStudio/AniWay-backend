@@ -31,15 +31,13 @@ public class CommentService {
     }
 
     public String createComment(CreateCommentRequest request) {
-        commentRepository.save(new CommentEntity()
+        commentRepository.save(CommentEntity
                 .builder()
-                        .id(request.id)
-                        .author(userRepository.findById(request.author).get())
-                        .text(request.text)
-                        .updatedAt(request.updatedAt)
-                        .createdAt(request.createdAt)
+                .author(userRepository.findById(request.author).get())
+                .text(request.text)
+                .createdAt(new Date(System.currentTimeMillis()))
+                .updatedAt(new Date(System.currentTimeMillis()))
                 .build()
-
         );
         return "Comment was created";
     }

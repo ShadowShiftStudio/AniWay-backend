@@ -3,9 +3,9 @@ package com.shadowshiftstudio.aniway.controller;
 import com.shadowshiftstudio.aniway.dto.CreateCommentRequest;
 import com.shadowshiftstudio.aniway.dto.UpdateCommentRequest;
 import com.shadowshiftstudio.aniway.exception.CommentNotFoundException;
-import com.shadowshiftstudio.aniway.exception.UserNotFoundException;
 import com.shadowshiftstudio.aniway.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity getComment(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(commentService.getComment(id));
@@ -27,7 +27,7 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/create")
     public ResponseEntity createComment(@RequestBody CreateCommentRequest request) {
         try {
             return ResponseEntity.ok(commentService.createComment(request));

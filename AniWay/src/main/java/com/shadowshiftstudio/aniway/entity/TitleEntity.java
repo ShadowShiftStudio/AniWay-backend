@@ -44,7 +44,8 @@ public class TitleEntity {
 
     private int views;
 
-    @OneToMany(mappedBy = "chapters")
+    @OneToMany(targetEntity = ChapterEntity.class, cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id")
     private Set<ChapterEntity> chapters;
 
     @ManyToMany
@@ -55,7 +56,8 @@ public class TitleEntity {
     )
     private Set<GenreEntity> genres;
 
-    @OneToMany(mappedBy = "title_comments")
+    @OneToMany(targetEntity = TitleCommentsEntity.class, cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id")
     private Set<TitleCommentsEntity> comments;
 
     @OneToMany

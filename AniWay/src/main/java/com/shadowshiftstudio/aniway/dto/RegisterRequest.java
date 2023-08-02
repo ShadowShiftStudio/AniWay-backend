@@ -1,5 +1,6 @@
-package com.shadowshiftstudio.aniway.controller;
+package com.shadowshiftstudio.aniway.dto;
 
+import com.shadowshiftstudio.aniway.enums.Sex;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,4 +14,5 @@ public class RegisterRequest {
     private String username;
     private String email;
     private String password;
+    private Sex sex;
 }

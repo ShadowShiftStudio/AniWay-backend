@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 @Entity
 @Data
 @Builder
@@ -35,7 +37,8 @@ public class TeamEntity {
     @Column(name="created_at")
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "chapters")
+    @OneToMany(targetEntity = ChapterEntity.class, cascade = ALL)
+    @JoinColumn(referencedColumnName = "id")
     private Set<ChapterEntity> chapters;
 
     @ManyToMany()
@@ -45,4 +48,6 @@ public class TeamEntity {
             inverseJoinColumns = @JoinColumn(name="user_id")
     )
     private Set<UserEntity> users;
+
+
 }

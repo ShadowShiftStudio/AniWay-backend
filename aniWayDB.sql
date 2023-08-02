@@ -3,6 +3,12 @@ CREATE TYPE "sex" AS ENUM (
   'female'
 );
 
+CREATE TYPE "role" AS ENUM (
+  'USER',
+  'MODERATOR',
+  'TRANSLATOR'
+);
+
 CREATE TYPE "title_status" AS ENUM (
   'ongoing',
   'finished',
@@ -28,17 +34,21 @@ CREATE TABLE "users" (
   "id" BIGSERIAL PRIMARY KEY,
   "username" varchar(20) UNIQUE,
   "email" varchar(100),
+  "email_verified" boolean,
   "password" varchar(100),
   "sex" sex,
+  "role" role,
   "xp" integer,
   "pass_xp" integer,
   "balance" integer,
   "created_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE "settings" (
+CREATE TABLE "refresh_tokens" (
   "id" BIGSERIAL PRIMARY KEY,
-  "user_id" BIGSERIAL PRIMARY KEY,
+  "user_id" BIGSERIAL,
+  "token" varchar UNIQUE,
+  "expiry_date" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "teams" (
@@ -143,7 +153,7 @@ COMMENT ON COLUMN "user_info_of_titles"."rating" IS 'min 1 max 5';
 
 ALTER TABLE "teams" ADD FOREIGN KEY ("owner_id") REFERENCES "users" ("id");
 
-ALTER TABLE "teams" ADD FOREIGN KEY ("owner_id") REFERENCES "users" ("id");
+ALTER TABLE "refresh_tokens" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 ALTER TABLE "chapters" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
 

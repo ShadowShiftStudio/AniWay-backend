@@ -2,10 +2,15 @@ package com.shadowshiftstudio.aniway.dto;
 
 import com.shadowshiftstudio.aniway.entity.UserEntity;
 import com.shadowshiftstudio.aniway.enums.Sex;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
+import java.util.Date;
+@Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
     private long id;
@@ -14,10 +19,7 @@ public class UserDto {
     private int xp;
     private int pass_xp;
     private int balance;
-    private boolean isHentaiHidden;
-    private boolean isYuriHidden;
-    private boolean isYaoiHidden;
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
     public static UserDto toDto(UserEntity entity) {
         UserDto dto = new UserDto();
@@ -28,9 +30,6 @@ public class UserDto {
         dto.xp = entity.getXp();
         dto.pass_xp = entity.getPassXp();
         dto.balance = entity.getBalance();
-        dto.isHentaiHidden = entity.isHentaiHidden();
-        dto.isYuriHidden = entity.isYuriHidden();
-        dto.isYaoiHidden = entity.isYaoiHidden();
         dto.createdAt = entity.getCreatedAt();
 
         return dto;
