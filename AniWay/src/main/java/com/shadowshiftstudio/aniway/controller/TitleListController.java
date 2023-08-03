@@ -20,12 +20,14 @@ public class TitleListController {
     private TitleListService titleListService;
 
     @GetMapping("/catalog")
-    public ResponseEntity getCatalogTitles(@RequestParam(required = false) List<GenreDto> genres,
-                                           @RequestParam(required = false) List<TitleStatus> status,
-                                           @RequestParam(required = false) List<TitleType> type,
-                                           @RequestParam(required = false) List<CategoryDto> categories,
-                                           @RequestParam(required = false) List<AgeRating> rating,
-                                           @RequestParam(required = false) SortBy sortBy) {
+    public ResponseEntity getCatalogTitles(
+        @RequestParam(required = false) List<GenreDto> genres,
+        @RequestParam(required = false) List<TitleStatus> status,
+        @RequestParam(required = false) List<TitleType> type,
+        @RequestParam(required = false) List<CategoryDto> categories,
+        @RequestParam(required = false) List<AgeRating> rating,
+        @RequestParam(required = false) SortBy sortBy
+    ) {
         try {
             return ResponseEntity.ok(titleListService.getCatalogTitles(
                         genres,

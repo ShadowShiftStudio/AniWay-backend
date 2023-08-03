@@ -48,8 +48,6 @@ public class TitleEntity {
     @Column(name="age_rating")
     private AgeRating ageRating;
 
-    @ManyToMany
-    private Set<CategoryEntity> categories;
     @OneToMany(targetEntity = ChapterEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
     private Set<ChapterEntity> chapters;
@@ -61,6 +59,14 @@ public class TitleEntity {
             inverseJoinColumns = @JoinColumn(name="genre_id")
     )
     private Set<GenreEntity> genres;
+
+    @ManyToMany
+    @JoinTable(
+            name="titles_categories",
+            joinColumns = @JoinColumn(name="title_id"),
+            inverseJoinColumns = @JoinColumn(name="category_id")
+    )
+    private Set<CategoryEntity> categories;
 
     @OneToMany(targetEntity = TitleCommentsEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
