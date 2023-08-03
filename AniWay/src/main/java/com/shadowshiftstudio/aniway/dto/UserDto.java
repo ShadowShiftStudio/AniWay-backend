@@ -22,16 +22,15 @@ public class UserDto {
     private Date createdAt;
 
     public static UserDto toDto(UserEntity entity) {
-        UserDto dto = new UserDto();
-
-        dto.id = entity.getId();
-        dto.username = entity.getUsername();
-        dto.sex = entity.getSex();
-        dto.xp = entity.getXp();
-        dto.pass_xp = entity.getPassXp();
-        dto.balance = entity.getBalance();
-        dto.createdAt = entity.getCreatedAt();
-
-        return dto;
+        return UserDto
+                .builder()
+                .id(entity.getId())
+                .username(entity.getUsername())
+                .sex(entity.getSex())
+                .xp(entity.getXp())
+                .pass_xp(entity.getPassXp())
+                .balance(entity.getBalance())
+                .createdAt(entity.getCreatedAt())
+                .build();
     }
 }

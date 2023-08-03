@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/auth/register", "/auth/login", "/auth/refresh").permitAll()
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/{id}", "/comment/create", "comment/{id}").authenticated()
+                        .requestMatchers("/user/**", "/comment/**", "/titles/**", "title/**").authenticated()
                 )
                 .sessionManagement(authorize -> authorize
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

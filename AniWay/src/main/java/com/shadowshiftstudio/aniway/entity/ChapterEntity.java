@@ -43,6 +43,7 @@ public class ChapterEntity {
     private int volume;
     private int views;
 
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

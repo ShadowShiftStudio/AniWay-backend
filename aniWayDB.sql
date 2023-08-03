@@ -3,6 +3,12 @@ CREATE TYPE "sex" AS ENUM (
   'female'
 );
 
+CREATE TYPE "age_rating" AS ENUM (
+  'everyone',
+  'teenager',
+  'adult'
+);
+
 CREATE TYPE "role" AS ENUM (
   'USER',
   'MODERATOR',
@@ -28,6 +34,17 @@ CREATE TYPE "reading_status" AS ENUM (
   'planned',
   'completed',
   'postponed'
+);
+
+CREATE TABLE "categories" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "text" varchar(30)
+);
+
+CREATE TABLE "title_categories" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "title_id" BIGSERIAL,
+  "category_id" BIGSERIAL
 );
 
 CREATE TABLE "users" (
@@ -63,6 +80,7 @@ CREATE TABLE "titles" (
   "id" BIGSERIAL PRIMARY KEY,
   "name" varchar(100),
   "original_name" varchar(100),
+  "age_rating" age_rating,
   "year" integer,
   "description" text[],
   "status" title_status,
@@ -192,3 +210,7 @@ ALTER TABLE "users_badges" ADD FOREIGN KEY ("badge_id") REFERENCES "badges" ("id
 ALTER TABLE "titles_genres" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
 
 ALTER TABLE "titles_genres" ADD FOREIGN KEY ("genre_id") REFERENCES "genres" ("id");
+
+ALTER TABLE "titles_categories" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
+
+ALTER TABLE "titles_categories" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");

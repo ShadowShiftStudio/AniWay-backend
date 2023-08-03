@@ -2,10 +2,16 @@ package com.shadowshiftstudio.aniway.dto;
 
 import com.shadowshiftstudio.aniway.entity.BadgeEntity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class BadgeDto {
     private long id;
@@ -13,12 +19,11 @@ public class BadgeDto {
     private LocalDateTime createdAt;
 
     public static BadgeDto toDto(BadgeEntity entity) {
-        BadgeDto dto = new BadgeDto();
-
-        dto.id = entity.getId();
-        dto.name = entity.getName();
-        dto.createdAt = entity.getCreatedAt();
-
-        return dto;
+        return BadgeDto
+                .builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .createdAt(entity.getCreatedAt())
+                .build();
     }
 }

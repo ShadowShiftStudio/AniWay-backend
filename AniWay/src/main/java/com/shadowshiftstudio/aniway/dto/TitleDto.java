@@ -1,16 +1,18 @@
 package com.shadowshiftstudio.aniway.dto;
 
 import com.shadowshiftstudio.aniway.entity.*;
+import com.shadowshiftstudio.aniway.enums.AgeRating;
 import com.shadowshiftstudio.aniway.enums.TitleStatus;
 import com.shadowshiftstudio.aniway.enums.TitleType;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
-import static jakarta.persistence.EnumType.STRING;
-
+@Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class TitleDto {
     private long id;
@@ -22,18 +24,19 @@ public class TitleDto {
     private TitleType type;
     private int views;
 
+    private AgeRating ageRating;
     public static TitleDto toDto(TitleEntity entity) {
-        TitleDto dto = new TitleDto();
-
-        dto.id = entity.getId();
-        dto.name = entity.getName();
-        dto.originalName = entity.getOriginalName();
-        dto.year = entity.getYear();
-        dto.description = entity.getDescription();
-        dto.status = entity.getStatus();
-        dto.type = entity.getType();
-        dto.views = entity.getViews();
-
-        return dto;
+        return TitleDto
+                .builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .originalName(entity.getOriginalName())
+                .year(entity.getYear())
+                .description(entity.getDescription())
+                .status(entity.getStatus())
+                .type(entity.getType())
+                .views(entity.getViews())
+                .ageRating(entity.getAgeRating())
+                .build();
     }
 }

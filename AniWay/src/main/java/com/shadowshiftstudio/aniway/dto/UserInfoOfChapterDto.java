@@ -1,8 +1,14 @@
 package com.shadowshiftstudio.aniway.dto;
 
 import com.shadowshiftstudio.aniway.entity.UserInfoOfChaptersEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class UserInfoOfChapterDto {
     private long id;
@@ -10,12 +16,11 @@ public class UserInfoOfChapterDto {
     private boolean isReaded;
 
     public static UserInfoOfChapterDto toDto(UserInfoOfChaptersEntity entity) {
-        UserInfoOfChapterDto dto = new UserInfoOfChapterDto();
-
-        dto.id = entity.getId();
-        dto.isLiked = entity.isLiked();
-        dto.isReaded = entity.isReaded();
-
-        return dto;
+        return UserInfoOfChapterDto
+                .builder()
+                .id(entity.getId())
+                .isLiked(entity.isLiked())
+                .isReaded(entity.isReaded())
+                .build();
     }
 }

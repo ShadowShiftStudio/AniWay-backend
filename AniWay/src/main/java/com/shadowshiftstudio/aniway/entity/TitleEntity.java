@@ -1,5 +1,6 @@
 package com.shadowshiftstudio.aniway.entity;
 
+import com.shadowshiftstudio.aniway.enums.AgeRating;
 import com.shadowshiftstudio.aniway.enums.TitleStatus;
 import com.shadowshiftstudio.aniway.enums.TitleType;
 import jakarta.persistence.*;
@@ -44,6 +45,11 @@ public class TitleEntity {
 
     private int views;
 
+    @Column(name="age_rating")
+    private AgeRating ageRating;
+
+    @ManyToMany
+    private Set<CategoryEntity> categories;
     @OneToMany(targetEntity = ChapterEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
     private Set<ChapterEntity> chapters;

@@ -41,4 +41,18 @@ public class TitleService {
         titleRepository.save(entity);
         return "Title was successfully created";
     }
+
+    public String deleteTitle(Long id) throws TitleNotFoundException {
+        Optional<TitleEntity> titleOptional = titleRepository.findById(id);
+        TitleEntity titleEntity;
+
+        if (titleOptional.isPresent())
+            titleEntity = titleOptional.get();
+        else
+            throw new TitleNotFoundException("Title not found");
+
+        titleRepository.delete(titleEntity);
+
+        return "Title was successfully deleted";
+    }
 }
