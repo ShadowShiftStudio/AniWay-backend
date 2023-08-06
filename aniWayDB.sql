@@ -38,7 +38,7 @@ CREATE TYPE "reading_status" AS ENUM (
 
 CREATE TABLE "categories" (
   "id" BIGSERIAL PRIMARY KEY,
-  "text" varchar(30)
+  "name" varchar(30)
 );
 
 CREATE TABLE "title_categories" (
