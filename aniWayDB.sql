@@ -58,7 +58,21 @@ CREATE TABLE "users" (
   "xp" integer,
   "pass_xp" integer,
   "balance" integer,
+  "password_reset_token_id" BIGSERIAL,
+  "email_verif_token_id" BIGSERIAL,
   "created_at" TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE TABLE "password_reset_tokens" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "token"  varchar(100),
+  "expiry_date" TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE TABLE "email_verif_tokens" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "token"  varchar(100),
+  "expiry_date" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "refresh_tokens" (

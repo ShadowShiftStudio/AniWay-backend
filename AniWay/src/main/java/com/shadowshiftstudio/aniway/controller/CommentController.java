@@ -47,8 +47,7 @@ public class CommentController {
         }
     }
 
-    // TODO think about correct mapping path
-    @PutMapping("/")
+    @PutMapping("/update")
     public ResponseEntity updateComment(@RequestBody UpdateCommentRequest request) {
         try {
             return ResponseEntity.ok(commentService.updateComment(request));

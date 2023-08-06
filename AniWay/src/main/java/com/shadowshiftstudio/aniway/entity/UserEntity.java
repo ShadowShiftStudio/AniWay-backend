@@ -75,6 +75,13 @@ public class UserEntity implements UserDetails {
     @Enumerated(STRING)
     private Role role;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="password_reset_token_id", referencedColumnName = "id")
+    private PasswordResetTokenEntity passwordResetToken;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="email_verif_token_id", referencedColumnName = "id")
+    private EmailVerificationTokenEntity emailVerificationToken;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

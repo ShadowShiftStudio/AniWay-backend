@@ -62,6 +62,7 @@ public class CommentService {
 
         comment.setText(request.getText());
         comment.setUpdatedAt(new Date(System.currentTimeMillis()));
+        commentRepository.save(comment);
 
         return "Comment was updated successfully";
     }
