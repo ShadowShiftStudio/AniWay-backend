@@ -1,17 +1,13 @@
 package com.shadowshiftstudio.aniway.repository;
 
-import com.shadowshiftstudio.aniway.dto.CategoryDto;
-import com.shadowshiftstudio.aniway.dto.GenreDto;
 import com.shadowshiftstudio.aniway.entity.TitleEntity;
 import com.shadowshiftstudio.aniway.enums.AgeRating;
-import com.shadowshiftstudio.aniway.enums.SortBy;
 import com.shadowshiftstudio.aniway.enums.TitleStatus;
 import com.shadowshiftstudio.aniway.enums.TitleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +20,9 @@ public interface TitleRepository extends JpaRepository<TitleEntity, Long> {
             "WHERE genre.name IN :genres and " +
             "title.status IN :statuses and " +
             "title.type IN :types and " +
-            "category.name IN :categories and " +
+            "category.text IN :categories and " +
             "title.ageRating IN :ageRatings")
-    void bar(
+    List<Optional<TitleEntity>> findSpecificTitles(
         @Param("genres") List<String> genres,
         @Param("statuses") List<TitleStatus> statuses,
         @Param("types") List<TitleType> types,

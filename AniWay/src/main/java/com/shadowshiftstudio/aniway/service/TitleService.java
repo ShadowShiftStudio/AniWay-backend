@@ -24,6 +24,9 @@ public class TitleService {
         else
             throw new TitleNotFoundException("Title not found");
 
+        titleEntity.setViews(titleEntity.getViews() + 1);
+        titleRepository.save(titleEntity);
+
         return TitleDto.toDto(titleEntity);
     }
 

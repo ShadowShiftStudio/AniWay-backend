@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -43,10 +43,15 @@ public class ChapterEntity {
     private int volume;
     private int views;
 
+    @Column(name="number_of_pages")
+    private int numberOfPages;
+
+    @OneToMany(mappedBy = "chapter")
+    private Set<ChapterImageEntity> images;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
 }

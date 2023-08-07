@@ -102,6 +102,13 @@ CREATE TABLE "titles" (
   "views" integer
 );
 
+CREATE TABLE "chapter_images" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "chapter_id" BIGSERIAL,
+  "image_index" integer,
+  "url" varchar(100)
+);
+
 CREATE TABLE "chapters" (
   "id" BIGSERIAL PRIMARY KEY,
   "title_id" BIGSERIAL,
@@ -109,6 +116,7 @@ CREATE TABLE "chapters" (
   "name" varchar(300),
   "number" integer,
   "volume" integer,
+  "number_of_pages" integer,
   "views" integer,
   "created_at" TIMESTAMP WITHOUT TIME ZONE,
   "updated_at" TIMESTAMP WITHOUT TIME ZONE
@@ -228,3 +236,5 @@ ALTER TABLE "titles_genres" ADD FOREIGN KEY ("genre_id") REFERENCES "genres" ("i
 ALTER TABLE "titles_categories" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
 
 ALTER TABLE "titles_categories" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
+
+ALTER TABLE "chapter_images" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapters" ("id");

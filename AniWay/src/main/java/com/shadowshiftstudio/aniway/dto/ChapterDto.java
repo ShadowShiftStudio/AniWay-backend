@@ -1,16 +1,13 @@
 package com.shadowshiftstudio.aniway.dto;
 
-import com.shadowshiftstudio.aniway.entity.ChapterCommentsEntity;
 import com.shadowshiftstudio.aniway.entity.ChapterEntity;
-import com.shadowshiftstudio.aniway.entity.TeamEntity;
-import com.shadowshiftstudio.aniway.entity.TitleEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.Date;
 @Data
 @AllArgsConstructor
 @Builder
@@ -21,8 +18,9 @@ public class ChapterDto {
     private int number;
     private int volume;
     private int views;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private int numberOfPages;
+    private Date createdAt;
+    private Date updatedAt;
 
     public static ChapterDto toDto(ChapterEntity entity) {
         return ChapterDto
@@ -31,6 +29,7 @@ public class ChapterDto {
                 .name(entity.getName())
                 .number(entity.getNumber())
                 .volume(entity.getVolume())
+                .numberOfPages(entity.getNumberOfPages())
                 .views(entity.getViews())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())

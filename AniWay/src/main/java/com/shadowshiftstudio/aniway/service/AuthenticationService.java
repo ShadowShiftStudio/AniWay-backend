@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -97,13 +98,7 @@ public class AuthenticationService {
     }
 
     public String forgotPassword(ForgotPasswordRequest request) throws UserNotFoundException {
-        Optional<UserEntity> userOptional = repository.findByEmail(request.getEmail());
-        UserEntity userEntity;
-
-        if (userOptional.isPresent())
-            userEntity = userOptional.get();
-        else
-            throw new UserNotFoundException("User not found");
+        UserEntity userEntity = repository.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         PasswordResetTokenEntity token = generatePasswordResetToken(userEntity);
         String url = apiUrl + "/auth/resetpassword?token=" + token.getToken();
@@ -113,21 +108,15 @@ public class AuthenticationService {
     }
 
     public String validatePasswordResetToken(String token) throws PasswordResetTokenNotFoundException, PasswordResetTokenIsExpiredException {
-        Optional<PasswordResetTokenEntity> tokenOptional = passwordResetTokenRepository.findByToken(token);
-        PasswordResetTokenEntity tokenEntity;
-
-        if (tokenOptional.isPresent())
-            tokenEntity = tokenOptional.get();
-        else
-            throw new PasswordResetTokenNotFoundException("Password reset token not found!");
+        PasswordResetTokenEntity tokenEntity = passwordResetTokenRepository.findByToken(token).orElseThrow(() -> new PasswordResetTokenNotFoundException("Password reset token not found"));;
 
         ValidatePasswordResetToken(tokenEntity);
 
         return "Token validated successfully";
     }
 
-    public String resetPassword(String password, String token) {
-        PasswordResetTokenEntity tokenEntity = passwordResetTokenRepository.findByToken(token).get();
+    public String resetPassword(String password, String token) throws PasswordResetTokenNotFoundException {
+        PasswordResetTokenEntity tokenEntity = passwordResetTokenRepository.findByToken(token).orElseThrow(() -> new PasswordResetTokenNotFoundException("Password reset token not found"));
         UserEntity userEntity = tokenEntity.getUser();
 
         userEntity.setPassword(passwordEncoder.encode(password));
@@ -138,13 +127,7 @@ public class AuthenticationService {
     }
 
     public String sendVerificationEmail(String email) throws UserNotFoundException {
-        Optional<UserEntity> userOptional = repository.findByEmail(email);
-        UserEntity userEntity;
-
-        if (userOptional.isPresent())
-            userEntity = userOptional.get();
-        else
-            throw new UserNotFoundException("User not found");
+        UserEntity userEntity = repository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         EmailVerificationTokenEntity token = generateEmailVerificationToken(userEntity);
         String url = apiUrl + "/auth/verify_email?token=" + token.getToken();
@@ -153,13 +136,8 @@ public class AuthenticationService {
         return emailService.sendMail(emailDetails);
     }
     public String validateEmailVerificationToken(String token) throws EmailVerificationTokenNotFoundException, EmailVerificationTokenIsExpiredException {
-        Optional<EmailVerificationTokenEntity> tokenOptional = emailVerificationTokenRepository.findByToken(token);
-        EmailVerificationTokenEntity tokenEntity;
-
-        if (tokenOptional.isPresent())
-            tokenEntity = tokenOptional.get();
-        else
-            throw new EmailVerificationTokenNotFoundException("Password reset token not found!");
+        EmailVerificationTokenEntity tokenEntity = emailVerificationTokenRepository.findByToken(token)
+                .orElseThrow(() -> new EmailVerificationTokenNotFoundException("Email verification token not found"));
 
         ValidateEmailVerificationToken(tokenEntity);
         UserEntity userEntity = tokenEntity.getUser();
