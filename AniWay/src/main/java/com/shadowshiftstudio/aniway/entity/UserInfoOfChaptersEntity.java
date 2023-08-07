@@ -29,6 +29,6 @@ public class UserInfoOfChaptersEntity {
     @Column(name="is_liked")
     private boolean isLiked;
 
-    @Column(name="is_readed")
-    private boolean isReaded;
+    @Column(name="is_read")
+    private boolean isRead;
 }

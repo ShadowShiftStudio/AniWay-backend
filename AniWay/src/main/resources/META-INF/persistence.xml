@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+  <persistence-unit name="default">
+    <class>com.shadowshiftstudio.aniway.entity.UserInfoOfTitlesEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.UserInfoOfChaptersEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.UserEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.TitleEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.TitleCommentsEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.TeamEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.RefreshToken</class>
+    <class>com.shadowshiftstudio.aniway.entity.PasswordResetTokenEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.GenreEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.EmailVerificationTokenEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.ChapterEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.ChapterCommentsEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.CategoryEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.BadgeEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.ChapterImageEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.CommentEntity</class>
+
+  </persistence-unit>
+    <persistence-unit name="persistenceUnit"/>
+</persistence>

@@ -162,7 +162,7 @@ CREATE TABLE "user_info_of_chapters" (
   "chapter_id" BIGSERIAL,
   "user_id" BIGSERIAL,
   "is_liked" boolean,
-  "is_readed" boolean
+  "is_read" boolean
 );
 
 CREATE TABLE "user_info_of_titles" (
@@ -233,8 +233,8 @@ ALTER TABLE "titles_genres" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("i
 
 ALTER TABLE "titles_genres" ADD FOREIGN KEY ("genre_id") REFERENCES "genres" ("id");
 
-ALTER TABLE "titles_categories" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
+ALTER TABLE "title_categories" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
 
-ALTER TABLE "titles_categories" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
+ALTER TABLE "title_categories" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
 
 ALTER TABLE "chapter_images" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapters" ("id");

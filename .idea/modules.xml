@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AniWay-backend.iml" filepath="$PROJECT_DIR$/.idea/AniWay-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Aniway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Aniway.main.iml" />
     </modules>
   </component>
 </project>

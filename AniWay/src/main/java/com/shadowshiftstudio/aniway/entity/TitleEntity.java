@@ -62,7 +62,7 @@ public class TitleEntity {
 
     @ManyToMany
     @JoinTable(
-            name="titles_categories",
+            name="title_categories",
             joinColumns = @JoinColumn(name="title_id"),
             inverseJoinColumns = @JoinColumn(name="category_id")
     )
