@@ -16,11 +16,13 @@ public class UserInfoOfChapterDto {
     private boolean isReaded;
 
     public static UserInfoOfChapterDto toDto(UserInfoOfChaptersEntity entity) {
-        return UserInfoOfChapterDto
-                .builder()
-                .id(entity.getId())
-                .isLiked(entity.isLiked())
-                .isReaded(entity.isReaded())
-                .build();
+        // TODO
+        return null;
+//        return UserInfoOfChapterDto
+//                .builder()
+//                .id(entity.getId())
+//                .isLiked(entity.isLiked())
+//                .isReaded(entity.isReaded())
+//                .build();
     }
 }

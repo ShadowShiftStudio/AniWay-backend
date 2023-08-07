@@ -22,7 +22,7 @@ public class PasswordResetTokenEntity {
 
     private String token;
 
-    @OneToOne(mappedBy = "password_reset_token_id")
+    @OneToOne(mappedBy = "passwordResetToken")
     private UserEntity user;
 
     @Column(name="expiry_date")

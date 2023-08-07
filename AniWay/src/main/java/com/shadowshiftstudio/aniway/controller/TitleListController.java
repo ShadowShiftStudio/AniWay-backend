@@ -45,10 +45,12 @@ public class TitleListController {
 
     @GetMapping("/top")
     public ResponseEntity getTopTitles() {
-        try {
-            return ResponseEntity.ok(titleListService.getTopTitles());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        // TODO
+        return null;
+//        try {
+//            return ResponseEntity.ok(titleListService.getTopTitles());
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
     }
 }

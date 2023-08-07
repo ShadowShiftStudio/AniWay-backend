@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$/../../AniWay/build/generated/sources/annotationProcessor/java/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../AniWay/build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
+    </content>
+  </component>
   <component name="FacetManager">
     <facet type="jpa" name="JPA">
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="default" />
-          <factory-entry name="entityManagerFactory" />
-          <factory-entry name="persistenceUnit" />
+          <factory-entry name="default" value="0df5e08f-0c77-4bf9-86f3-9e831edc6514" />
+          <factory-entry name="entityManagerFactory" value="0df5e08f-0c77-4bf9-86f3-9e831edc6514" />
+          <factory-entry name="persistenceUnit" value="0df5e08f-0c77-4bf9-86f3-9e831edc6514" />
         </datasource-mapping>
-        <naming-strategy-map />
+        <naming-strategy-map>
+          <unit-entry name="default" />
+          <unit-entry name="entityManagerFactory" />
+          <unit-entry name="persistenceUnit" />
+        </naming-strategy-map>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/../../AniWay/src/main/resources/META-INF/persistence.xml" />
       </configuration>
     </facet>

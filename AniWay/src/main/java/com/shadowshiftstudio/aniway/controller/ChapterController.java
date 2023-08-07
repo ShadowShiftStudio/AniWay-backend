@@ -21,10 +21,12 @@ public class ChapterController {
 
     @GetMapping("/{id}")
     public ResponseEntity getImage(@PathVariable Long id, @RequestParam int page) {
-        try {
-            return ResponseEntity.ok(chapterService.getImage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        // TODO
+        return null;
+//        try {
+//            return ResponseEntity.ok(chapterService.getImage());
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
     }
 }

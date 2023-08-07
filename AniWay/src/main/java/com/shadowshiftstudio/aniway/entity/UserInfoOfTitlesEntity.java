@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+import static jakarta.persistence.EnumType.STRING;
+
 @Entity
 @Data
 @Builder
@@ -29,6 +31,7 @@ public class UserInfoOfTitlesEntity {
     private UserEntity user;
 
     @Column(name="reading_status")
+    @Enumerated(STRING)
     private ReadingStatus readingStatus;
 
     private boolean bookmarked;

@@ -46,6 +46,7 @@ public class TitleEntity {
     private int views;
 
     @Column(name="age_rating")
+    @Enumerated(STRING)
     private AgeRating ageRating;
 
     @OneToMany(targetEntity = ChapterEntity.class, cascade = CascadeType.ALL)

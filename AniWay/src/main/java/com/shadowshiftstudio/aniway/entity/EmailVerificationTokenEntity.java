@@ -22,7 +22,7 @@ public class EmailVerificationTokenEntity {
 
     private String token;
 
-    @OneToOne(mappedBy = "email_verif_token_id")
+    @OneToOne(mappedBy = "emailVerificationToken")
     private UserEntity user;
 
     @Column(name="expiry_date")

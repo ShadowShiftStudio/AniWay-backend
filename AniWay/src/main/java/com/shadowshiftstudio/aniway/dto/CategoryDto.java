@@ -15,10 +15,12 @@ public class CategoryDto {
     private String text;
 
     public static CategoryDto toDto(CategoryEntity entity) {
-        return CategoryDto
-                .builder()
-                .id(entity.getId())
-                .text(entity.getText())
-                .build();
+        // TODO
+        return null;
+//        return CategoryDto
+//                .builder()
+//                .id(entity.getId())
+//                .text(entity.getText())
+//                .build();
     }
 }

@@ -19,7 +19,7 @@ public class ChapterService {
     private String UPLOAD_URL = System.getProperty("user.dir") + "/uploads";
 
     private TitleRepository titleRepository;
-    private TeamRepository teamRepository;
+//    private TeamRepository teamRepository;
 
     public String uploadImage(MultipartFile file) throws IOException {
         StringBuilder fileNames = new StringBuilder();
@@ -32,15 +32,17 @@ public class ChapterService {
 
     public String createChapter(CreateChapterRequest request) throws TitleNotFoundException {
 
-        ChapterEntity chapterEntity = ChapterEntity
-                .builder()
-                .title(titleRepository.findById(request.getTitle_id()).orElseThrow(() -> new TitleNotFoundException("Title not found")))
-                .team(teamRepository.findById(request.getTeam_id()).orElseThrow(() -> new TeamNotFoundException("Team not found")))
-                .name(request.getName())
-                .number(request.getNumber())
-                .volume(request.getVolume())
-                .createdAt(new Date(System.currentTimeMillis()))
-                .updatedAt(new Date(System.currentTimeMillis()))
-                .build();
+        // TODO
+        return null;
+//        ChapterEntity chapterEntity = ChapterEntity
+//                .builder()
+//                .title(titleRepository.findById(request.getTitle_id()).orElseThrow(() -> new TitleNotFoundException("Title not found")))
+//                .team(teamRepository.findById(request.getTeam_id()).orElseThrow(() -> new TeamNotFoundException("Team not found")))
+//                .name(request.getName())
+//                .number(request.getNumber())
+//                .volume(request.getVolume())
+//                .createdAt(new Date(System.currentTimeMillis()))
+//                .updatedAt(new Date(System.currentTimeMillis()))
+//                .build();
     }
 }

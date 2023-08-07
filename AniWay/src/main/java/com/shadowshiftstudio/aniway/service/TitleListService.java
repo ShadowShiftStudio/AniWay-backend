@@ -26,7 +26,9 @@ public class TitleListService {
             List<AgeRating> rating,
             SortBy sortBy
     ) {
-        titleRepository.findSpecificTitles(genres, status, type, categories, rating);
+        // TODO
+        return null;
+//        titleRepository.findSpecificTitles(genres, status, type, categories, rating);
     }
 
 }
