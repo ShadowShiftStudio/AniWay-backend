@@ -80,7 +80,6 @@ public class UserEntity implements UserDetails {
     private PasswordResetTokenEntity passwordResetToken;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @Column(nullable = true)
     @JoinColumn(name="email_verif_token_id", referencedColumnName = "id")
     private EmailVerificationTokenEntity emailVerificationToken;
 

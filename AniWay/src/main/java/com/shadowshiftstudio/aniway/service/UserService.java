@@ -15,9 +15,18 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserDto getUser(@NotNull Long id) throws UserNotFoundException {
+    public UserDto getUserId(@NotNull Long id) throws UserNotFoundException {
         try {
             UserEntity user = userRepository.findById(id).get();
+            return UserDto.toDto(user);
+        } catch(NoSuchElementException e) {
+            throw new UserNotFoundException("User not found!");
+        }
+    }
+
+    public UserDto getUserUsername(@NotNull String username) throws UserNotFoundException {
+        try {
+            UserEntity user = userRepository.findByUsername(username).get();
             return UserDto.toDto(user);
         } catch(NoSuchElementException e) {
             throw new UserNotFoundException("User not found!");

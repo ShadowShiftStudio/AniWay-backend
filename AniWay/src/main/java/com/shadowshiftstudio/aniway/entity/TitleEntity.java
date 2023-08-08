@@ -61,13 +61,13 @@ public class TitleEntity {
     )
     private Set<GenreEntity> genres;
 
-    @ManyToMany
-    @JoinTable(
-            name="title_categories",
-            joinColumns = @JoinColumn(name="title_id"),
-            inverseJoinColumns = @JoinColumn(name="category_id")
-    )
-    private Set<CategoryEntity> categories;
+//    @ManyToMany
+//    @JoinTable(
+//            name="title_categories",
+//            joinColumns = @JoinColumn(name="title_id"),
+//            inverseJoinColumns = @JoinColumn(name="category_id")
+//    )
+//    private Set<CategoryEntity> categories;
 
     @OneToMany(targetEntity = TitleCommentsEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")

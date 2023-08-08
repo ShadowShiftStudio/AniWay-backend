@@ -56,8 +56,18 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) throws UsernameIsOccupiedException, EmailIsOccupiedException {
         validateRegisterRequest(request);
         // TODO ROLES
+
+        var b = EmailVerificationTokenEntity.builder()
+                .build();
+
+        var a = PasswordResetTokenEntity.builder()
+                .build();
+
         var user = UserEntity.builder()
                 .username(request.getUsername())
+                .passwordResetToken(a)
+                .emailVerificationToken(b)
+                .emailVerified(true)
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
