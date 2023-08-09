@@ -1,0 +1,61 @@
+package com.shadowshiftstudio.aniway.service.title;
+
+import com.shadowshiftstudio.aniway.dto.title.CreateTitleRequest;
+import com.shadowshiftstudio.aniway.dto.title.TitleDto;
+import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
+import com.shadowshiftstudio.aniway.exception.title.TitleNotFoundException;
+import com.shadowshiftstudio.aniway.repository.title.TitleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class TitleService {
+    @Autowired
+    private TitleRepository titleRepository;
+
+    public TitleDto getTitle(Long id) throws TitleNotFoundException {
+        Optional<TitleEntity> titleOptional = titleRepository.findById(id);
+        TitleEntity titleEntity;
+
+        if (titleOptional.isPresent())
+            titleEntity = titleOptional.get();
+        else
+            throw new TitleNotFoundException("Title not found");
+
+        titleEntity.setViews(titleEntity.getViews() + 1);
+        titleRepository.save(titleEntity);
+
+        return TitleDto.toDto(titleEntity);
+    }
+
+    public String createTitle(CreateTitleRequest request) {
+        TitleEntity entity = TitleEntity
+                .builder()
+                .name(request.getName())
+                .originalName(request.getOriginalName())
+                .description(request.getDescription())
+                .year(request.getYear())
+                .type(request.getType())
+                .status(request.getStatus())
+                .build();
+
+        titleRepository.save(entity);
+        return "Title was successfully created";
+    }
+
+    public String deleteTitle(Long id) throws TitleNotFoundException {
+        Optional<TitleEntity> titleOptional = titleRepository.findById(id);
+        TitleEntity titleEntity;
+
+        if (titleOptional.isPresent())
+            titleEntity = titleOptional.get();
+        else
+            throw new TitleNotFoundException("Title not found");
+
+        titleRepository.delete(titleEntity);
+
+        return "Title was successfully deleted";
+    }
+}

@@ -1,5 +1,7 @@
 package com.shadowshiftstudio.aniway.entity;
 
+import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
+import com.shadowshiftstudio.aniway.entity.user.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -7,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -21,9 +22,13 @@ public class CommentEntity {
     @GeneratedValue
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="author_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name="author_id", nullable = false)
     private UserEntity author;
+
+    @ManyToOne
+    @JoinColumn(name="title_id", nullable = false)
+    private TitleEntity title;
 
     @Size(min = 3, message = "{validation.name.size.too_short}")
     @Size(max = 300, message = "{validation.name.size.too_long}")

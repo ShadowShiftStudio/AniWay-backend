@@ -1,15 +1,17 @@
 package com.shadowshiftstudio.aniway.controller;
 
-import com.shadowshiftstudio.aniway.dto.*;
-import com.shadowshiftstudio.aniway.entity.RefreshToken;
-import com.shadowshiftstudio.aniway.exception.RefreshTokenNotFoundException;
-import com.shadowshiftstudio.aniway.exception.UserNotFoundException;
-import com.shadowshiftstudio.aniway.service.AuthenticationService;
-import com.shadowshiftstudio.aniway.service.JwtService;
-import com.shadowshiftstudio.aniway.service.RefreshTokenService;
+import com.shadowshiftstudio.aniway.dto.auth.AuthenticationRequest;
+import com.shadowshiftstudio.aniway.dto.auth.AuthenticationResponse;
+import com.shadowshiftstudio.aniway.dto.auth.RefreshTokenRequest;
+import com.shadowshiftstudio.aniway.dto.auth.RegisterRequest;
+import com.shadowshiftstudio.aniway.entity.auth.RefreshToken;
+import com.shadowshiftstudio.aniway.exception.tokens.RefreshTokenNotFoundException;
+import com.shadowshiftstudio.aniway.exception.user.UserNotFoundException;
+import com.shadowshiftstudio.aniway.service.auth.AuthenticationService;
+import com.shadowshiftstudio.aniway.service.auth.JwtService;
+import com.shadowshiftstudio.aniway.service.auth.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,9 +42,9 @@ public class AuthenticationController {
 
     // Password reset
     @PostMapping("/forgot_password")
-    public ResponseEntity forgotPassword(@RequestBody ForgotPasswordRequest request) {
+    public ResponseEntity forgotPassword(@RequestParam String email) {
         try {
-            return ResponseEntity.ok(service.forgotPassword(request));
+            return ResponseEntity.ok(service.forgotPassword(email));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -76,7 +78,7 @@ public class AuthenticationController {
         }
     }
 
-    @GetMapping("/validate_pass_toke")
+    @GetMapping("/verify_email")
     public ResponseEntity validateEmailVerificationToken(@RequestParam String token) {
         try {
             return ResponseEntity.ok(service.validateEmailVerificationToken(token));

@@ -1,8 +1,8 @@
 package com.shadowshiftstudio.aniway.controller;
 
-import com.shadowshiftstudio.aniway.dto.CreateTitleRequest;
-import com.shadowshiftstudio.aniway.exception.TitleNotFoundException;
-import com.shadowshiftstudio.aniway.service.TitleService;
+import com.shadowshiftstudio.aniway.dto.title.CreateTitleRequest;
+import com.shadowshiftstudio.aniway.exception.title.TitleNotFoundException;
+import com.shadowshiftstudio.aniway.service.title.TitleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

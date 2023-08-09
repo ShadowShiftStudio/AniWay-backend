@@ -1,7 +1,7 @@
 package com.shadowshiftstudio.aniway.controller;
 
-import com.shadowshiftstudio.aniway.exception.BadgeNotFoundException;
-import com.shadowshiftstudio.aniway.service.BadgeService;
+import com.shadowshiftstudio.aniway.exception.user.BadgeNotFoundException;
+import com.shadowshiftstudio.aniway.service.user.BadgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

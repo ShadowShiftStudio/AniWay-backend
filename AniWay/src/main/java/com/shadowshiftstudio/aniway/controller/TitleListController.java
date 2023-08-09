@@ -1,12 +1,9 @@
 package com.shadowshiftstudio.aniway.controller;
 
-import com.shadowshiftstudio.aniway.dto.CategoryDto;
-import com.shadowshiftstudio.aniway.dto.GenreDto;
 import com.shadowshiftstudio.aniway.enums.AgeRating;
-import com.shadowshiftstudio.aniway.enums.SortBy;
 import com.shadowshiftstudio.aniway.enums.TitleStatus;
 import com.shadowshiftstudio.aniway.enums.TitleType;
-import com.shadowshiftstudio.aniway.service.TitleListService;
+import com.shadowshiftstudio.aniway.service.title.TitleListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,21 +18,19 @@ public class TitleListController {
 
     @GetMapping("/catalog")
     public ResponseEntity getCatalogTitles(
-        @RequestParam(required = false) List<GenreDto> genres,
-        @RequestParam(required = false) List<TitleStatus> status,
-        @RequestParam(required = false) List<TitleType> type,
-        @RequestParam(required = false) List<CategoryDto> categories,
-        @RequestParam(required = false) List<AgeRating> rating,
-        @RequestParam(required = false) SortBy sortBy
+        @RequestParam(required = false) List<String> genres,
+        @RequestParam(required = false) List<TitleStatus> statuses,
+        @RequestParam(required = false) List<TitleType> types,
+        @RequestParam(required = false) List<String> categories,
+        @RequestParam(required = false) List<AgeRating> ageRatings
     ) {
         try {
             return ResponseEntity.ok(titleListService.getCatalogTitles(
                         genres,
-                        status,
-                        type,
+                        statuses,
+                        types,
                         categories,
-                        rating,
-                        sortBy
+                        ageRatings
                     )
             );
         } catch (Exception e) {

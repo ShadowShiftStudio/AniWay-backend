@@ -1,11 +1,10 @@
 package com.shadowshiftstudio.aniway.controller;
 
-import com.shadowshiftstudio.aniway.dto.CreateCommentRequest;
-import com.shadowshiftstudio.aniway.dto.UpdateCommentRequest;
-import com.shadowshiftstudio.aniway.exception.CommentNotFoundException;
-import com.shadowshiftstudio.aniway.service.CommentService;
+import com.shadowshiftstudio.aniway.dto.comment.CreateCommentRequest;
+import com.shadowshiftstudio.aniway.dto.auth.UpdateCommentRequest;
+import com.shadowshiftstudio.aniway.exception.comment.CommentNotFoundException;
+import com.shadowshiftstudio.aniway.service.chapter.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +26,15 @@ public class CommentController {
         }
     }
 
+    @GetMapping(value = "/user_comments")
+    public ResponseEntity getUserComments(@PathVariable Long userId) {
+        try {
+            return ResponseEntity.ok(commentService.getUserComments(userId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PostMapping("/create")
     public ResponseEntity createComment(@RequestBody CreateCommentRequest request) {
         try {
@@ -36,10 +44,12 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteComment(@PathVariable Long id) {
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteComment(
+            @RequestParam(name="user_id") Long userId,
+            @RequestParam(name="comment_id") Long id) {
         try {
-            return ResponseEntity.ok(commentService.deleteComment(id));
+            return ResponseEntity.ok(commentService.deleteComment(userId, id));
         } catch (CommentNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

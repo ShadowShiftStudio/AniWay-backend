@@ -1,5 +1,7 @@
 package com.shadowshiftstudio.aniway.entity;
 
+import com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity;
+import com.shadowshiftstudio.aniway.entity.user.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -42,11 +44,6 @@ public class TeamEntity {
     private Set<ChapterEntity> chapters;
 
     @ManyToMany()
-    @JoinTable(
-            name = "team_users",
-            joinColumns = @JoinColumn(name="team_id"),
-            inverseJoinColumns = @JoinColumn(name="user_id")
-    )
     private Set<UserEntity> users;
 
 

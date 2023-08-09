@@ -58,19 +58,19 @@ CREATE TABLE "users" (
   "xp" integer,
   "pass_xp" integer,
   "balance" integer,
-  "password_reset_token_id" BIGSERIAL,
-  "email_verif_token_id" BIGSERIAL,
   "created_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "password_reset_tokens" (
   "id" BIGSERIAL PRIMARY KEY,
+  "user_id" BIGSERIAL,
   "token"  varchar(100),
   "expiry_date" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "email_verif_tokens" (
   "id" BIGSERIAL PRIMARY KEY,
+  "user_id" BIGSERIAL,
   "token"  varchar(100),
   "expiry_date" TIMESTAMP WITHOUT TIME ZONE
 );
@@ -88,6 +88,12 @@ CREATE TABLE "teams" (
   "name" varchar(20),
   "description" varchar(150),
   "created_at" TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE TABLE "team_chapters" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "team_id" BIGSERIAL,
+  "chapter_id" BIGSERIAL
 );
 
 CREATE TABLE "titles" (
@@ -145,9 +151,23 @@ CREATE TABLE "chapter_comments" (
   "comment_id" BIGSERIAL
 );
 
+CREATE TABLE "achievments" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "header" varchar(30),
+  "avatar_url" varchar,
+  "text" varchar(50)
+);
+
+CREATE TABLE "user_achievments" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "user_id" BIGSERIAL,
+  "achievment_id" BIGSERIAL
+);
+
 CREATE TABLE "comments" (
   "id" BIGSERIAL PRIMARY KEY,
   "author_id" BIGSERIAL,
+  "title_id" BIGSERIAL,
   "text" varchar(350),
   "created_at" TIMESTAMP WITHOUT TIME ZONE,
   "updated_at" TIMESTAMP WITHOUT TIME ZONE
