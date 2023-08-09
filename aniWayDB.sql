@@ -151,17 +151,16 @@ CREATE TABLE "chapter_comments" (
   "comment_id" BIGSERIAL
 );
 
-CREATE TABLE "achievments" (
+CREATE TABLE "achievements" (
   "id" BIGSERIAL PRIMARY KEY,
   "header" varchar(30),
   "avatar_url" varchar,
   "text" varchar(50)
 );
 
-CREATE TABLE "user_achievments" (
-  "id" BIGSERIAL PRIMARY KEY,
+CREATE TABLE "user_achievements" (
   "user_id" BIGSERIAL,
-  "achievment_id" BIGSERIAL
+  "achievement_id" BIGSERIAL
 );
 
 CREATE TABLE "comments" (
@@ -258,3 +257,7 @@ ALTER TABLE "title_categories" ADD FOREIGN KEY ("title_id") REFERENCES "titles" 
 ALTER TABLE "title_categories" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
 
 ALTER TABLE "chapter_images" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapters" ("id");
+
+ALTER TABLE "user_achievements" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "user_achievements" ADD FOREIGN KEY ("achievement_id") REFERENCES "achievements" ("id");

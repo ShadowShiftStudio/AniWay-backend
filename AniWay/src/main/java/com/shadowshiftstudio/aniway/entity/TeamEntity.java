@@ -43,7 +43,12 @@ public class TeamEntity {
     @JoinColumn(referencedColumnName = "id")
     private Set<ChapterEntity> chapters;
 
-    @ManyToMany()
+    @ManyToMany
+    @JoinTable(
+            name="team_users",
+            joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
+    )
     private Set<UserEntity> users;
 
 

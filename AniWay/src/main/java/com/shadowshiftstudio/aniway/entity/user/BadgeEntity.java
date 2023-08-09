@@ -29,6 +29,6 @@ public class BadgeEntity {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "badges")
     private Set<UserEntity> users;
 }

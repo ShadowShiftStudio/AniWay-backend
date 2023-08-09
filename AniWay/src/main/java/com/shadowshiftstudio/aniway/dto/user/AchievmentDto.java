@@ -1,6 +1,6 @@
 package com.shadowshiftstudio.aniway.dto.user;
 
-import com.shadowshiftstudio.aniway.entity.user.AchievmentEntity;
+import com.shadowshiftstudio.aniway.entity.AchievementEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +15,7 @@ public class AchievmentDto {
     private String avatarUrl;
     private String text;
 
-    public static AchievmentDto toDto(AchievmentEntity entity) {
+    public static AchievmentDto toDto(AchievementEntity entity) {
         return AchievmentDto
                 .builder()
                 .header(entity.getHeader())

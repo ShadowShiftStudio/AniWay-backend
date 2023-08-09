@@ -55,7 +55,7 @@ public class UserDto {
                 .comments(entity.getComments().size())
                 .avatarUrl(entity.getAvatarUrl())
                 .backgroundUrl(entity.getBackgroundUrl())
-                .achievments(entity.getAchievments().stream().map(AchievmentDto::toDto).toList())
+                .achievments(entity.getAchievements().stream().map(AchievmentDto::toDto).toList())
                 .build();
     }
 }

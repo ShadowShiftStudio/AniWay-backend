@@ -84,14 +84,6 @@ public class UserEntity implements UserDetails {
 
     private String backgroundUrl;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_achievments",
-            joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name="achievment_id")
-    )
-    private Set<AchievmentEntity> achievments;
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private PasswordResetTokenEntity passwordResetToken;
@@ -105,8 +97,11 @@ public class UserEntity implements UserDetails {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "users")
     private Set<TeamEntity> teams;
+
+    @ManyToMany(mappedBy = "users")
+    private Set<AchievementEntity> achievements;
 
     @Override
     public boolean isAccountNonExpired() {
