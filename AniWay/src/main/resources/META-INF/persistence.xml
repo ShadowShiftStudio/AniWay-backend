@@ -20,7 +20,7 @@
     <class>com.shadowshiftstudio.aniway.entity.user.BadgeEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.chapter.ChapterImageEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.CommentEntity</class>
-
+    <class>com.shadowshiftstudio.aniway.entity.AchievementEntity</class>
   </persistence-unit>
     <persistence-unit name="persistenceUnit"/>
 </persistence>

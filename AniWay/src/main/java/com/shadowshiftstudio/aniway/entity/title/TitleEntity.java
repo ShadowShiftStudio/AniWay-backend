@@ -1,6 +1,7 @@
 package com.shadowshiftstudio.aniway.entity.title;
 
 import com.shadowshiftstudio.aniway.entity.CategoryEntity;
+import com.shadowshiftstudio.aniway.entity.CommentEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.GenreEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserInfoOfChaptersEntity;
@@ -75,7 +76,7 @@ public class TitleEntity {
     private Set<CategoryEntity> categories;
 
     @OneToMany(mappedBy = "title")
-    private Set<TitleCommentsEntity> comments;
+    private Set<CommentEntity> comments;
 
     @OneToMany
     @JoinTable(

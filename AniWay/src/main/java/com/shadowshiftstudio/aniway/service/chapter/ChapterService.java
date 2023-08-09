@@ -96,7 +96,11 @@ public class ChapterService {
     }
 
     public List<ChapterImageDto> getTitleImages(Long id) throws ChapterNotFoundException, ChapterImageNotFoundException {
-        List<ChapterImageDto> images = chapterImageRepository.findByChapter(id).stream().map(ChapterImageDto::toDto).toList();
+        List<ChapterImageDto> images = chapterImageRepository
+                .findByChapter(chapterRepository.findById(id).orElseThrow(() -> new ChapterNotFoundException("Chapter not found")))
+                .stream()
+                .map(ChapterImageDto::toDto)
+                .toList();
 
         if (images.isEmpty())
             throw new ChapterImageNotFoundException("Images not found");
