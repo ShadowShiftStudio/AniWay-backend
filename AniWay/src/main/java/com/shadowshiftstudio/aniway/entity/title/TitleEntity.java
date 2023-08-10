@@ -4,8 +4,7 @@ import com.shadowshiftstudio.aniway.entity.CategoryEntity;
 import com.shadowshiftstudio.aniway.entity.CommentEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.GenreEntity;
-import com.shadowshiftstudio.aniway.entity.user.UserInfoOfChaptersEntity;
-import com.shadowshiftstudio.aniway.entity.user.UserInfoOfTitlesEntity;
+import com.shadowshiftstudio.aniway.entity.user.UserTitle;
 import com.shadowshiftstudio.aniway.enums.AgeRating;
 import com.shadowshiftstudio.aniway.enums.TitleStatus;
 import com.shadowshiftstudio.aniway.enums.TitleType;
@@ -75,7 +74,7 @@ public class TitleEntity {
     )
     private Set<CategoryEntity> categories;
 
-    @OneToMany(mappedBy = "title")
+    @OneToMany(mappedBy="title")
     private Set<CommentEntity> comments;
 
     @OneToMany
@@ -87,8 +86,5 @@ public class TitleEntity {
     private Set<TitleEntity> relatedTitles;
 
     @OneToMany(mappedBy = "title")
-    private Set<UserInfoOfTitlesEntity> titlesInfo;
-
-    @OneToMany(mappedBy = "title")
-    private Set<UserInfoOfChaptersEntity> chaptersInfo;
+    private Set<UserTitle> titlesInfo;
 }

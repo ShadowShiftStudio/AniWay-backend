@@ -12,7 +12,15 @@ CREATE TYPE "age_rating" AS ENUM (
 CREATE TYPE "role" AS ENUM (
   'USER',
   'MODERATOR',
-  'TRANSLATOR'
+  'TRANSLATOR',
+  'ADMIN'
+);
+
+CREATE TYPE "achievement_type" AS ENUM (
+  'likes',
+  'comments',
+  'chapters',
+  'lvl'
 );
 
 CREATE TYPE "title_status" AS ENUM (
@@ -30,10 +38,11 @@ CREATE TYPE "title_type" AS ENUM (
 );
 
 CREATE TYPE "reading_status" AS ENUM (
-  'in_progress',
-  'planned',
-  'completed',
-  'postponed'
+  'IN_PROGRESS',
+  'PLANNED',
+  'COMPLETED',
+  'POSTPONED',
+  'FAVOURITE'
 );
 
 CREATE TABLE "categories" (
@@ -139,34 +148,26 @@ CREATE TABLE "badges" (
   "created_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE "title_comments" (
-  "id" BIGSERIAL PRIMARY KEY,
-  "title_id" BIGSERIAL,
-  "comment_id" BIGSERIAL
-);
-
-CREATE TABLE "chapter_comments" (
-  "id" BIGSERIAL PRIMARY KEY,
-  "chapter_id" BIGSERIAL,
-  "comment_id" BIGSERIAL
-);
-
 CREATE TABLE "achievements" (
   "id" BIGSERIAL PRIMARY KEY,
   "header" varchar(30),
   "avatar_url" varchar,
-  "text" varchar(50)
+  "text" varchar(50),
+  "type" achievement_type,
+  "condition" integer
 );
 
 CREATE TABLE "user_achievements" (
   "user_id" BIGSERIAL,
-  "achievement_id" BIGSERIAL
+  "achievement_id" BIGSERIAL,
+  "received" boolean
 );
 
 CREATE TABLE "comments" (
   "id" BIGSERIAL PRIMARY KEY,
   "author_id" BIGSERIAL,
   "title_id" BIGSERIAL,
+  "chapter_id" BIGSERIAL,
   "text" varchar(350),
   "created_at" TIMESTAMP WITHOUT TIME ZONE,
   "updated_at" TIMESTAMP WITHOUT TIME ZONE
@@ -188,7 +189,6 @@ CREATE TABLE "user_info_of_titles" (
   "title_id" BIGSERIAL,
   "user_id" BIGSERIAL,
   "reading_status" reading_status,
-  "bookmarked" boolean,
   "rating" integer
 );
 
@@ -220,13 +220,9 @@ ALTER TABLE "chapters" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id");
 
 ALTER TABLE "comments" ADD FOREIGN KEY ("author_id") REFERENCES "users" ("id");
 
-ALTER TABLE "title_comments" ADD FOREIGN KEY ("comment_id") REFERENCES "comments" ("id");
+ALTER TABLE "comments" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
 
-ALTER TABLE "title_comments" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
-
-ALTER TABLE "chapter_comments" ADD FOREIGN KEY ("comment_id") REFERENCES "comments" ("id");
-
-ALTER TABLE "chapter_comments" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapters" ("id");
+ALTER TABLE "comments" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapters" ("id");
 
 ALTER TABLE "related_titles" ADD FOREIGN KEY ("base_title_id") REFERENCES "titles" ("id");
 

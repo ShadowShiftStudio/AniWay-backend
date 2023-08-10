@@ -1,5 +1,6 @@
 package com.shadowshiftstudio.aniway.entity;
 
+import com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity;
 import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserEntity;
 import jakarta.persistence.*;
@@ -27,8 +28,12 @@ public class CommentEntity {
     private UserEntity author;
 
     @ManyToOne
-    @JoinColumn(name="title_id", nullable = false)
+    @JoinColumn(name="title_id")
     private TitleEntity title;
+
+    @ManyToOne
+    @JoinColumn(name="chapter_id")
+    private ChapterEntity chapter;
 
     @Size(min = 3, message = "{validation.name.size.too_short}")
     @Size(max = 300, message = "{validation.name.size.too_long}")

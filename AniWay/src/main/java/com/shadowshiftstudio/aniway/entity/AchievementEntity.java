@@ -1,6 +1,7 @@
 package com.shadowshiftstudio.aniway.entity;
 
-import com.shadowshiftstudio.aniway.entity.user.UserEntity;
+import com.shadowshiftstudio.aniway.entity.user.UserAchievement;
+import com.shadowshiftstudio.aniway.enums.AchievementType;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
+
+import static jakarta.persistence.EnumType.STRING;
 
 @Entity
 @Data
@@ -28,11 +31,10 @@ public class AchievementEntity {
 
     private String text;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_achievements",
-            joinColumns = @JoinColumn(name = "achievement_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
-    )
-    private Set<UserEntity> users;
+    @Enumerated(STRING)
+    private AchievementType type;
+
+    private int condition;
+    @OneToMany(mappedBy = "achievement")
+    private Set<UserAchievement> achievementsInfo;
 }

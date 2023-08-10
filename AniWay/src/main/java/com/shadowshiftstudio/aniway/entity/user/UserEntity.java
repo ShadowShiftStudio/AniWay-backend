@@ -69,10 +69,10 @@ public class UserEntity implements UserDetails {
     private Set<BadgeEntity> badges;
 
     @OneToMany(mappedBy = "user")
-    private Set<UserInfoOfTitlesEntity> titlesInfo;
+    private Set<UserTitle> titlesInfo;
 
     @OneToMany(mappedBy = "user")
-    private Set<UserInfoOfChaptersEntity> chaptersInfo;
+    private Set<UserChapter> chaptersInfo;
 
     @Enumerated(STRING)
     private Role role;
@@ -100,8 +100,8 @@ public class UserEntity implements UserDetails {
     @ManyToMany(mappedBy = "users")
     private Set<TeamEntity> teams;
 
-    @ManyToMany(mappedBy = "users")
-    private Set<AchievementEntity> achievements;
+    @OneToMany(mappedBy = "user")
+    private Set<UserAchievement> achievementsInfo;
 
     @Override
     public boolean isAccountNonExpired() {

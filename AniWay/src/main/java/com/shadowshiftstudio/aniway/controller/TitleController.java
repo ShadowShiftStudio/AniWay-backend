@@ -1,6 +1,7 @@
 package com.shadowshiftstudio.aniway.controller;
 
 import com.shadowshiftstudio.aniway.dto.title.CreateTitleRequest;
+import com.shadowshiftstudio.aniway.enums.ReadingStatus;
 import com.shadowshiftstudio.aniway.exception.title.TitleNotFoundException;
 import com.shadowshiftstudio.aniway.service.title.TitleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,15 @@ public class TitleController {
         try {
             return ResponseEntity.ok(titleService.deleteTitle(id));
         } catch (TitleNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get_user_titles/{username}")
+    public ResponseEntity getUserTitlesByReadingStatus(@PathVariable String username, @RequestParam ReadingStatus readingStatus) {
+        try {
+            return ResponseEntity.ok(titleService.getUserTitlesByReadingStatus(username, readingStatus));
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

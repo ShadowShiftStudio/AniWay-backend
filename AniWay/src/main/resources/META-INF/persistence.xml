@@ -4,18 +4,17 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
   <persistence-unit name="default">
-    <class>com.shadowshiftstudio.aniway.entity.user.UserInfoOfTitlesEntity</class>
-    <class>com.shadowshiftstudio.aniway.entity.user.UserInfoOfChaptersEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.user.UserTitle</class>
+    <class>com.shadowshiftstudio.aniway.entity.user.UserChapter</class>
     <class>com.shadowshiftstudio.aniway.entity.user.UserEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.user.UserAchievement</class>
     <class>com.shadowshiftstudio.aniway.entity.title.TitleEntity</class>
-    <class>com.shadowshiftstudio.aniway.entity.title.TitleCommentsEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.TeamEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.auth.RefreshToken</class>
     <class>com.shadowshiftstudio.aniway.entity.auth.PasswordResetTokenEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.chapter.GenreEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.auth.EmailVerificationTokenEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity</class>
-    <class>com.shadowshiftstudio.aniway.entity.chapter.ChapterCommentsEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.CategoryEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.user.BadgeEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.chapter.ChapterImageEntity</class>

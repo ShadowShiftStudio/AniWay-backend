@@ -3,17 +3,30 @@ package com.shadowshiftstudio.aniway.service.title;
 import com.shadowshiftstudio.aniway.dto.title.CreateTitleRequest;
 import com.shadowshiftstudio.aniway.dto.title.TitleDto;
 import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
+import com.shadowshiftstudio.aniway.entity.user.UserTitle;
+import com.shadowshiftstudio.aniway.enums.ReadingStatus;
 import com.shadowshiftstudio.aniway.exception.title.TitleNotFoundException;
+import com.shadowshiftstudio.aniway.exception.title.TitlesNotFoundException;
+import com.shadowshiftstudio.aniway.exception.user.UserNotFoundException;
 import com.shadowshiftstudio.aniway.repository.title.TitleRepository;
+import com.shadowshiftstudio.aniway.repository.user.UserRepository;
+import com.shadowshiftstudio.aniway.repository.user.UserTitleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TitleService {
     @Autowired
     private TitleRepository titleRepository;
+
+    @Autowired
+    private UserTitleRepository userTitleRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public TitleDto getTitle(Long id) throws TitleNotFoundException {
         Optional<TitleEntity> titleOptional = titleRepository.findById(id);
@@ -57,5 +70,21 @@ public class TitleService {
         titleRepository.delete(titleEntity);
 
         return "Title was successfully deleted";
+    }
+
+    public List<TitleDto> getUserTitlesByReadingStatus(String username, ReadingStatus readingStatus) throws UserNotFoundException, TitlesNotFoundException {
+        List<TitleDto> titles = userTitleRepository.findAllByUserAndReadingStatus(
+                userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found")),
+                readingStatus
+        )
+                .stream()
+                .map(UserTitle::getTitle)
+                .map(TitleDto::toDto)
+                .toList();
+
+        if (titles.isEmpty())
+            throw new TitlesNotFoundException("Titles not found");
+
+        return titles;
     }
 }

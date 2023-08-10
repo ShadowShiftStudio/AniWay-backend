@@ -26,10 +26,10 @@ public class CommentController {
         }
     }
 
-    @GetMapping(value = "/user_comments")
-    public ResponseEntity getUserComments(@PathVariable Long userId) {
+    @GetMapping(value = "/get_comments/{username}")
+    public ResponseEntity getUserComments(@PathVariable String username) {
         try {
-            return ResponseEntity.ok(commentService.getUserComments(userId));
+            return ResponseEntity.ok(commentService.getUserComments(username));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

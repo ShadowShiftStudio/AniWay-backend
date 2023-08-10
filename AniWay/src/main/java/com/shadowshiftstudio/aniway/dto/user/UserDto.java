@@ -1,7 +1,7 @@
 package com.shadowshiftstudio.aniway.dto.user;
 
+import com.shadowshiftstudio.aniway.entity.user.UserChapter;
 import com.shadowshiftstudio.aniway.entity.user.UserEntity;
-import com.shadowshiftstudio.aniway.entity.user.UserInfoOfChaptersEntity;
 import com.shadowshiftstudio.aniway.enums.Sex;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Builder
@@ -25,10 +24,9 @@ public class UserDto {
     private Date createdAt;
     private int chapters;
     private int likes;
-    private int comments;
+    private int commentsCount;
     private String avatarUrl;
     private String backgroundUrl;
-    private List<AchievmentDto> achievments;
 
     public static UserDto toDto(UserEntity entity) {
         return UserDto
@@ -42,20 +40,19 @@ public class UserDto {
                 .createdAt(entity.getCreatedAt())
                 .chapters(entity.getChaptersInfo()
                         .stream()
-                        .map(UserInfoOfChaptersEntity::isRead)
+                        .map(UserChapter::isRead)
                         .toList()
                         .size()
                 )
                 .likes(entity.getChaptersInfo()
                         .stream()
-                        .map(UserInfoOfChaptersEntity::isLiked)
+                        .map(UserChapter::isLiked)
                         .toList()
                         .size()
                 )
-                .comments(entity.getComments().size())
+                .commentsCount(entity.getComments().size())
                 .avatarUrl(entity.getAvatarUrl())
                 .backgroundUrl(entity.getBackgroundUrl())
-                .achievments(entity.getAchievements().stream().map(AchievmentDto::toDto).toList())
                 .build();
     }
 }

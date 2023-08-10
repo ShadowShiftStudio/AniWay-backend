@@ -4,5 +4,6 @@ public enum ReadingStatus {
     IN_PROGRESS,
     PLANNED,
     COMPLETED,
-    POSTPONED
+    POSTPONED,
+    FAVOURITE
 }

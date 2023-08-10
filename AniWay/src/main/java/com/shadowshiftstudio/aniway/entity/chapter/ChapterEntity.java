@@ -3,6 +3,7 @@ package com.shadowshiftstudio.aniway.entity.chapter;
 import com.shadowshiftstudio.aniway.entity.CommentEntity;
 import com.shadowshiftstudio.aniway.entity.TeamEntity;
 import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
+import com.shadowshiftstudio.aniway.entity.user.UserChapter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -34,10 +35,6 @@ public class ChapterEntity {
     @JoinColumn(name = "team_id", insertable = false, updatable = false)
     private TeamEntity team;
 
-    @OneToMany(targetEntity = CommentEntity.class, cascade = ALL)
-    @JoinColumn(referencedColumnName = "id")
-    private Set<CommentEntity> comments;
-
     @Size(min = 3, message = "{validation.name.size.too_short}")
     @Size(max = 300, message = "{validation.name.size.too_long}")
     private String name;
@@ -50,6 +47,9 @@ public class ChapterEntity {
     private int numberOfPages;
 
     @OneToMany(mappedBy = "chapter")
+    private Set<CommentEntity> comments;
+
+    @OneToMany(mappedBy = "chapter")
     private Set<ChapterImageEntity> images;
 
     @Column(name = "created_at")
@@ -57,4 +57,7 @@ public class ChapterEntity {
 
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    @OneToMany(mappedBy = "chapter")
+    private Set<UserChapter> chaptersInfo;
 }

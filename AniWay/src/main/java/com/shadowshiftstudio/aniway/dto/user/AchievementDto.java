@@ -10,13 +10,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AchievmentDto {
+public class AchievementDto {
     private String header;
     private String avatarUrl;
     private String text;
-
-    public static AchievmentDto toDto(AchievementEntity entity) {
-        return AchievmentDto
+    public static AchievementDto toDto(AchievementEntity entity) {
+        return AchievementDto
                 .builder()
                 .header(entity.getHeader())
                 .avatarUrl(entity.getAvatarUrl())

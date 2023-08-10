@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                         .requestMatchers("auth/**").permitAll()
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/**", "/comment/**", "/titles/**", "title/**").authenticated()
+                        .requestMatchers("/user/**", "/comment/**","achievements/**", "/titles/**", "title/**").authenticated()
                 )
                 .sessionManagement(authorize -> authorize
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
