@@ -1,5 +1,6 @@
 package com.shadowshiftstudio.aniway.dto.auth;
 
+import com.shadowshiftstudio.aniway.enums.Role;
 import com.shadowshiftstudio.aniway.enums.Sex;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,4 +16,5 @@ public class RegisterRequest {
     private String email;
     private String password;
     private Sex sex;
+    private Role role = Role.USER;
 }

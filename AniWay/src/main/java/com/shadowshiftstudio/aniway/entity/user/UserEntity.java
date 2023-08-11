@@ -1,5 +1,6 @@
 package com.shadowshiftstudio.aniway.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.shadowshiftstudio.aniway.entity.*;
 import com.shadowshiftstudio.aniway.entity.auth.EmailVerificationTokenEntity;
 import com.shadowshiftstudio.aniway.entity.auth.PasswordResetTokenEntity;
@@ -7,10 +8,7 @@ import com.shadowshiftstudio.aniway.enums.Role;
 import com.shadowshiftstudio.aniway.enums.Sex;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +23,8 @@ import static jakarta.persistence.EnumType.STRING;
 @Entity
 @Data
 @Builder
+@EqualsAndHashCode(exclude = {"comments"})
+@ToString(exclude = {"comments"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="users")
@@ -53,9 +53,12 @@ public class UserEntity implements UserDetails {
     private Sex sex;
     private int xp;
 
+    private int lvl = xp / 500;
+
     @Column(name="pass_xp")
     private int passXp;
     private int balance;
+
 
     @Column(name = "created_at")
     private Date createdAt;
@@ -77,9 +80,15 @@ public class UserEntity implements UserDetails {
     @Enumerated(STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = {"author"})
     private Set<CommentEntity> comments;
 
+    public UserEntity addComment(CommentEntity comment) {
+        comments.add(comment);
+        comment.setAuthor(this);
+        return this;
+    }
     private String avatarUrl;
 
     private String backgroundUrl;

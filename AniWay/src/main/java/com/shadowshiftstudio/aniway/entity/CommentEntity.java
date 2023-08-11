@@ -23,15 +23,15 @@ public class CommentEntity {
     @GeneratedValue
     private long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="author_id", nullable = false)
     private UserEntity author;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="title_id")
     private TitleEntity title;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="chapter_id")
     private ChapterEntity chapter;
 

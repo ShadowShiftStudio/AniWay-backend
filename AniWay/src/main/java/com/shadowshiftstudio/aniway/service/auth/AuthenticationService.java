@@ -19,6 +19,7 @@ import com.shadowshiftstudio.aniway.exception.user.UserNotFoundException;
 import com.shadowshiftstudio.aniway.repository.auth.EmailVerificationTokenRepository;
 import com.shadowshiftstudio.aniway.repository.auth.PasswordResetTokenRepository;
 import com.shadowshiftstudio.aniway.repository.user.UserRepository;
+import com.shadowshiftstudio.aniway.service.user.AchievementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,6 +46,9 @@ public class AuthenticationService {
     private EmailVerificationTokenRepository emailVerificationTokenRepository;
 
     @Autowired
+    private AchievementService achievementService;
+
+    @Autowired
     private UserRepository repository;
 
     @Autowired
@@ -59,21 +63,21 @@ public class AuthenticationService {
     @Autowired
     private RefreshTokenService refreshTokenService;
 
-    public AuthenticationResponse register(RegisterRequest request) throws UsernameIsOccupiedException, EmailIsOccupiedException {
+    public AuthenticationResponse register(RegisterRequest request) throws UsernameIsOccupiedException, EmailIsOccupiedException, UserNotFoundException {
         validateRegisterRequest(request);
-        // TODO ROLES
 
         var user = UserEntity.builder()
                 .username(request.getUsername())
                 .emailVerified(false)
+                .role(request.getRole())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
                 .sex(request.getSex())
                 .createdAt(new Date(System.currentTimeMillis()))
                 .build();
 
         repository.save(user);
+        achievementService.initUserAchievements(request.getUsername());
 
         String jwtToken = jwtService.generateToken(user);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getUsername());

@@ -52,8 +52,8 @@ CREATE TABLE "categories" (
 
 CREATE TABLE "title_categories" (
   "id" BIGSERIAL PRIMARY KEY,
-  "title_id" BIGSERIAL,
-  "category_id" BIGSERIAL
+  "title_id" BIGINT,
+  "category_id" BIGINT 
 );
 
 CREATE TABLE "users" (
@@ -72,28 +72,28 @@ CREATE TABLE "users" (
 
 CREATE TABLE "password_reset_tokens" (
   "id" BIGSERIAL PRIMARY KEY,
-  "user_id" BIGSERIAL,
+  "user_id" BIGINT,
   "token"  varchar(100),
   "expiry_date" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "email_verif_tokens" (
   "id" BIGSERIAL PRIMARY KEY,
-  "user_id" BIGSERIAL,
+  "user_id" BIGINT,
   "token"  varchar(100),
   "expiry_date" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "refresh_tokens" (
   "id" BIGSERIAL PRIMARY KEY,
-  "user_id" BIGSERIAL,
+  "user_id" BIGINT,
   "token" varchar UNIQUE,
   "expiry_date" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "teams" (
   "id" BIGSERIAL PRIMARY KEY,
-  "owner_id" BIGSERIAL,
+  "owner_id" BIGINT,
   "name" varchar(20),
   "description" varchar(150),
   "created_at" TIMESTAMP WITHOUT TIME ZONE
@@ -101,8 +101,8 @@ CREATE TABLE "teams" (
 
 CREATE TABLE "team_chapters" (
   "id" BIGSERIAL PRIMARY KEY,
-  "team_id" BIGSERIAL,
-  "chapter_id" BIGSERIAL
+  "team_id" BIGINT,
+  "chapter_id" BIGINT 
 );
 
 CREATE TABLE "titles" (
@@ -119,15 +119,15 @@ CREATE TABLE "titles" (
 
 CREATE TABLE "chapter_images" (
   "id" BIGSERIAL PRIMARY KEY,
-  "chapter_id" BIGSERIAL,
+  "chapter_id" BIGINT,
   "image_index" integer,
   "url" varchar(100)
 );
 
 CREATE TABLE "chapters" (
   "id" BIGSERIAL PRIMARY KEY,
-  "title_id" BIGSERIAL,
-  "team_id" BIGSERIAL,
+  "title_id" BIGINT,
+  "team_id" BIGINT,
   "name" varchar(300),
   "number" integer,
   "volume" integer,
@@ -159,53 +159,53 @@ CREATE TABLE "achievements" (
 
 CREATE TABLE "user_achievements" (
   "user_id" BIGSERIAL,
-  "achievement_id" BIGSERIAL,
+  "achievement_id" BIGINT,
   "received" boolean
 );
 
 CREATE TABLE "comments" (
   "id" BIGSERIAL PRIMARY KEY,
-  "author_id" BIGSERIAL,
-  "title_id" BIGSERIAL,
-  "chapter_id" BIGSERIAL,
+  "author_id" BIGINT,
+  "title_id" BIGINT NULL,
+  "chapter_id" BIGINT NULL,
   "text" varchar(350),
   "created_at" TIMESTAMP WITHOUT TIME ZONE,
   "updated_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "related_titles" (
-  "base_title_id" BIGSERIAL,
-  "related_title_id" BIGSERIAL
+  "base_title_id" BIGINT,
+  "related_title_id" BIGINT 
 );
 
 CREATE TABLE "user_info_of_chapters" (
-  "chapter_id" BIGSERIAL,
-  "user_id" BIGSERIAL,
+  "chapter_id" BIGINT,
+  "user_id" BIGINT,
   "is_liked" boolean,
   "is_read" boolean
 );
 
 CREATE TABLE "user_info_of_titles" (
-  "title_id" BIGSERIAL,
-  "user_id" BIGSERIAL,
+  "title_id" BIGINT,
+  "user_id" BIGINT,
   "reading_status" reading_status,
   "rating" integer
 );
 
 CREATE TABLE "team_users" (
-  "user_id" BIGSERIAL,
-  "team_id" BIGSERIAL,
+  "user_id" BIGINT,
+  "team_id" BIGINT,
   "status" varchar(20)
 );
 
 CREATE TABLE "users_badges" (
-  "user_id" BIGSERIAL,
-  "badge_id" BIGSERIAL
+  "user_id" BIGINT,
+  "badge_id" BIGINT 
 );
 
 CREATE TABLE "titles_genres" (
-  "title_id" BIGSERIAL,
-  "genre_id" BIGSERIAL
+  "title_id" BIGINT,
+  "genre_id" BIGINT 
 );
 
 COMMENT ON COLUMN "user_info_of_titles"."rating" IS 'min 1 max 5';

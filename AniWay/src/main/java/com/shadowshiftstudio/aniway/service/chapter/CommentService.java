@@ -5,6 +5,7 @@ import com.shadowshiftstudio.aniway.dto.comment.CreateCommentRequest;
 import com.shadowshiftstudio.aniway.dto.auth.UpdateCommentRequest;
 import com.shadowshiftstudio.aniway.entity.CommentEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserEntity;
+import com.shadowshiftstudio.aniway.enums.AchievementType;
 import com.shadowshiftstudio.aniway.enums.Role;
 import com.shadowshiftstudio.aniway.exception.chapter.ChapterNotFoundException;
 import com.shadowshiftstudio.aniway.exception.comment.CommentNotFoundException;
@@ -16,6 +17,7 @@ import com.shadowshiftstudio.aniway.repository.chapter.ChapterRepository;
 import com.shadowshiftstudio.aniway.repository.chapter.CommentRepository;
 import com.shadowshiftstudio.aniway.repository.title.TitleRepository;
 import com.shadowshiftstudio.aniway.repository.user.UserRepository;
+import com.shadowshiftstudio.aniway.service.user.AchievementService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ import java.util.*;
 public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private AchievementService achievementService;
 
     @Autowired
     private UserRepository userRepository;
@@ -46,9 +51,9 @@ public class CommentService {
     }
 
     public String createComment(CreateCommentRequest request) throws UserNotFoundException, TitleNotFoundException, ChapterNotFoundException {
-        commentRepository.save(CommentEntity
+        UserEntity author = userRepository.findById(request.author).orElseThrow(() -> new UserNotFoundException("User not found"));
+        CommentEntity comment = CommentEntity
                 .builder()
-                .author(userRepository.findById(request.author).orElseThrow(() -> new UserNotFoundException("User not found")))
                 .text(request.text)
                 .title(
                         request.getTitle_id() != 0
@@ -62,8 +67,9 @@ public class CommentService {
                 )
                 .createdAt(new Date(System.currentTimeMillis()))
                 .updatedAt(new Date(System.currentTimeMillis()))
-                .build()
-        );
+                .build();
+
+        userRepository.save(author.addComment(comment));
         return "Comment was created";
     }
 
