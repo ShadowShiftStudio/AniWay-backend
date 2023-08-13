@@ -21,7 +21,7 @@ public class ChapterController {
             @RequestParam("image") MultipartFile file,
             @RequestParam("chapter_id") Long id) {
         try {
-            return ResponseEntity.ok(chapterService.uploadImage(id, file));
+            return ResponseEntity.ok(chapterService.uploadChapterImage(file, id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -40,7 +40,7 @@ public class ChapterController {
     @GetMapping("/{id}")
     public ResponseEntity getTitleImages(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(chapterService.getTitleImages(id));
+            return ResponseEntity.ok(chapterService.getChapterImages(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

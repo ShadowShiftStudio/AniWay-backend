@@ -27,7 +27,7 @@ public class TitleController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('TRANSLATOR')")
+    @PreAuthorize("hasAuthority('TRANSLATOR') or hasAuthority('ADMIN')")
     public ResponseEntity createTitle(@RequestBody CreateTitleRequest request) {
         try {
             return ResponseEntity.ok(titleService.createTitle(request));

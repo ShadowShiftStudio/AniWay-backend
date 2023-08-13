@@ -51,6 +51,7 @@ public class TitleService {
                 .description(request.getDescription())
                 .year(request.getYear())
                 .type(request.getType())
+                .ageRating(request.getAgeRating())
                 .status(request.getStatus())
                 .build();
 

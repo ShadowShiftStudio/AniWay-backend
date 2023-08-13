@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateAchievementRequest {
     private String header;
-    private String avatarUrl;
     private String text;
     private AchievementType type;
     private int condition;

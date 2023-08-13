@@ -14,9 +14,12 @@ import com.shadowshiftstudio.aniway.exception.user.UserNotFoundException;
 import com.shadowshiftstudio.aniway.repository.user.AchievementRepository;
 import com.shadowshiftstudio.aniway.repository.user.UserAchievementRepository;
 import com.shadowshiftstudio.aniway.repository.user.UserRepository;
+import com.shadowshiftstudio.aniway.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -29,11 +32,17 @@ public class AchievementService {
 
     @Autowired
     private UserRepository userRepository;
-    public String createAchievement(CreateAchievementRequest request) throws AchievementNotFoundException {
+
+    @Autowired
+    private ImageService imageService;
+
+    public String createAchievement(CreateAchievementRequest request, MultipartFile avatar) throws AchievementNotFoundException, IOException {
+        String finalPath = imageService.uploadImage(avatar, "achievement_avatars/");
+
         AchievementEntity achievement = AchievementEntity
                 .builder()
                 .text(request.getText())
-                .avatarUrl(request.getAvatarUrl())
+                .avatarUrl(finalPath)
                 .header(request.getHeader())
                 .condition(request.getCondition())
                 .type(request.getType())

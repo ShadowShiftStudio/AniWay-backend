@@ -13,6 +13,7 @@ import com.shadowshiftstudio.aniway.repository.chapter.ChapterRepository;
 import com.shadowshiftstudio.aniway.repository.team.TeamRepository;
 import com.shadowshiftstudio.aniway.repository.title.TitleRepository;
 import com.shadowshiftstudio.aniway.repository.user.UserRepository;
+import com.shadowshiftstudio.aniway.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,9 +28,6 @@ import java.util.Optional;
 
 @Service
 public class ChapterService {
-    // TODO URL FOR IMAGE SERVICE
-    private String UPLOAD_URL = System.getProperty("user.dir") + "/uploads";
-
     @Autowired
     private UserRepository userRepository;
 
@@ -45,39 +43,9 @@ public class ChapterService {
     @Autowired
     private ChapterImageRepository chapterImageRepository;
 
-    public String uploadImage(Long chapterId, MultipartFile file) throws IOException, ChapterNotFoundException, ChapterImageNotFoundException {
-        ChapterEntity chapterEntity = chapterRepository.findById(chapterId).orElseThrow(() -> new ChapterNotFoundException("Chapter not found"));
-        String titleName = chapterEntity.getTitle().getName();
-        StringBuilder fileNames = new StringBuilder();
+    @Autowired
+    private ImageService imageService;
 
-        Path fileNameAndPath = Paths.get(
-                String.format(
-                        "%s/%s/v%d/n%d",
-                        UPLOAD_URL,
-                        titleName,
-                        chapterEntity.getVolume(),
-                        chapterEntity.getNumber()
-                ),
-                file.getOriginalFilename()
-        );
-
-        fileNames.append(file.getOriginalFilename());
-        Files.write(fileNameAndPath, file.getBytes());
-
-        Optional<ChapterImageEntity> chapterImageOptional = chapterImageRepository.findFirstByOrderByImageIndexDesc();
-        int imageIndex = chapterImageOptional.map(entity -> entity.getImageIndex() + 1).orElse(1);
-
-        chapterImageRepository.save(
-                ChapterImageEntity
-                    .builder()
-                    .chapter(chapterEntity)
-                    .imageIndex(imageIndex)
-                    .url(fileNameAndPath.toString())
-                    .build()
-        );
-
-        return "Uploaded files: " + fileNames;
-    }
 
     public String createChapter(CreateChapterRequest request) throws TitleNotFoundException, TeamNotFoundException {
         ChapterEntity chapterEntity = ChapterEntity
@@ -95,7 +63,29 @@ public class ChapterService {
         return "Chapter was successfully created";
     }
 
-    public List<ChapterImageDto> getTitleImages(Long id) throws ChapterNotFoundException, ChapterImageNotFoundException {
+    public String uploadChapterImage(MultipartFile file, Long id) throws ChapterNotFoundException, IOException {
+        ChapterEntity chapterEntity = chapterRepository.findById(id).orElseThrow(() -> new ChapterNotFoundException("Chapter not found"));
+        String titleName = chapterEntity.getTitle().getName();
+
+        Optional<ChapterImageEntity> chapterImageOptional = chapterImageRepository.findFirstByOrderByImageIndexDesc();
+        int imageIndex = chapterImageOptional.map(entity -> entity.getImageIndex() + 1).orElse(1);
+
+        String path = String.format("%s/%d%/%d/%d.jpeg", titleName, chapterEntity.getVolume(), chapterEntity.getNumber(), imageIndex);
+        String finalPath = imageService.uploadImage(file, path);
+
+        chapterImageRepository.save(
+                ChapterImageEntity
+                        .builder()
+                        .chapter(chapterEntity)
+                        .imageIndex(imageIndex)
+                        .url(finalPath)
+                        .build()
+        );
+
+        return "Image was save on path: " + finalPath;
+
+    }
+    public List<ChapterImageDto> getChapterImages(Long id) throws ChapterNotFoundException, ChapterImageNotFoundException {
         List<ChapterImageDto> images = chapterImageRepository
                 .findByChapter(chapterRepository.findById(id).orElseThrow(() -> new ChapterNotFoundException("Chapter not found")))
                 .stream()

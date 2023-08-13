@@ -1,5 +1,6 @@
 package com.shadowshiftstudio.aniway.dto.title;
 
+import com.shadowshiftstudio.aniway.enums.AgeRating;
 import com.shadowshiftstudio.aniway.enums.TitleStatus;
 import com.shadowshiftstudio.aniway.enums.TitleType;
 import lombok.AllArgsConstructor;
@@ -18,4 +19,5 @@ public class CreateTitleRequest {
     private String description;
     private TitleStatus status;
     private TitleType type;
+    private AgeRating ageRating;
 }
