@@ -1,12 +1,12 @@
 CREATE TYPE "sex" AS ENUM (
-  'male',
-  'female'
+  'MALE',
+  'FEMALE'
 );
 
 CREATE TYPE "age_rating" AS ENUM (
-  'everyone',
-  'teenager',
-  'adult'
+  'EVERYONE',
+  'TEENAGER',
+  'ADULT'
 );
 
 CREATE TYPE "role" AS ENUM (
@@ -17,24 +17,24 @@ CREATE TYPE "role" AS ENUM (
 );
 
 CREATE TYPE "achievement_type" AS ENUM (
-  'likes',
-  'comments',
-  'chapters',
-  'lvl'
+  'LIKES',
+  'COMMENTS',
+  'CHAPTERS',
+  'LVL'
 );
 
 CREATE TYPE "title_status" AS ENUM (
-  'ongoing',
-  'finished',
-  'freezed',
-  'announced'
+  'ONGOING',
+  'FINISHED',
+  'FREEZED',
+  'ANNOUNCED'
 );
 
 CREATE TYPE "title_type" AS ENUM (
-  'manhwa',
-  'manhua',
-  'manga',
-  'cartoon'
+    'MANHWA'
+    'MANHUA',
+    'MANGA',
+    'CARTOON'
 );
 
 CREATE TYPE "reading_status" AS ENUM (
