@@ -6,7 +6,9 @@ import com.shadowshiftstudio.aniway.entity.AchievementEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserAchievement;
 import com.shadowshiftstudio.aniway.entity.user.UserChapter;
 import com.shadowshiftstudio.aniway.entity.user.UserEntity;
+import com.shadowshiftstudio.aniway.entity.user.keys.UserAchievementKey;
 import com.shadowshiftstudio.aniway.enums.AchievementType;
+import com.shadowshiftstudio.aniway.exception.achievement.AchievementNotFoundException;
 import com.shadowshiftstudio.aniway.exception.user.UserAchievementsNotFoundException;
 import com.shadowshiftstudio.aniway.exception.user.UserNotFoundException;
 import com.shadowshiftstudio.aniway.repository.user.AchievementRepository;
@@ -27,7 +29,7 @@ public class AchievementService {
 
     @Autowired
     private UserRepository userRepository;
-    public String createAchievement(CreateAchievementRequest request) {
+    public String createAchievement(CreateAchievementRequest request) throws AchievementNotFoundException {
         AchievementEntity achievement = AchievementEntity
                 .builder()
                 .text(request.getText())
@@ -39,12 +41,21 @@ public class AchievementService {
 
         achievementRepository.save(achievement);
 
+        AchievementEntity finalAchievement = achievementRepository.findByHeader(request.getHeader())
+                .orElseThrow(() -> new AchievementNotFoundException("Achievement not found"));
+
         userRepository.findAll().forEach((user) ->
             userAchievementRepository.save(UserAchievement
                     .builder()
-                            .user(user)
-                            .achievement(achievement)
-                            .received(false)
+                    .achievement(achievement)
+                    .user(user)
+                    .id(UserAchievementKey
+                            .builder()
+                            .achievementId(finalAchievement.getId())
+                            .userId(user.getId())
+                            .build()
+                    )
+                    .received(false)
                     .build())
         );
 
@@ -80,6 +91,12 @@ public class AchievementService {
                     .builder()
                             .achievement(achievement)
                             .user(user)
+                            .id(UserAchievementKey
+                                    .builder()
+                                    .userId(user.getId())
+                                    .achievementId(achievement.getId())
+                                    .build()
+                            )
                             .received(false)
                     .build());
         });
