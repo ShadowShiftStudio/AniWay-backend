@@ -1,5 +1,8 @@
 package com.shadowshiftstudio.aniway.dto.title;
 
+import com.shadowshiftstudio.aniway.dto.chapter.CategoryDto;
+import com.shadowshiftstudio.aniway.dto.chapter.GenreDto;
+import com.shadowshiftstudio.aniway.dto.comment.CommentDto;
 import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
 import com.shadowshiftstudio.aniway.enums.AgeRating;
 import com.shadowshiftstudio.aniway.enums.TitleStatus;
@@ -9,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -23,7 +28,10 @@ public class TitleDto {
     private TitleStatus status;
     private TitleType type;
     private int views;
-
+    private String backgroundUrl;
+    private List<CommentDto> comments;
+    private List<CategoryDto> categories;
+    private List<GenreDto> genres;
     private AgeRating ageRating;
     public static TitleDto toDto(TitleEntity entity) {
         return TitleDto
@@ -37,6 +45,22 @@ public class TitleDto {
                 .type(entity.getType())
                 .views(entity.getViews())
                 .ageRating(entity.getAgeRating())
+                .backgroundUrl(entity.getBackgroundUrl())
+                .comments(entity.getComments()
+                        .stream()
+                        .map(CommentDto::toDto)
+                        .toList()
+                )
+                .categories(entity.getCategories()
+                        .stream()
+                        .map(CategoryDto::toDto)
+                        .toList()
+                )
+                .genres(entity.getGenres()
+                        .stream()
+                        .map(GenreDto::toDto)
+                        .toList()
+                )
                 .build();
     }
 }

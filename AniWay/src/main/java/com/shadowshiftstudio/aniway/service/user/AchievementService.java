@@ -37,7 +37,7 @@ public class AchievementService {
     private ImageService imageService;
 
     public String createAchievement(CreateAchievementRequest request, MultipartFile avatar) throws AchievementNotFoundException, IOException {
-        String finalPath = imageService.uploadImage(avatar, "achievement_avatars/");
+        String finalPath = imageService.uploadImage(avatar, "achievement_avatars/" + avatar.getOriginalFilename());
 
         AchievementEntity achievement = AchievementEntity
                 .builder()

@@ -51,7 +51,6 @@ CREATE TABLE "categories" (
 );
 
 CREATE TABLE "title_categories" (
-  "id" BIGSERIAL PRIMARY KEY,
   "title_id" BIGINT,
   "category_id" BIGINT 
 );
@@ -111,6 +110,7 @@ CREATE TABLE "titles" (
   "original_name" varchar(100),
   "age_rating" age_rating,
   "year" integer,
+  "background_image_url" varchar(300),
   "description" text[],
   "status" title_status,
   "type" title_type,

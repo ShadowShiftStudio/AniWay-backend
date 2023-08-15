@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,4 +22,7 @@ public class CreateTitleRequest {
     private TitleStatus status;
     private TitleType type;
     private AgeRating ageRating;
+    private List<Long> category_ids;
+    private List<Long> genres_ids;
+
 }

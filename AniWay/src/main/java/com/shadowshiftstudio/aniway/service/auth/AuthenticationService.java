@@ -34,7 +34,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private String apiUrl = "https://localhost:8080";
+    private final String apiUrl = "https://localhost:8080";
+    private final String basicAvatarAndBackgroundUrl = System.getProperty("user.dir") + "/uploads" + "/users";
 
     @Autowired
     private EmailService emailService;
@@ -73,6 +74,8 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .sex(request.getSex())
+                .avatarUrl(basicAvatarAndBackgroundUrl + "/avatar.jpeg")
+                .backgroundUrl(basicAvatarAndBackgroundUrl + "/background.jpeg")
                 .createdAt(new Date(System.currentTimeMillis()))
                 .build();
 

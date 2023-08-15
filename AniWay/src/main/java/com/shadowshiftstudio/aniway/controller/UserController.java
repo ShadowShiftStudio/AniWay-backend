@@ -6,6 +6,7 @@ import com.shadowshiftstudio.aniway.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -32,6 +33,26 @@ public class UserController {
             return ResponseEntity.ok(userService.getUserUsername(username));
         } catch (UserNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/upload_avatar")
+    public ResponseEntity uploadAvatarImage(@RequestParam Long id,
+                                            @RequestParam MultipartFile avatar) {
+        try {
+            return ResponseEntity.ok(userService.uploadAvatarImage(id, avatar));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/upload_background")
+    public ResponseEntity uploadBackgroundImage(@RequestParam Long id,
+                                                @RequestParam MultipartFile background) {
+        try {
+            return ResponseEntity.ok(userService.uploadBackgroundImage(id, background));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
