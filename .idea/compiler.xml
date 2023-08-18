@@ -30,12 +30,15 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Aniway" target="17" />
       <module name="aniway.app.main" target="17" />
       <module name="aniway.app.test" target="17" />
       <module name="aniway.auth.main" target="17" />
       <module name="aniway.auth.test" target="17" />
       <module name="aniway.core.main" target="17" />
       <module name="aniway.core.test" target="17" />
+      <module name="Aniway.test" target="17" />
+      <module name="com.shadowshiftstudio.Aniway.main" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

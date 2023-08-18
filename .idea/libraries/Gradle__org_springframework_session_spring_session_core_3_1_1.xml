@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.session:spring-session-core:3.1.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework.session" artifactId="spring-session-core" version="3.1.1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.session/spring-session-core/3.1.1/ba7923a209de510b3b264e5cb8c169cdf66555ae/spring-session-core-3.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.session/spring-session-core/3.1.1/354c43df56bcb4a15ef8e81d75dd9ff94f757018/spring-session-core-3.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

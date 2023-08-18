@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AniWay-backend.iml" filepath="$PROJECT_DIR$/.idea/AniWay-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Aniway.iml" filepath="$PROJECT_DIR$/.idea/modules/Aniway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Aniway.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Aniway.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.shadowshiftstudio.Aniway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.shadowshiftstudio.Aniway.main.iml" />
     </modules>
   </component>

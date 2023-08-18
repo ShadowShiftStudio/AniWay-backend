@@ -11,11 +11,9 @@ import com.shadowshiftstudio.aniway.enums.TitleStatus;
 import com.shadowshiftstudio.aniway.enums.TitleType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static jakarta.persistence.EnumType.STRING;
@@ -62,6 +60,7 @@ public class TitleEntity {
     @JoinColumn(referencedColumnName = "id")
     private Set<ChapterEntity> chapters;
 
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @JoinTable(
             name = "titles_genres",
@@ -70,6 +69,7 @@ public class TitleEntity {
     )
     private Set<GenreEntity> genres;
 
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @JoinTable(
             name="title_categories",

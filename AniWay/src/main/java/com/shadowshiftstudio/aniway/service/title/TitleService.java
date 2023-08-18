@@ -17,11 +17,14 @@ import com.shadowshiftstudio.aniway.repository.title.GenreRespository;
 import com.shadowshiftstudio.aniway.repository.title.TitleRepository;
 import com.shadowshiftstudio.aniway.repository.user.UserRepository;
 import com.shadowshiftstudio.aniway.repository.user.UserTitleRepository;
+import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class TitleService {
@@ -56,6 +59,9 @@ public class TitleService {
     }
 
     public String createTitle(CreateTitleRequest request) throws GenreNotFoundException, CategoryNotFoundException {
+        List<Long> genresIds = request.getGenres_ids();
+        List<Long> categoryIds = request.getCategory_ids();
+
         TitleEntity entity = TitleEntity
                 .builder()
                 .name(request.getName())
@@ -65,13 +71,20 @@ public class TitleService {
                 .type(request.getType())
                 .ageRating(request.getAgeRating())
                 .status(request.getStatus())
+                .categories(new HashSet<>())
+                .genres(new HashSet<>())
                 .build();
 
-        // MAYBE UNNECESSARY OPERATION
         TitleEntity finalEntity = titleRepository.save(entity);
 
-        addGenres(finalEntity, request.getGenres_ids());
-        addCategories(finalEntity, request.getCategory_ids());
+        if (genresIds != null) {
+            addGenres(finalEntity, genresIds);
+        }
+
+        if (categoryIds != null) {
+            addCategories(finalEntity, categoryIds);
+        }
+
 
         titleRepository.save(finalEntity);
 

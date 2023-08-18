@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.session:spring-session-data-redis:3.1.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework.session" artifactId="spring-session-data-redis" version="3.1.1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.session/spring-session-data-redis/3.1.1/d020025923dc0fdfb972d001e58efe9b597626fb/spring-session-data-redis-3.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.session/spring-session-data-redis/3.1.1/f7e87edbc154950de51ba65f039b8ba44a0ed7a9/spring-session-data-redis-3.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
