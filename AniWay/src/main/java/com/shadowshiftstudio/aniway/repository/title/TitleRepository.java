@@ -1,18 +1,13 @@
 package com.shadowshiftstudio.aniway.repository.title;
 
 import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
-import com.shadowshiftstudio.aniway.enums.AgeRating;
-import com.shadowshiftstudio.aniway.enums.TitleStatus;
-import com.shadowshiftstudio.aniway.enums.TitleType;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 
-import java.util.List;
 import java.util.Optional;
 
 public interface TitleRepository extends JpaRepository<TitleEntity, Long> , JpaSpecificationExecutor<TitleEntity> {
@@ -37,5 +32,5 @@ public interface TitleRepository extends JpaRepository<TitleEntity, Long> , JpaS
     Optional<TitleEntity> findById(Long id);
     Optional<TitleEntity> findByName(String name);
 
-    List<TitleEntity> findAll(Specification<TitleEntity> spec, Sort sort);
+    Page<TitleEntity> findAll(Specification<TitleEntity> spec, Pageable pageable);
 }

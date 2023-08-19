@@ -8,6 +8,8 @@ import com.shadowshiftstudio.aniway.enums.TitleType;
 import com.shadowshiftstudio.aniway.exception.title.TitlesNotFoundException;
 import com.shadowshiftstudio.aniway.repository.title.TitleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +33,14 @@ public class TitleListService {
             List<TitleStatus> statuses,
             List<TitleType> types,
             List<String> categories,
-            List<AgeRating> ratings
+            List<AgeRating> ratings,
+            int page,
+            int pageSize
     ) throws TitlesNotFoundException {
         Specification<TitleEntity> specification = buildSpecification(genres, statuses, types, categories, ratings);
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id"));
 
-        Sort sort = Sort.by("ageRating");
-        List<TitleDto> titles = titleRepository.findAll(specification, sort)
+        List<TitleDto> titles = titleRepository.findAll(specification, pageable)
                 .stream()
                 .map(TitleDto::toDto)
                 .collect(Collectors.toList());
