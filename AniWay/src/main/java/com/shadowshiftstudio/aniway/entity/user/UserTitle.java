@@ -5,10 +5,12 @@ import com.shadowshiftstudio.aniway.entity.user.keys.UserTitleKey;
 import com.shadowshiftstudio.aniway.enums.ReadingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

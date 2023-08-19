@@ -26,7 +26,7 @@ public class TitleListController {
             @RequestParam(required = false) List<String> categories,
             @RequestParam(required = false) List<AgeRating> ageRatings,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "18") int pageSize
+            @RequestParam(required = false, defaultValue = "18") int pageSize
             ) {
         try {
             return ResponseEntity.ok(titleListService.getCatalogTitles(
@@ -44,6 +44,15 @@ public class TitleListController {
         }
     }
 
+/*    @GetMapping("/related")
+    public ResponseEntity getRelatedTitles(@RequestParam Long id) {
+        try {
+            return ResponseEntity.ok(titleListService.getRelatedTitles(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+*/
     @GetMapping("/top")
     public ResponseEntity getTopTitles() {
         // TODO

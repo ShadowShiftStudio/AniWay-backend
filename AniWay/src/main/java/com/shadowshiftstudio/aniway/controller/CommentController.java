@@ -27,14 +27,26 @@ public class CommentController {
     }
 
     @GetMapping(value = "/get_comments/{username}")
-    public ResponseEntity getUserComments(@PathVariable String username) {
+    public ResponseEntity getUserComments(@PathVariable String username,
+                                          @RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(required = false, defaultValue = "10") int pageSize) {
         try {
-            return ResponseEntity.ok(commentService.getUserComments(username));
+            return ResponseEntity.ok(commentService.getUserComments(username, page, pageSize));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
+    @GetMapping("/title")
+    public ResponseEntity getTitleComments(@RequestParam Long titleId,
+                                           @RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        try {
+            return ResponseEntity.ok(commentService.getTitleComments(titleId, page, pageSize));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
     @PostMapping("/create")
     public ResponseEntity createComment(@RequestBody CreateCommentRequest request) {
         try {

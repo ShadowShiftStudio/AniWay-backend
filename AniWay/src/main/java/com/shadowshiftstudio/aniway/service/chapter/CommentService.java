@@ -20,6 +20,9 @@ import com.shadowshiftstudio.aniway.repository.user.UserRepository;
 import com.shadowshiftstudio.aniway.service.user.AchievementService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -103,11 +106,14 @@ public class CommentService {
         return "Comment was updated successfully";
     }
 
-    public List<CommentDto> getUserComments(String username) throws UserNotFoundException, UserCommentsAreNotFoundException {
+    public List<CommentDto> getUserComments(String username, int page, int pageSize) throws UserNotFoundException, UserCommentsAreNotFoundException {
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("created_at"));
+
         List<CommentDto> comments = commentRepository
                 .findByAuthor(userRepository
                         .findByUsername(username)
-                        .orElseThrow(() -> new UserNotFoundException("User not found"))
+                        .orElseThrow(() -> new UserNotFoundException("User not found")),
+                        pageable
                 )
                 .stream()
                 .map(CommentDto::toDto)
@@ -115,6 +121,22 @@ public class CommentService {
 
         if (comments.isEmpty())
             throw new UserCommentsAreNotFoundException("User comments are not found");
+
+        return comments;
+    }
+
+    public List<CommentDto> getTitleComments(Long titleId, int page, int pageSize) throws TitleNotFoundException, CommentNotFoundException {
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("created_at"));
+
+        List<CommentDto> comments = commentRepository.findByTitle(
+                titleRepository
+                        .findById(titleId)
+                        .orElseThrow(() -> new TitleNotFoundException("Title not found")),
+                pageable
+        ).stream().map(CommentDto::toDto).toList();
+
+        if (comments.isEmpty())
+            throw new CommentNotFoundException("Title comments not found");
 
         return comments;
     }

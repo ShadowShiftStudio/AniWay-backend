@@ -48,23 +48,20 @@ public class AchievementService {
                 .type(request.getType())
                 .build();
 
-        achievementRepository.save(achievement);
-
-        AchievementEntity finalAchievement = achievementRepository.findByHeader(request.getHeader())
-                .orElseThrow(() -> new AchievementNotFoundException("Achievement not found"));
+        AchievementEntity finalAchievement = achievementRepository.save(achievement);
 
         userRepository.findAll().forEach((user) ->
             userAchievementRepository.save(UserAchievement
                     .builder()
                     .achievement(achievement)
                     .user(user)
+                    .received(false)
                     .id(UserAchievementKey
                             .builder()
                             .achievementId(finalAchievement.getId())
                             .userId(user.getId())
                             .build()
                     )
-                    .received(false)
                     .build())
         );
 

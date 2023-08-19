@@ -1,12 +1,15 @@
 package com.shadowshiftstudio.aniway.service.title;
 
-import com.shadowshiftstudio.aniway.dto.title.CreateTitleRequest;
-import com.shadowshiftstudio.aniway.dto.title.TitleDto;
+import com.shadowshiftstudio.aniway.dto.chapter.ChapterDto;
+import com.shadowshiftstudio.aniway.dto.title.*;
 import com.shadowshiftstudio.aniway.entity.CategoryEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.GenreEntity;
 import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
+import com.shadowshiftstudio.aniway.entity.user.UserEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserTitle;
+import com.shadowshiftstudio.aniway.entity.user.keys.UserTitleKey;
 import com.shadowshiftstudio.aniway.enums.ReadingStatus;
+import com.shadowshiftstudio.aniway.exception.chapter.ChapterNotFoundException;
 import com.shadowshiftstudio.aniway.exception.title.CategoryNotFoundException;
 import com.shadowshiftstudio.aniway.exception.title.GenreNotFoundException;
 import com.shadowshiftstudio.aniway.exception.title.TitleNotFoundException;
@@ -137,5 +140,57 @@ public class TitleService {
                     .orElseThrow(() -> new CategoryNotFoundException("Category not found"))
             );
         }
+    }
+
+    public String rateTitle(RateTitleRequest request) throws UserNotFoundException, TitleNotFoundException {
+        UserTitle userTitle = getUserTitleByUsernameAndTitle(request.getUsername(), request.getTitleId());
+
+        userTitle.setRating(request.getRating());
+
+        userTitleRepository.save(userTitle);
+
+        return "Title was successfully rated";
+    }
+
+    public String setTitleReadingStatus(SetTitleReadingStatusRequest request) throws UserNotFoundException, TitleNotFoundException {
+        UserTitle userTitle = getUserTitleByUsernameAndTitle(request.getUsername(), request.getTitleId());
+
+        userTitle.setReadingStatus(request.getStatus());
+        userTitleRepository.save(userTitle);
+
+        return "Title was successfully added to reading category";
+    }
+
+    private UserTitle getUserTitleByUsernameAndTitle(String username, Long titleId) throws UserNotFoundException, TitleNotFoundException {
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
+        TitleEntity title = titleRepository.findById(titleId).orElseThrow(() -> new TitleNotFoundException("Title not found"));
+
+        return userTitleRepository.findByUserAndTitle(user, title)
+                .orElse(UserTitle
+                        .builder()
+                        .user(user)
+                        .title(title)
+                        .id(UserTitleKey
+                                .builder()
+                                .titleId(title.getId())
+                                .userId(user.getId())
+                                .build()
+                        )
+                        .build());
+    }
+
+    public List<ChapterDto> getChapters(Long id) throws TitleNotFoundException, ChapterNotFoundException {
+        List<ChapterDto> chapters = titleRepository
+                .findById(id)
+                .orElseThrow(() -> new TitleNotFoundException("Title not found"))
+                .getChapters()
+                .stream()
+                .map(ChapterDto::toDto)
+                .toList();
+
+        if (chapters.isEmpty())
+            throw new ChapterNotFoundException("Chapters not found");
+
+        return chapters;
     }
 }

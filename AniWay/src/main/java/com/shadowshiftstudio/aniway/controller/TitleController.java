@@ -1,6 +1,8 @@
 package com.shadowshiftstudio.aniway.controller;
 
 import com.shadowshiftstudio.aniway.dto.title.CreateTitleRequest;
+import com.shadowshiftstudio.aniway.dto.title.RateTitleRequest;
+import com.shadowshiftstudio.aniway.dto.title.SetTitleReadingStatusRequest;
 import com.shadowshiftstudio.aniway.enums.ReadingStatus;
 import com.shadowshiftstudio.aniway.exception.title.TitleNotFoundException;
 import com.shadowshiftstudio.aniway.service.title.TitleService;
@@ -25,6 +27,7 @@ public class TitleController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('TRANSLATOR') or hasAuthority('ADMIN')")
@@ -54,4 +57,32 @@ public class TitleController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/chapters")
+    public ResponseEntity getChapters(@RequestParam Long id) {
+        try {
+            return ResponseEntity.ok(titleService.getChapters(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/rate")
+    public ResponseEntity rateTitle(@RequestBody RateTitleRequest request) {
+        try {
+            return ResponseEntity.ok(titleService.rateTitle(request));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/set_reading_status")
+    public ResponseEntity setTitleReadingStatus(@RequestBody SetTitleReadingStatusRequest request) {
+        try {
+            return ResponseEntity.ok(titleService.setTitleReadingStatus(request));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

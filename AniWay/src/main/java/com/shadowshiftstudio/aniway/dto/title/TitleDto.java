@@ -29,10 +29,10 @@ public class TitleDto {
     private TitleType type;
     private int views;
     private String backgroundUrl;
-    private List<CommentDto> comments;
     private List<CategoryDto> categories;
     private List<GenreDto> genres;
     private AgeRating ageRating;
+
     public static TitleDto toDto(TitleEntity entity) {
         return TitleDto
                 .builder()
@@ -46,11 +46,6 @@ public class TitleDto {
                 .views(entity.getViews())
                 .ageRating(entity.getAgeRating())
                 .backgroundUrl(entity.getBackgroundUrl())
-                .comments(entity.getComments()
-                        .stream()
-                        .map(CommentDto::toDto)
-                        .toList()
-                )
                 .categories(entity.getCategories()
                         .stream()
                         .map(CategoryDto::toDto)
