@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.shadowshiftstudio.aniway.entity.*;
 import com.shadowshiftstudio.aniway.entity.auth.EmailVerificationTokenEntity;
 import com.shadowshiftstudio.aniway.entity.auth.PasswordResetTokenEntity;
+import com.shadowshiftstudio.aniway.entity.team.TeamEntity;
+import com.shadowshiftstudio.aniway.entity.team.UserTeam;
 import com.shadowshiftstudio.aniway.enums.Role;
 import com.shadowshiftstudio.aniway.enums.Sex;
 import jakarta.persistence.*;
@@ -63,6 +65,12 @@ public class UserEntity implements UserDetails {
     @Column(name = "created_at")
     private Date createdAt;
 
+    @OneToOne(mappedBy = "owner")
+    private TeamEntity team;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserTeam> userTeamsInfo;
+
     @ManyToMany
     @JoinTable(
             name = "users_badges",
@@ -84,11 +92,6 @@ public class UserEntity implements UserDetails {
     @JsonIgnoreProperties(value = {"author"})
     private Set<CommentEntity> comments;
 
-    public UserEntity addComment(CommentEntity comment) {
-        comments.add(comment);
-        comment.setAuthor(this);
-        return this;
-    }
     private String avatarUrl;
 
     private String backgroundUrl;
@@ -105,9 +108,6 @@ public class UserEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
-
-    @ManyToMany(mappedBy = "users")
-    private Set<TeamEntity> teams;
 
     @OneToMany(mappedBy = "user")
     private Set<UserAchievement> achievementsInfo;
@@ -130,5 +130,35 @@ public class UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserEntity addComment(CommentEntity comment) {
+        comments.add(comment);
+        comment.setAuthor(this);
+        return this;
+    }
+
+    public UserEntity addAchievement(UserAchievement achievement) {
+        achievementsInfo.add(achievement);
+        achievement.setUser(this);
+        return this;
+    }
+
+    public UserEntity addChapter(UserChapter chapter) {
+        chaptersInfo.add(chapter);
+        chapter.setUser(this);
+        return this;
+    }
+
+    public UserEntity addTitle(UserTitle title) {
+        titlesInfo.add(title);
+        title.setUser(this);
+        return this;
+    }
+
+    public UserEntity addTeam(UserTeam userTeamInfo) {
+        userTeamsInfo.add(userTeamInfo);
+        userTeamInfo.setUser(this);
+        return this;
     }
 }

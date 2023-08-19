@@ -15,10 +15,10 @@ public class AchievementController {
     @Autowired
     private AchievementService achievementService;
 
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity createAchievement(@RequestBody CreateAchievementRequest request,
-                                            @RequestParam MultipartFile avatar) {
+    public ResponseEntity createAchievement(@RequestParam("request") CreateAchievementRequest request,
+                                            @RequestParam("avatar") MultipartFile avatar) {
         try {
             return ResponseEntity.ok(achievementService.createAchievement(request, avatar));
         } catch (Exception e) {

@@ -103,4 +103,10 @@ public class TitleEntity {
         category.getTitles().add(this);
         return this;
     }
+
+    public TitleEntity addChapter(ChapterEntity chapter) {
+        chapters.add(chapter);
+        chapter.setTitle(this);
+        return this;
+    }
 }

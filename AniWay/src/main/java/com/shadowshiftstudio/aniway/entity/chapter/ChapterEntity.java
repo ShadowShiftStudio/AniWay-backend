@@ -1,7 +1,7 @@
 package com.shadowshiftstudio.aniway.entity.chapter;
 
 import com.shadowshiftstudio.aniway.entity.CommentEntity;
-import com.shadowshiftstudio.aniway.entity.TeamEntity;
+import com.shadowshiftstudio.aniway.entity.team.TeamEntity;
 import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserChapter;
 import jakarta.persistence.*;
@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.Set;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Data

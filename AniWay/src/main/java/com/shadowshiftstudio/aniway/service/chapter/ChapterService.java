@@ -2,8 +2,10 @@ package com.shadowshiftstudio.aniway.service.chapter;
 
 import com.shadowshiftstudio.aniway.dto.chapter.ChapterImageDto;
 import com.shadowshiftstudio.aniway.dto.chapter.CreateChapterRequest;
+import com.shadowshiftstudio.aniway.entity.team.TeamEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.ChapterImageEntity;
+import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
 import com.shadowshiftstudio.aniway.exception.chapter.ChapterImageNotFoundException;
 import com.shadowshiftstudio.aniway.exception.chapter.ChapterNotFoundException;
 import com.shadowshiftstudio.aniway.exception.team.TeamNotFoundException;
@@ -19,9 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -48,10 +47,13 @@ public class ChapterService {
 
 
     public String createChapter(CreateChapterRequest request) throws TitleNotFoundException, TeamNotFoundException {
+        TitleEntity title = titleRepository.findById(request.getTitle_id()).orElseThrow(() -> new TitleNotFoundException("Title not found"));
+        TeamEntity team = teamRepository.findById(request.getTeam_id()).orElseThrow(() -> new TeamNotFoundException("Team not found"));
+
         ChapterEntity chapterEntity = ChapterEntity
                 .builder()
-                .title(titleRepository.findById(request.getTitle_id()).orElseThrow(() -> new TitleNotFoundException("Title not found")))
-                .team(teamRepository.findById(request.getTeam_id()).orElseThrow(() -> new TeamNotFoundException("Team not found")))
+                .title(title)
+                .team(team)
                 .name(request.getName())
                 .number(request.getNumber())
                 .volume(request.getVolume())
@@ -59,6 +61,8 @@ public class ChapterService {
                 .updatedAt(new Date(System.currentTimeMillis()))
                 .build();
 
+        titleRepository.save(title.addChapter(chapterEntity));
+        teamRepository.save(team.addChapter(chapterEntity));
         chapterRepository.save(chapterEntity);
         return "Chapter was successfully created";
     }

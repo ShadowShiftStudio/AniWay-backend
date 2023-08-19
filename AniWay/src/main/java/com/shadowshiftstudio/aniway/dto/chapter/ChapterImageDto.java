@@ -13,11 +13,14 @@ import lombok.NoArgsConstructor;
 public class ChapterImageDto {
     private Long id;
     private String url;
+    private int imageIndex;
+
     public static ChapterImageDto toDto(ChapterImageEntity entity) {
         return ChapterImageDto
                 .builder()
                 .id(entity.getId())
                 .url(entity.getUrl())
+                .imageIndex(entity.getImageIndex())
                 .build();
     }
 }

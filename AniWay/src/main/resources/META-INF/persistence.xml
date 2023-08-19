@@ -9,7 +9,7 @@
     <class>com.shadowshiftstudio.aniway.entity.user.UserEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.user.UserAchievement</class>
     <class>com.shadowshiftstudio.aniway.entity.title.TitleEntity</class>
-    <class>com.shadowshiftstudio.aniway.entity.TeamEntity</class>
+    <class>com.shadowshiftstudio.aniway.entity.team.TeamEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.auth.RefreshToken</class>
     <class>com.shadowshiftstudio.aniway.entity.auth.PasswordResetTokenEntity</class>
     <class>com.shadowshiftstudio.aniway.entity.chapter.GenreEntity</class>

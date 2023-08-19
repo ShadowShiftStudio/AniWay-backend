@@ -1,10 +1,12 @@
 package com.shadowshiftstudio.aniway.service.title;
 
+import com.shadowshiftstudio.aniway.dto.title.TitleCardDto;
 import com.shadowshiftstudio.aniway.dto.title.TitleDto;
 import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
 import com.shadowshiftstudio.aniway.enums.AgeRating;
 import com.shadowshiftstudio.aniway.enums.TitleStatus;
 import com.shadowshiftstudio.aniway.enums.TitleType;
+import com.shadowshiftstudio.aniway.exception.title.TitleNotFoundException;
 import com.shadowshiftstudio.aniway.exception.title.TitlesNotFoundException;
 import com.shadowshiftstudio.aniway.repository.title.TitleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ public class TitleListService {
     @Autowired
     private TitleRepository titleRepository;
 
-    public List<TitleDto> getCatalogTitles(
+    public List<TitleCardDto> getCatalogTitles(
             List<String> genres,
             List<TitleStatus> statuses,
             List<TitleType> types,
@@ -40,10 +42,10 @@ public class TitleListService {
         Specification<TitleEntity> specification = buildSpecification(genres, statuses, types, categories, ratings);
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id"));
 
-        List<TitleDto> titles = titleRepository.findAll(specification, pageable)
+        List<TitleCardDto> titles = titleRepository.findAll(specification, pageable)
                 .stream()
-                .map(TitleDto::toDto)
-                .collect(Collectors.toList());
+                .map(TitleCardDto::toDto)
+                .toList();
 
         if (titles.isEmpty()) {
             throw new TitlesNotFoundException("Titles not found");
@@ -85,6 +87,5 @@ public class TitleListService {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
-
 }
 

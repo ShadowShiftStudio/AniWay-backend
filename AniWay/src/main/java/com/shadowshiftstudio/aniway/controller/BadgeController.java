@@ -1,13 +1,12 @@
 package com.shadowshiftstudio.aniway.controller;
 
+import com.shadowshiftstudio.aniway.dto.user.CreateBadgeRequest;
 import com.shadowshiftstudio.aniway.exception.user.BadgeNotFoundException;
 import com.shadowshiftstudio.aniway.service.user.BadgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/badge")
@@ -19,8 +18,16 @@ public class BadgeController {
     public ResponseEntity getBadge(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(badgeService.getBadge(id));
-        } catch (BadgeNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity createBadge(@RequestBody CreateBadgeRequest request) {
+        try {
+            return ResponseEntity.ok(badgeService.createBadge(request));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

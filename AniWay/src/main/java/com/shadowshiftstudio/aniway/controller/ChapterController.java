@@ -37,8 +37,9 @@ public class ChapterController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity getTitleImages(@PathVariable Long id) {
+
+    @GetMapping("/images")
+    public ResponseEntity getChapterImages(@RequestParam Long id) {
         try {
             return ResponseEntity.ok(chapterService.getChapterImages(id));
         } catch (Exception e) {

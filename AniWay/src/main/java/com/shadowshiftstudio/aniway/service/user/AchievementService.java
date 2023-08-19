@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AchievementService {
@@ -51,7 +52,7 @@ public class AchievementService {
         AchievementEntity finalAchievement = achievementRepository.save(achievement);
 
         userRepository.findAll().forEach((user) ->
-            userAchievementRepository.save(UserAchievement
+            userRepository.save(user.addAchievement(UserAchievement
                     .builder()
                     .achievement(achievement)
                     .user(user)
@@ -62,7 +63,7 @@ public class AchievementService {
                             .userId(user.getId())
                             .build()
                     )
-                    .build())
+                    .build()))
         );
 
         return "Achievement created successfully";
@@ -92,20 +93,23 @@ public class AchievementService {
 
     public void initUserAchievements(String username) throws UserNotFoundException {
         UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
+
         achievementRepository.findAll().forEach((achievement) -> {
-            userAchievementRepository.save(UserAchievement
+            user.addAchievement(UserAchievement
                     .builder()
                             .achievement(achievement)
                             .user(user)
+                            .received(false)
                             .id(UserAchievementKey
                                     .builder()
                                     .userId(user.getId())
                                     .achievementId(achievement.getId())
                                     .build()
                             )
-                            .received(false)
                     .build());
         });
+
+        userRepository.save(user);
     }
 
     private void checkForReceived(UserEntity user) {
@@ -114,26 +118,15 @@ public class AchievementService {
     }
 
     private void checkCondition(UserAchievement userAchievement) {
-        int distance = 0;
-        switch (userAchievement.getAchievement().getType()) {
-            case CHAPTERS:
-                distance = getChaptersDistance(userAchievement);
-                break;
-            case LIKES:
-                distance = getLikesDistance(userAchievement);
-                break;
-            case LVL:
-                distance = getLvlDistance(userAchievement);
-                break;
-            case COMMENTS:
-                distance = getCommentsDistance(userAchievement);
-                break;
-        }
+        int distance = switch (userAchievement.getAchievement().getType()) {
+            case CHAPTERS -> getChaptersDistance(userAchievement);
+            case LIKES -> getLikesDistance(userAchievement);
+            case LVL -> getLvlDistance(userAchievement);
+            case COMMENTS -> getCommentsDistance(userAchievement);
+        };
 
-        if (userAchievement.getAchievement().getCondition() <= distance) {
+        if (userAchievement.getAchievement().getCondition() <= distance)
             userAchievement.setReceived(true);
-            userAchievementRepository.save(userAchievement);
-        }
     }
 
     private int getCommentsDistance(UserAchievement userAchievement) {

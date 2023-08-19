@@ -1,4 +1,4 @@
-package com.shadowshiftstudio.aniway.entity;
+package com.shadowshiftstudio.aniway.entity.team;
 
 import com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserEntity;
@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -23,10 +24,11 @@ import static jakarta.persistence.CascadeType.ALL;
 public class TeamEntity {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
-    @Column(name="owner_id")
-    private long ownerId;
+    @OneToOne(cascade = ALL)
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    private UserEntity owner;
 
     @Size(min = 3, message = "{validation.name.size.too_short}")
     @Size(max = 20, message = "{validation.name.size.too_long}")
@@ -37,19 +39,27 @@ public class TeamEntity {
     private String description;
 
     @Column(name="created_at")
-    private LocalDateTime createdAt;
+    private Date createdAt;
+
+    @Column(name="avatar_url")
+    private String avatarUrl;
 
     @OneToMany(targetEntity = ChapterEntity.class, cascade = ALL)
     @JoinColumn(referencedColumnName = "id")
     private Set<ChapterEntity> chapters;
 
-    @ManyToMany
-    @JoinTable(
-            name="team_users",
-            joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
-    )
-    private Set<UserEntity> users;
+    @OneToMany(mappedBy = "team")
+    private Set<UserTeam> userTeamsInfo;
 
+    public TeamEntity addChapter(ChapterEntity chapter) {
+        chapters.add(chapter);
+        chapter.setTeam(this);
+        return this;
+    }
 
+    public TeamEntity addUser(UserTeam user) {
+        userTeamsInfo.add(user);
+        user.setTeam(this);
+        return this;
+    }
 }

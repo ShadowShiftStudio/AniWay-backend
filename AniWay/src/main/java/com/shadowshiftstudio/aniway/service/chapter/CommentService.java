@@ -45,12 +45,7 @@ public class CommentService {
     private TitleRepository titleRepository;
 
     public CommentDto getComment(@NotNull Long id) throws CommentNotFoundException {
-        try {
-            CommentEntity comment = commentRepository.findById(id).get();
-            return CommentDto.toDto(comment);
-        } catch(NoSuchElementException e) {
-            throw new CommentNotFoundException("Comment not found!");
-        }
+        return CommentDto.toDto(commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException("Comment not found")));
     }
 
     public String createComment(CreateCommentRequest request) throws UserNotFoundException, TitleNotFoundException, ChapterNotFoundException {

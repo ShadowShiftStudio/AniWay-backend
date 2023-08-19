@@ -95,6 +95,7 @@ CREATE TABLE "teams" (
   "owner_id" BIGINT,
   "name" varchar(20),
   "description" varchar(150),
+  "avatar_url" varchar(150),
   "created_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
