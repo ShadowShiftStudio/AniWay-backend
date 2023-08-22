@@ -57,4 +57,13 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/badges")
+    public ResponseEntity getUserBadges(@RequestParam String username) {
+        try {
+            return ResponseEntity.ok(userService.getUserBadges(username));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

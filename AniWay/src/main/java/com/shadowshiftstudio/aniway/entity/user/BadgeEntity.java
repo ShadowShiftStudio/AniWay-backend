@@ -1,6 +1,6 @@
 package com.shadowshiftstudio.aniway.entity.user;
 
-import com.shadowshiftstudio.aniway.entity.user.UserEntity;
+import com.shadowshiftstudio.aniway.entity.AchievementEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -17,7 +16,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="badges")
+@Table(name = "badges")
 public class BadgeEntity {
     @Id
     @GeneratedValue
@@ -32,4 +31,12 @@ public class BadgeEntity {
 
     @ManyToMany(mappedBy = "badges")
     private Set<UserEntity> users;
+
+    @OneToOne(mappedBy = "badge")
+    private AchievementEntity achievement;
+
+    public BadgeEntity addUser(UserEntity userEntity) {
+        users.add(userEntity);
+        return this;
+    }
 }

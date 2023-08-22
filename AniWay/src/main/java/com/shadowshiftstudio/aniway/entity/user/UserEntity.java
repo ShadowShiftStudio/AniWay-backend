@@ -146,19 +146,25 @@ public class UserEntity implements UserDetails {
 
     public UserEntity addChapter(UserChapter chapter) {
         chaptersInfo.add(chapter);
-        chapter.setUser(this);
+        chapter.getChapter().getChaptersInfo().add(chapter);
         return this;
     }
 
     public UserEntity addTitle(UserTitle title) {
         titlesInfo.add(title);
-        title.setUser(this);
+        title.getTitle().getTitlesInfo().add(title);
         return this;
     }
 
     public UserEntity addTeam(UserTeam userTeamInfo) {
         userTeamsInfo.add(userTeamInfo);
         userTeamInfo.setUser(this);
+        return this;
+    }
+
+    public UserEntity addBadge(BadgeEntity badge) {
+        badge.addUser(this);
+        badges.add(badge);
         return this;
     }
 }

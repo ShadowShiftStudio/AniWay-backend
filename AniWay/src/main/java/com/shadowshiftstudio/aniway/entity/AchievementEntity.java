@@ -1,9 +1,9 @@
 package com.shadowshiftstudio.aniway.entity;
 
+import com.shadowshiftstudio.aniway.entity.user.BadgeEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserAchievement;
 import com.shadowshiftstudio.aniway.enums.AchievementType;
 import jakarta.persistence.*;
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,13 +18,13 @@ import static jakarta.persistence.EnumType.STRING;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="achievements")
+@Table(name = "achievements")
 public class AchievementEntity {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(name="avatar_url")
+    @Column(name = "avatar_url")
     private String avatarUrl;
 
     private String header;
@@ -37,4 +37,11 @@ public class AchievementEntity {
     private int condition;
     @OneToMany(mappedBy = "achievement")
     private Set<UserAchievement> achievementsInfo;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "achievement_badge",
+            joinColumns = @JoinColumn(name = "achievement_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "badge_id", referencedColumnName = "id")
+    )
+    private BadgeEntity badge;
 }

@@ -4,6 +4,7 @@ import com.shadowshiftstudio.aniway.entity.CategoryEntity;
 import com.shadowshiftstudio.aniway.entity.CommentEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.GenreEntity;
+import com.shadowshiftstudio.aniway.entity.team.TeamEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserTitle;
 import com.shadowshiftstudio.aniway.enums.AgeRating;
@@ -49,7 +50,7 @@ public class TitleEntity {
 
     private int views;
 
-    @Column(name="background_url")
+    @Column(name="background_image_url")
     private String backgroundUrl;
 
     @Column(name="age_rating")
@@ -91,6 +92,9 @@ public class TitleEntity {
 
     @OneToMany(mappedBy = "title")
     private Set<UserTitle> titlesInfo;
+
+    @ManyToMany(mappedBy = "titles")
+    private Set<TeamEntity> teams;
 
     public TitleEntity addGenre(GenreEntity genre) {
         genres.add(genre);

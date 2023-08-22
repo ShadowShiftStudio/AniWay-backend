@@ -12,7 +12,8 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDto  {
+public class CommentDto {
+    private Long id;
     private String text;
     private String username;
     private String titleName;
@@ -22,6 +23,7 @@ public class CommentDto  {
     public static CommentDto toDto(CommentEntity entity) {
         return CommentDto
                 .builder()
+                .id(entity.getId())
                 .text(entity.getText())
                 .createdAt(entity.getCreatedAt())
                 .username(entity.getAuthor().getUsername())

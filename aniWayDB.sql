@@ -99,12 +99,6 @@ CREATE TABLE "teams" (
   "created_at" TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE "team_chapters" (
-  "id" BIGSERIAL PRIMARY KEY,
-  "team_id" BIGINT,
-  "chapter_id" BIGINT 
-);
-
 CREATE TABLE "titles" (
   "id" BIGSERIAL PRIMARY KEY,
   "name" varchar(100),
@@ -147,6 +141,11 @@ CREATE TABLE "badges" (
   "id" BIGSERIAL PRIMARY KEY,
   "name" varchar(20) UNIQUE,
   "created_at" TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE TABLE "achievement_badge" (
+  "achievement_id" BIGINT,
+  "badge_id" BIGINT
 );
 
 CREATE TABLE "achievements" (
@@ -258,3 +257,7 @@ ALTER TABLE "chapter_images" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapters
 ALTER TABLE "user_achievements" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 ALTER TABLE "user_achievements" ADD FOREIGN KEY ("achievement_id") REFERENCES "achievements" ("id");
+
+ALTER TABLE "achievement_badge" ADD FOREIGN KEY ("badge_id") REFERENCES "badges" ("id");
+
+ALTER TABLE "achievement_badge" ADD FOREIGN KEY ("achievement_id") REFERENCES "achievements" ("id");

@@ -14,6 +14,15 @@ public class TeamController {
     @Autowired
     private TeamService teamService;
 
+    @GetMapping("/{team_name}")
+    public ResponseEntity getTeam(@PathVariable(name = "team_name") String teamName) {
+        try {
+            return ResponseEntity.ok(teamService.getTeam(teamName));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('TRANSLATOR')")
     public ResponseEntity createTeam(@RequestBody CreateTeamRequest request) {

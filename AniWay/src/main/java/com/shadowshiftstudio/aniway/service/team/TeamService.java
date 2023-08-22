@@ -36,11 +36,17 @@ public class TeamService {
     @Autowired
     private ImageService imageService;
 
+    public TeamDto getTeam(String teamName) throws TeamNotFoundException {
+        return TeamDto.toDto(teamRepository
+                .findByName(teamName)
+                .orElseThrow(() -> new TeamNotFoundException("Team not found")));
+    }
+
     public String createTeam(CreateTeamRequest request) throws TeamAlreadyExistsException, UserNotFoundException, UserAlreadyOwnsTeamException {
         if (teamRepository.findByOwner(
-                        userRepository.findByUsername(request.getOwnerUsername())
+                userRepository.findByUsername(request.getOwnerUsername())
                         .orElseThrow(() -> new UserNotFoundException("User not found"))
-                ).isPresent()) {
+        ).isPresent()) {
             throw new UserAlreadyOwnsTeamException("User already owns a team");
         }
 
@@ -140,4 +146,6 @@ public class TeamService {
         if (!team.getOwner().equals(user))
             throw new UserIsNotAnOwnerOfTeamException("User is not an owner of team");
     }
+
+
 }

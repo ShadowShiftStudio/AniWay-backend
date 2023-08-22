@@ -3,15 +3,17 @@ package com.shadowshiftstudio.aniway.service.user;
 import com.shadowshiftstudio.aniway.dto.achievement.CreateAchievementRequest;
 import com.shadowshiftstudio.aniway.dto.user.AchievementDto;
 import com.shadowshiftstudio.aniway.entity.AchievementEntity;
+import com.shadowshiftstudio.aniway.entity.user.BadgeEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserAchievement;
 import com.shadowshiftstudio.aniway.entity.user.UserChapter;
 import com.shadowshiftstudio.aniway.entity.user.UserEntity;
 import com.shadowshiftstudio.aniway.entity.user.keys.UserAchievementKey;
-import com.shadowshiftstudio.aniway.enums.AchievementType;
 import com.shadowshiftstudio.aniway.exception.achievement.AchievementNotFoundException;
+import com.shadowshiftstudio.aniway.exception.user.BadgeNotFoundException;
 import com.shadowshiftstudio.aniway.exception.user.UserAchievementsNotFoundException;
 import com.shadowshiftstudio.aniway.exception.user.UserNotFoundException;
 import com.shadowshiftstudio.aniway.repository.user.AchievementRepository;
+import com.shadowshiftstudio.aniway.repository.user.BadgeRepository;
 import com.shadowshiftstudio.aniway.repository.user.UserAchievementRepository;
 import com.shadowshiftstudio.aniway.repository.user.UserRepository;
 import com.shadowshiftstudio.aniway.service.image.ImageService;
@@ -21,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class AchievementService {
@@ -37,8 +38,12 @@ public class AchievementService {
     @Autowired
     private ImageService imageService;
 
-    public String createAchievement(CreateAchievementRequest request, MultipartFile avatar) throws AchievementNotFoundException, IOException {
+    @Autowired
+    private BadgeRepository badgeRepository;
+
+    public String createAchievement(CreateAchievementRequest request, MultipartFile avatar) throws AchievementNotFoundException, IOException, BadgeNotFoundException {
         String finalPath = imageService.uploadImage(avatar, "achievement_avatars/" + avatar.getOriginalFilename());
+        Long badgeId = request.getBadgeId();
 
         AchievementEntity achievement = AchievementEntity
                 .builder()
@@ -49,21 +54,30 @@ public class AchievementService {
                 .type(request.getType())
                 .build();
 
+        if (badgeId != 0) {
+            BadgeEntity badge = badgeRepository
+                    .findById(badgeId)
+                    .orElseThrow(() -> new BadgeNotFoundException("Badge not found"));
+
+            badge.setAchievement(achievement);
+            achievement.setBadge(badge);
+        }
+
         AchievementEntity finalAchievement = achievementRepository.save(achievement);
 
         userRepository.findAll().forEach((user) ->
-            userRepository.save(user.addAchievement(UserAchievement
-                    .builder()
-                    .achievement(achievement)
-                    .user(user)
-                    .received(false)
-                    .id(UserAchievementKey
-                            .builder()
-                            .achievementId(finalAchievement.getId())
-                            .userId(user.getId())
-                            .build()
-                    )
-                    .build()))
+                userRepository.save(user.addAchievement(UserAchievement
+                        .builder()
+                        .achievement(finalAchievement)
+                        .user(user)
+                        .received(false)
+                        .id(UserAchievementKey
+                                .builder()
+                                .achievementId(finalAchievement.getId())
+                                .userId(user.getId())
+                                .build()
+                        )
+                        .build()))
         );
 
         return "Achievement created successfully";
@@ -97,15 +111,15 @@ public class AchievementService {
         achievementRepository.findAll().forEach((achievement) -> {
             user.addAchievement(UserAchievement
                     .builder()
-                            .achievement(achievement)
-                            .user(user)
-                            .received(false)
-                            .id(UserAchievementKey
-                                    .builder()
-                                    .userId(user.getId())
-                                    .achievementId(achievement.getId())
-                                    .build()
-                            )
+                    .achievement(achievement)
+                    .user(user)
+                    .received(false)
+                    .id(UserAchievementKey
+                            .builder()
+                            .userId(user.getId())
+                            .achievementId(achievement.getId())
+                            .build()
+                    )
                     .build());
         });
 
@@ -125,8 +139,20 @@ public class AchievementService {
             case COMMENTS -> getCommentsDistance(userAchievement);
         };
 
-        if (userAchievement.getAchievement().getCondition() <= distance)
+        if (userAchievement.getAchievement().getCondition() <= distance) {
             userAchievement.setReceived(true);
+            findRelatedBadge(userAchievement);
+        }
+    }
+
+    private void findRelatedBadge(UserAchievement userAchievement) {
+        BadgeEntity badge = userAchievement.getAchievement().getBadge();
+        UserEntity user = userAchievement.getUser();
+
+        if (badge == null)
+            return;
+
+        userRepository.save(user.addBadge(badge));
     }
 
     private int getCommentsDistance(UserAchievement userAchievement) {

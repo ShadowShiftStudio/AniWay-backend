@@ -102,7 +102,7 @@ public class CommentService {
     }
 
     public List<CommentDto> getUserComments(String username, int page, int pageSize) throws UserNotFoundException, UserCommentsAreNotFoundException {
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("created_at"));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("createdAt"));
 
         List<CommentDto> comments = commentRepository
                 .findByAuthor(userRepository
@@ -121,7 +121,7 @@ public class CommentService {
     }
 
     public List<CommentDto> getTitleComments(Long titleId, int page, int pageSize) throws TitleNotFoundException, CommentNotFoundException {
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("created_at"));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("createdAt"));
 
         List<CommentDto> comments = commentRepository.findByTitle(
                 titleRepository

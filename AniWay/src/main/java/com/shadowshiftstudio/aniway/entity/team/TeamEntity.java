@@ -1,6 +1,7 @@
 package com.shadowshiftstudio.aniway.entity.team;
 
 import com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity;
+import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -50,6 +51,14 @@ public class TeamEntity {
 
     @OneToMany(mappedBy = "team")
     private Set<UserTeam> userTeamsInfo;
+
+    @ManyToMany
+    @JoinTable(
+            name = "chapters",
+            joinColumns = @JoinColumn(name = "team_id"),
+            inverseJoinColumns = @JoinColumn(name = "title_id")
+    )
+    private Set<TitleEntity> titles;
 
     public TeamEntity addChapter(ChapterEntity chapter) {
         chapters.add(chapter);

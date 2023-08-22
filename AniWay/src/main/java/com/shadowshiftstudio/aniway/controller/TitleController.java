@@ -58,10 +58,19 @@ public class TitleController {
         }
     }
 
-    @GetMapping("/chapters")
-    public ResponseEntity getChapters(@RequestParam Long id) {
+    @GetMapping("/teams")
+    public ResponseEntity getTeams(@RequestParam Long id) {
         try {
-            return ResponseEntity.ok(titleService.getChapters(id));
+            return ResponseEntity.ok(titleService.getTeams(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/chapters")
+    public ResponseEntity getChapters(@RequestParam Long id, @RequestParam Long teamId) {
+        try {
+            return ResponseEntity.ok(titleService.getChapters(id, teamId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

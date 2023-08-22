@@ -1,26 +1,28 @@
 package com.shadowshiftstudio.aniway.service.title;
 
 import com.shadowshiftstudio.aniway.dto.chapter.ChapterDto;
+import com.shadowshiftstudio.aniway.dto.team.TeamCardDto;
 import com.shadowshiftstudio.aniway.dto.title.*;
-import com.shadowshiftstudio.aniway.entity.CategoryEntity;
-import com.shadowshiftstudio.aniway.entity.chapter.GenreEntity;
+import com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity;
 import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserEntity;
 import com.shadowshiftstudio.aniway.entity.user.UserTitle;
 import com.shadowshiftstudio.aniway.entity.user.keys.UserTitleKey;
 import com.shadowshiftstudio.aniway.enums.ReadingStatus;
 import com.shadowshiftstudio.aniway.exception.chapter.ChapterNotFoundException;
+import com.shadowshiftstudio.aniway.exception.team.TeamNotFoundException;
 import com.shadowshiftstudio.aniway.exception.title.CategoryNotFoundException;
 import com.shadowshiftstudio.aniway.exception.title.GenreNotFoundException;
 import com.shadowshiftstudio.aniway.exception.title.TitleNotFoundException;
 import com.shadowshiftstudio.aniway.exception.title.TitlesNotFoundException;
 import com.shadowshiftstudio.aniway.exception.user.UserNotFoundException;
+import com.shadowshiftstudio.aniway.repository.chapter.ChapterRepository;
+import com.shadowshiftstudio.aniway.repository.team.TeamRepository;
 import com.shadowshiftstudio.aniway.repository.title.CategoryRepository;
 import com.shadowshiftstudio.aniway.repository.title.GenreRespository;
 import com.shadowshiftstudio.aniway.repository.title.TitleRepository;
 import com.shadowshiftstudio.aniway.repository.user.UserRepository;
 import com.shadowshiftstudio.aniway.repository.user.UserTitleRepository;
-import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,12 @@ public class TitleService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ChapterRepository chapterRepository;
+
+    @Autowired
+    private TeamRepository teamRepository;
 
     public TitleDto getTitle(Long id) throws TitleNotFoundException {
         Optional<TitleEntity> titleOptional = titleRepository.findById(id);
@@ -146,7 +154,6 @@ public class TitleService {
         UserTitle userTitle = getUserTitleByUsernameAndTitle(request.getUsername(), request.getTitleId());
 
         userTitle.setRating(request.getRating());
-
         userTitleRepository.save(userTitle);
 
         return "Title was successfully rated";
@@ -179,18 +186,29 @@ public class TitleService {
                         .build());
     }
 
-    public List<ChapterDto> getChapters(Long id) throws TitleNotFoundException, ChapterNotFoundException {
-        List<ChapterDto> chapters = titleRepository
-                .findById(id)
-                .orElseThrow(() -> new TitleNotFoundException("Title not found"))
-                .getChapters()
-                .stream()
+    public List<ChapterDto> getChapters(Long id, Long teamId) throws TitleNotFoundException, ChapterNotFoundException, TeamNotFoundException {
+        List<ChapterDto> chapters = chapterRepository
+                .findAllByTitleAndTeam(
+                        titleRepository.findById(id).orElseThrow(() -> new TitleNotFoundException("Title not found")),
+                        teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("Team not found"))
+                ).stream()
                 .map(ChapterDto::toDto)
                 .toList();
+
 
         if (chapters.isEmpty())
             throw new ChapterNotFoundException("Chapters not found");
 
         return chapters;
+    }
+
+    public List<TeamCardDto> getTeams(Long id) throws TitleNotFoundException {
+        return titleRepository
+                .findById(id)
+                .orElseThrow(() -> new TitleNotFoundException("Title not found"))
+                .getTeams()
+                .stream()
+                .map(TeamCardDto::toDto)
+                .toList();
     }
 }

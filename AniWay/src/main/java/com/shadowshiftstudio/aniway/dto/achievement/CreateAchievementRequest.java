@@ -15,4 +15,5 @@ public class CreateAchievementRequest {
     private String text;
     private AchievementType type;
     private int condition;
+    private Long badgeId;
 }

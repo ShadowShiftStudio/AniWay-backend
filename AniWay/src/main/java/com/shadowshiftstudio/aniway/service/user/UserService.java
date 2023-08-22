@@ -1,5 +1,6 @@
 package com.shadowshiftstudio.aniway.service.user;
 
+import com.shadowshiftstudio.aniway.dto.user.BadgeDto;
 import com.shadowshiftstudio.aniway.dto.user.UserDto;
 import com.shadowshiftstudio.aniway.entity.user.UserEntity;
 import com.shadowshiftstudio.aniway.exception.user.UserNotFoundException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -19,6 +21,7 @@ public class UserService {
 
     @Autowired
     private ImageService imageService;
+
     public UserDto getUserId(@NotNull Long id) throws UserNotFoundException {
         return UserDto.toDto(userRepository
                 .findById(id)
@@ -27,10 +30,10 @@ public class UserService {
     }
 
     public UserDto getUserUsername(@NotNull String username) throws UserNotFoundException {
-            return UserDto.toDto(userRepository
-                    .findByUsername(username)
-                    .orElseThrow(() -> new UserNotFoundException("User not found"))
-            );
+        return UserDto.toDto(userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"))
+        );
     }
 
     public String uploadAvatarImage(Long id, MultipartFile avatar) throws IOException, UserNotFoundException {
@@ -51,5 +54,15 @@ public class UserService {
         userRepository.save(user);
 
         return "Avatar was successfully uploaded on url: " + url;
+    }
+
+    public List<BadgeDto> getUserBadges(String username) throws UserNotFoundException {
+        return userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"))
+                .getBadges()
+                .stream()
+                .map(BadgeDto::toDto)
+                .toList();
     }
 }
