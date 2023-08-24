@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChapterImageRepository extends JpaRepository<ChapterImageEntity, Long> {
-    List<ChapterImageEntity> findByChapter(ChapterEntity entity);
+    List<ChapterImageEntity> findByImageChapter(ChapterEntity entity);
     Optional<ChapterImageEntity> findFirstByOrderByImageIndexDesc();
 }

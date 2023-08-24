@@ -41,13 +41,13 @@ public class TeamDto {
                 .description(entity.getDescription())
                 .createdAt(entity.getCreatedAt())
                 .avatarUrl(entity.getAvatarUrl())
-                .titles(entity
+                /*.titles(entity
                         .getTitles()
                         .stream()
                         .map(TitleCardDto::toDto)
                         .limit(12)
                         .toList()
-                )
+                )*/
                 .build();
     }
 }

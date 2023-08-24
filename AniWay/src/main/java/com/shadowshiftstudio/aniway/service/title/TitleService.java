@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class TitleService {
@@ -68,7 +69,18 @@ public class TitleService {
 
         return TitleDto.toDto(titleEntity);
     }
+    public Set<TeamCardDto> getTeams(Long titleId) throws TitleNotFoundException {
+        TitleEntity title = titleRepository
+                .findById(titleId)
+                .orElseThrow(() -> new TitleNotFoundException("Title not found"));
 
+        return title
+                .getChapters()
+                .stream()
+                .map(ChapterEntity::getTeam)
+                .map(TeamCardDto::toDto)
+                .collect(Collectors.toSet());
+    }
     public String createTitle(CreateTitleRequest request) throws GenreNotFoundException, CategoryNotFoundException {
         List<Long> genresIds = request.getGenres_ids();
         List<Long> categoryIds = request.getCategory_ids();
@@ -202,7 +214,7 @@ public class TitleService {
         return chapters;
     }
 
-    public List<TeamCardDto> getTeams(Long id) throws TitleNotFoundException {
+    /*public List<TeamCardDto> getTeams(Long id) throws TitleNotFoundException {
         return titleRepository
                 .findById(id)
                 .orElseThrow(() -> new TitleNotFoundException("Title not found"))
@@ -210,5 +222,5 @@ public class TitleService {
                 .stream()
                 .map(TeamCardDto::toDto)
                 .toList();
-    }
+    }*/
 }
