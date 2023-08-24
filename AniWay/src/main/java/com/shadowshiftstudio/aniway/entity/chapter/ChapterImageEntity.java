@@ -1,6 +1,5 @@
 package com.shadowshiftstudio.aniway.entity.chapter;
 
-import com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,9 +17,9 @@ public class ChapterImageEntity {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="chapter_id", nullable = false)
-    private ChapterEntity chapter;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="chapter_id")
+    private ChapterEntity imageChapter;
 
     @Column(name="image_index")
     private int imageIndex;

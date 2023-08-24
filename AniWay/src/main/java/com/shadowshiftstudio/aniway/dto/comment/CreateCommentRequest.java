@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCommentRequest {
-    public Long author;
+    public String username;
     public Long title_id;
     public Long chapter_id;
     public String text;

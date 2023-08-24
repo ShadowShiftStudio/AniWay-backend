@@ -13,7 +13,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 public class ChapterDto {
-    private long id;
+    private Long id;
     private String name;
     private int number;
     private int volume;

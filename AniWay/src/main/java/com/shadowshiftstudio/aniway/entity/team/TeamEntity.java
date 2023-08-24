@@ -45,8 +45,7 @@ public class TeamEntity {
     @Column(name="avatar_url")
     private String avatarUrl;
 
-    @OneToMany(targetEntity = ChapterEntity.class, cascade = ALL)
-    @JoinColumn(referencedColumnName = "id")
+    @OneToMany(mappedBy = "team")
     private Set<ChapterEntity> chapters;
 
     @OneToMany(mappedBy = "team")
@@ -54,7 +53,7 @@ public class TeamEntity {
 
     @ManyToMany
     @JoinTable(
-            name = "chapters",
+            name = "team_titles",
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "title_id")
     )
@@ -69,6 +68,12 @@ public class TeamEntity {
     public TeamEntity addUser(UserTeam user) {
         userTeamsInfo.add(user);
         user.setTeam(this);
+        return this;
+    }
+
+    public TeamEntity addTitle(TitleEntity title) {
+        titles.add(title);
+        title.getTeams().add(this);
         return this;
     }
 }

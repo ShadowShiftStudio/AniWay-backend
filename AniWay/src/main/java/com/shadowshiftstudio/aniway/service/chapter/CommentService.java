@@ -33,9 +33,6 @@ public class CommentService {
     private CommentRepository commentRepository;
 
     @Autowired
-    private AchievementService achievementService;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -49,7 +46,7 @@ public class CommentService {
     }
 
     public String createComment(CreateCommentRequest request) throws UserNotFoundException, TitleNotFoundException, ChapterNotFoundException {
-        UserEntity author = userRepository.findById(request.author).orElseThrow(() -> new UserNotFoundException("User not found"));
+        UserEntity author = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new UserNotFoundException("User not found"));
         CommentEntity comment = CommentEntity
                 .builder()
                 .text(request.text)
@@ -58,7 +55,7 @@ public class CommentService {
                                 ? titleRepository.findById(request.getTitle_id()).orElseThrow(() -> new TitleNotFoundException("Title not found"))
                                 : null
                 )
-                .chapter(
+                .commentsChapter(
                         request.getChapter_id() != 0
                                 ? chapterRepository.findById(request.getChapter_id()).orElseThrow(() -> new ChapterNotFoundException("Chapter not found"))
                                 : null
@@ -71,14 +68,14 @@ public class CommentService {
         return "Comment was created";
     }
 
-    public String deleteComment(@NotNull Long user_id, @NotNull Long id) throws CommentNotFoundException, NoPermissionsToDeleteCommentException {
+    public String deleteComment(@NotNull String username, @NotNull Long id) throws CommentNotFoundException, NoPermissionsToDeleteCommentException, UserNotFoundException {
         CommentEntity commentEntity = commentRepository
                 .findById(id)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
         UserEntity userEntity = commentEntity.getAuthor();
 
         if (userEntity.getRole() != Role.MODERATOR
-                && !user_id.equals(userEntity.getId())) {
+                && !userEntity.equals(userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found")))) {
             throw new NoPermissionsToDeleteCommentException("User doesn't have permissions to delete comment");
         }
 
@@ -87,10 +84,14 @@ public class CommentService {
 
     }
 
-    public String updateComment(UpdateCommentRequest request) throws CommentNotFoundException, NoPermissionsToDeleteCommentException {
+    public String updateComment(UpdateCommentRequest request) throws CommentNotFoundException, NoPermissionsToDeleteCommentException, UserNotFoundException {
         CommentEntity comment = commentRepository.findById(request.getComment_id()).orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
-        if (!Objects.equals(comment.getAuthor().getId(), request.getUser_id())) {
+        if (!Objects.equals(
+                comment.getAuthor(),
+                userRepository.findByUsername(request.getUsername())
+                        .orElseThrow(() -> new UserNotFoundException("User not found")))
+        ) {
             throw new NoPermissionsToDeleteCommentException("User doesn't have permissions to delete comment");
         }
 

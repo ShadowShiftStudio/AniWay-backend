@@ -119,6 +119,11 @@ CREATE TABLE "chapter_images" (
   "url" varchar(100)
 );
 
+CREATE TABLE "team_titles" (
+  "team_id" BIGINT,
+  "title_id" BIGINT
+);
+
 CREATE TABLE "chapters" (
   "id" BIGSERIAL PRIMARY KEY,
   "title_id" BIGINT,
@@ -214,10 +219,6 @@ ALTER TABLE "teams" ADD FOREIGN KEY ("owner_id") REFERENCES "users" ("id");
 
 ALTER TABLE "refresh_tokens" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-ALTER TABLE "chapters" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
-
-ALTER TABLE "chapters" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id");
-
 ALTER TABLE "comments" ADD FOREIGN KEY ("author_id") REFERENCES "users" ("id");
 
 ALTER TABLE "comments" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
@@ -227,6 +228,10 @@ ALTER TABLE "comments" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapters" ("id
 ALTER TABLE "related_titles" ADD FOREIGN KEY ("base_title_id") REFERENCES "titles" ("id");
 
 ALTER TABLE "related_titles" ADD FOREIGN KEY ("related_title_id") REFERENCES "titles" ("id");
+
+ALTER TABLE "team_titles" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id");
+
+ALTER TABLE "team_titles" ADD FOREIGN KEY ("title_id") REFERENCES "titles" ("id");
 
 ALTER TABLE "user_info_of_chapters" ADD FOREIGN KEY ("chapter_id") REFERENCES "chapters" ("id");
 

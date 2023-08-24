@@ -2,6 +2,8 @@ package com.shadowshiftstudio.aniway.service.chapter;
 
 import com.shadowshiftstudio.aniway.dto.chapter.ChapterImageDto;
 import com.shadowshiftstudio.aniway.dto.chapter.CreateChapterRequest;
+import com.shadowshiftstudio.aniway.dto.team.TeamCardDto;
+import com.shadowshiftstudio.aniway.dto.team.TeamDto;
 import com.shadowshiftstudio.aniway.entity.team.TeamEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.ChapterImageEntity;
@@ -24,6 +26,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ChapterService {
@@ -50,6 +54,9 @@ public class ChapterService {
         TitleEntity title = titleRepository.findById(request.getTitle_id()).orElseThrow(() -> new TitleNotFoundException("Title not found"));
         TeamEntity team = teamRepository.findById(request.getTeam_id()).orElseThrow(() -> new TeamNotFoundException("Team not found"));
 
+        if (!team.getTitles().contains(title))
+            team.addTitle(title);
+
         ChapterEntity chapterEntity = ChapterEntity
                 .builder()
                 .title(title)
@@ -67,6 +74,8 @@ public class ChapterService {
         return "Chapter was successfully created";
     }
 
+
+
     public String uploadChapterImage(MultipartFile file, Long id) throws ChapterNotFoundException, IOException {
         ChapterEntity chapterEntity = chapterRepository.findById(id).orElseThrow(() -> new ChapterNotFoundException("Chapter not found"));
         String titleName = chapterEntity.getTitle().getName();
@@ -80,7 +89,7 @@ public class ChapterService {
         chapterImageRepository.save(
                 ChapterImageEntity
                         .builder()
-                        .chapter(chapterEntity)
+                        .imageChapter(chapterEntity)
                         .imageIndex(imageIndex)
                         .url(finalPath)
                         .build()
@@ -91,7 +100,7 @@ public class ChapterService {
     }
     public List<ChapterImageDto> getChapterImages(Long id) throws ChapterNotFoundException, ChapterImageNotFoundException {
         List<ChapterImageDto> images = chapterImageRepository
-                .findByChapter(chapterRepository.findById(id).orElseThrow(() -> new ChapterNotFoundException("Chapter not found")))
+                .findByImageChapter(chapterRepository.findById(id).orElseThrow(() -> new ChapterNotFoundException("Chapter not found")))
                 .stream()
                 .map(ChapterImageDto::toDto)
                 .toList();

@@ -23,14 +23,14 @@ import java.util.Set;
 public class ChapterEntity {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "title_id", insertable = false, updatable = false)
+    @JoinColumn(name = "title_id")
     private TitleEntity title;
 
     @ManyToOne
-    @JoinColumn(name = "team_id", insertable = false, updatable = false)
+    @JoinColumn(name = "team_id")
     private TeamEntity team;
 
     @Size(min = 3, message = "{validation.name.size.too_short}")
@@ -44,18 +44,18 @@ public class ChapterEntity {
     @Column(name="number_of_pages")
     private int numberOfPages;
 
-    @OneToMany(mappedBy = "chapter")
+    @OneToMany(mappedBy = "commentsChapter")
     private Set<CommentEntity> comments;
 
-    @OneToMany(mappedBy = "chapter")
+    @OneToMany(mappedBy = "imageChapter")
     private Set<ChapterImageEntity> images;
+
+    @OneToMany(mappedBy = "chapter")
+    private Set<UserChapter> chaptersInfo;
 
     @Column(name = "created_at")
     private Date createdAt;
 
     @Column(name = "updated_at")
     private Date updatedAt;
-
-    @OneToMany(mappedBy = "chapter")
-    private Set<UserChapter> chaptersInfo;
 }

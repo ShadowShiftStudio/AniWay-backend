@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UpdateCommentRequest {
-    private Long user_id;
+    private String username;
     private Long comment_id;
     private String text;
 }

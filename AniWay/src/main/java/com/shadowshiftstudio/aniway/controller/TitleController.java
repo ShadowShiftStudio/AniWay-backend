@@ -5,6 +5,7 @@ import com.shadowshiftstudio.aniway.dto.title.RateTitleRequest;
 import com.shadowshiftstudio.aniway.dto.title.SetTitleReadingStatusRequest;
 import com.shadowshiftstudio.aniway.enums.ReadingStatus;
 import com.shadowshiftstudio.aniway.exception.title.TitleNotFoundException;
+import com.shadowshiftstudio.aniway.service.chapter.CommentService;
 import com.shadowshiftstudio.aniway.service.title.TitleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +18,17 @@ public class TitleController {
     @Autowired
     private TitleService titleService;
 
+    @Autowired
+    private CommentService commentService;
+
     @GetMapping("/{id}")
     public ResponseEntity getTitle(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(titleService.getTitle(id));
-        } catch (TitleNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('TRANSLATOR') or hasAuthority('ADMIN')")
@@ -40,7 +41,7 @@ public class TitleController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('MODERATOR')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity deleteTitle(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(titleService.deleteTitle(id));
@@ -49,23 +50,14 @@ public class TitleController {
         }
     }
 
-    @GetMapping("/get_user_titles/{username}")
-    public ResponseEntity getUserTitlesByReadingStatus(@PathVariable String username, @RequestParam ReadingStatus readingStatus) {
-        try {
-            return ResponseEntity.ok(titleService.getUserTitlesByReadingStatus(username, readingStatus));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @GetMapping("/teams")
+    /*@GetMapping("/teams")
     public ResponseEntity getTeams(@RequestParam Long id) {
         try {
             return ResponseEntity.ok(titleService.getTeams(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
+    }*/
 
     @GetMapping("/chapters")
     public ResponseEntity getChapters(@RequestParam Long id, @RequestParam Long teamId) {
@@ -76,8 +68,8 @@ public class TitleController {
         }
     }
 
-    @PostMapping("/rate")
-    public ResponseEntity rateTitle(@RequestBody RateTitleRequest request) {
+    @PostMapping("/set/rating")
+    public ResponseEntity setRating(@RequestBody RateTitleRequest request) {
         try {
             return ResponseEntity.ok(titleService.rateTitle(request));
         } catch (Exception e) {
@@ -85,8 +77,8 @@ public class TitleController {
         }
     }
 
-    @PostMapping("/set_reading_status")
-    public ResponseEntity setTitleReadingStatus(@RequestBody SetTitleReadingStatusRequest request) {
+    @PostMapping("/set/reading_status")
+    public ResponseEntity setReadingStatus(@RequestBody SetTitleReadingStatusRequest request) {
         try {
             return ResponseEntity.ok(titleService.setTitleReadingStatus(request));
         } catch (Exception e) {
@@ -94,4 +86,23 @@ public class TitleController {
         }
     }
 
+    @GetMapping("/comments")
+    public ResponseEntity getComments(@RequestParam Long titleId,
+                                           @RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        try {
+            return ResponseEntity.ok(commentService.getTitleComments(titleId, page, pageSize));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/teams")
+    public ResponseEntity getTeams(@RequestParam Long titleId) {
+        try {
+            return ResponseEntity.ok(titleService.getTeams(titleId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

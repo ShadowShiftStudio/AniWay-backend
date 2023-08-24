@@ -33,7 +33,7 @@ public class CommentEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="chapter_id")
-    private ChapterEntity chapter;
+    private ChapterEntity commentsChapter;
 
     @Size(min = 3, message = "{validation.name.size.too_short}")
     @Size(max = 300, message = "{validation.name.size.too_long}")

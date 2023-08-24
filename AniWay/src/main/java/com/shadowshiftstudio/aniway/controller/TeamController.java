@@ -53,7 +53,7 @@ public class TeamController {
         }
     }
 
-    @DeleteMapping("/delete_user")
+    @DeleteMapping("/delete/user")
     @PreAuthorize("hasAuthority('TRANSLATOR')")
     public ResponseEntity deleteUser(@RequestBody DeleteUserFromTeamRequest request) {
         try {
@@ -63,7 +63,7 @@ public class TeamController {
         }
     }
 
-    @PostMapping("/avatar/upload")
+    @PostMapping("/upload/avatar")
     @PreAuthorize("hasAuthority('TRANSLATOR')")
     public ResponseEntity uploadAvatar(
             @RequestPart("data") UploadTeamAvatarRequest request,

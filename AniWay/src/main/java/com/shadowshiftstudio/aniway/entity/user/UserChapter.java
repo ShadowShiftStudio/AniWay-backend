@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="user_info_of_chapters")
+@Table(name = "user_info_of_chapters")
 public class UserChapter {
     @EmbeddedId
     private UserChapterKey id;
 
     @ManyToOne
     @MapsId("chapterId")
-    @JoinColumn(name = "chapter_id")
+    @JoinColumn(name = "chapter_id", referencedColumnName = "id")
     private ChapterEntity chapter;
 
     @ManyToOne
