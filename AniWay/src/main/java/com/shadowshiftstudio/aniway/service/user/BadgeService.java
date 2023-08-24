@@ -5,11 +5,14 @@ import com.shadowshiftstudio.aniway.dto.user.CreateBadgeRequest;
 import com.shadowshiftstudio.aniway.entity.user.BadgeEntity;
 import com.shadowshiftstudio.aniway.exception.user.BadgeAlreadyExistsException;
 import com.shadowshiftstudio.aniway.exception.user.BadgeNotFoundException;
+import com.shadowshiftstudio.aniway.exception.user.UserNotFoundException;
 import com.shadowshiftstudio.aniway.repository.user.BadgeRepository;
+import com.shadowshiftstudio.aniway.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +20,9 @@ public class BadgeService {
 
     @Autowired
     private BadgeRepository badgeRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public BadgeDto getBadge(Long id) throws BadgeNotFoundException {
         Optional<BadgeEntity> badgeOptional = badgeRepository.findById(id);
@@ -44,4 +50,13 @@ public class BadgeService {
         return "Badge has been successfully created";
     }
 
+    public List<BadgeDto> getUserBadges(String username) throws UserNotFoundException {
+        return userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"))
+                .getBadges()
+                .stream()
+                .map(BadgeDto::toDto)
+                .toList();
+    }
 }

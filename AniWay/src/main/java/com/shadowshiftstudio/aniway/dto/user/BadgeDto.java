@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
@@ -16,8 +17,7 @@ import java.time.LocalDateTime;
 public class BadgeDto {
     private long id;
     private String name;
-    private LocalDateTime createdAt;
-
+    private Date createdAt;
     public static BadgeDto toDto(BadgeEntity entity) {
         return BadgeDto
                 .builder()

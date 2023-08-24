@@ -19,34 +19,11 @@ public class CommentController {
     public ResponseEntity getComment(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(commentService.getComment(id));
-        } catch (CommentNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping(value = "/get_comments/{username}")
-    public ResponseEntity getUserComments(@PathVariable String username,
-                                          @RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(required = false, defaultValue = "10") int pageSize) {
-        try {
-            return ResponseEntity.ok(commentService.getUserComments(username, page, pageSize));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @GetMapping("/title")
-    public ResponseEntity getTitleComments(@RequestParam Long titleId,
-                                           @RequestParam(defaultValue = "0") int page,
-                                           @RequestParam(required = false, defaultValue = "10") int pageSize) {
-        try {
-            return ResponseEntity.ok(commentService.getTitleComments(titleId, page, pageSize));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
     @PostMapping("/create")
     public ResponseEntity createComment(@RequestBody CreateCommentRequest request) {
         try {
@@ -58,12 +35,10 @@ public class CommentController {
 
     @DeleteMapping("/delete")
     public ResponseEntity deleteComment(
-            @RequestParam(name="user_id") Long userId,
+            @RequestParam(name="username") String username,
             @RequestParam(name="comment_id") Long id) {
         try {
-            return ResponseEntity.ok(commentService.deleteComment(userId, id));
-        } catch (CommentNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.ok(commentService.deleteComment(username, id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -73,8 +48,6 @@ public class CommentController {
     public ResponseEntity updateComment(@RequestBody UpdateCommentRequest request) {
         try {
             return ResponseEntity.ok(commentService.updateComment(request));
-        } catch (CommentNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

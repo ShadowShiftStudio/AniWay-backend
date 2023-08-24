@@ -31,4 +31,5 @@ public class BadgeController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 }

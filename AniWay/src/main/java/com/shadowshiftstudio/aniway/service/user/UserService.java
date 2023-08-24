@@ -36,9 +36,9 @@ public class UserService {
         );
     }
 
-    public String uploadAvatarImage(Long id, MultipartFile avatar) throws IOException, UserNotFoundException {
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
-        String url = imageService.uploadImage(avatar, "users/" + id + "/avatar.jpeg");
+    public String uploadAvatarImage(String username, MultipartFile avatar) throws IOException, UserNotFoundException {
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
+        String url = imageService.uploadImage(avatar, "users/" + username + "/avatar.jpeg");
 
         user.setAvatarUrl(url);
         userRepository.save(user);
@@ -46,9 +46,9 @@ public class UserService {
         return "Avatar was successfully uploaded on url: " + url;
     }
 
-    public Object uploadBackgroundImage(Long id, MultipartFile background) throws UserNotFoundException, IOException {
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
-        String url = imageService.uploadImage(background, "users/" + id + "/background.jpeg");
+    public Object uploadBackgroundImage(String username, MultipartFile background) throws UserNotFoundException, IOException {
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
+        String url = imageService.uploadImage(background, "users/" + username + "/background.jpeg");
 
         user.setBackgroundUrl(url);
         userRepository.save(user);
@@ -56,13 +56,5 @@ public class UserService {
         return "Avatar was successfully uploaded on url: " + url;
     }
 
-    public List<BadgeDto> getUserBadges(String username) throws UserNotFoundException {
-        return userRepository
-                .findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found"))
-                .getBadges()
-                .stream()
-                .map(BadgeDto::toDto)
-                .toList();
-    }
+
 }

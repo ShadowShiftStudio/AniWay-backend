@@ -54,31 +54,11 @@ public class AchievementService {
                 .type(request.getType())
                 .build();
 
-        if (badgeId != 0) {
-            BadgeEntity badge = badgeRepository
-                    .findById(badgeId)
-                    .orElseThrow(() -> new BadgeNotFoundException("Badge not found"));
-
-            badge.setAchievement(achievement);
-            achievement.setBadge(badge);
-        }
+        if (badgeId != 0)
+            addBadge(achievement, request.getBadgeId());
 
         AchievementEntity finalAchievement = achievementRepository.save(achievement);
-
-        userRepository.findAll().forEach((user) ->
-                userRepository.save(user.addAchievement(UserAchievement
-                        .builder()
-                        .achievement(finalAchievement)
-                        .user(user)
-                        .received(false)
-                        .id(UserAchievementKey
-                                .builder()
-                                .achievementId(finalAchievement.getId())
-                                .userId(user.getId())
-                                .build()
-                        )
-                        .build()))
-        );
+        addAchievementToUsers(finalAchievement);
 
         return "Achievement created successfully";
     }
@@ -126,11 +106,34 @@ public class AchievementService {
         userRepository.save(user);
     }
 
+    private void addAchievementToUsers(AchievementEntity achievement) {
+        userRepository.findAll().forEach((user) ->
+                userRepository.save(user.addAchievement(UserAchievement
+                        .builder()
+                        .achievement(achievement)
+                        .user(user)
+                        .received(false)
+                        .id(UserAchievementKey
+                                .builder()
+                                .achievementId(achievement.getId())
+                                .userId(user.getId())
+                                .build()
+                        )
+                        .build()))
+        );
+    }
     private void checkForReceived(UserEntity user) {
         userAchievementRepository
                 .findUserAchievementsByUserAndReceived(user, false).forEach(this::checkCondition);
     }
+    private void addBadge(AchievementEntity achievement, Long badgeId) throws BadgeNotFoundException {
+        BadgeEntity badge = badgeRepository
+                .findById(badgeId)
+                .orElseThrow(() -> new BadgeNotFoundException("Badge not found"));
 
+        badge.setAchievement(achievement);
+        achievement.setBadge(badge);
+    }
     private void checkCondition(UserAchievement userAchievement) {
         int distance = switch (userAchievement.getAchievement().getType()) {
             case CHAPTERS -> getChaptersDistance(userAchievement);

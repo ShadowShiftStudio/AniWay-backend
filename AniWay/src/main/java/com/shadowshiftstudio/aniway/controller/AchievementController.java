@@ -25,13 +25,4 @@ public class AchievementController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    @GetMapping("get_achievements/{username}")
-    public ResponseEntity getUserAchievements(@PathVariable String username, @RequestParam boolean received) {
-        try {
-            return ResponseEntity.ok(achievementService.getUserAchievements(username, received));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 }
