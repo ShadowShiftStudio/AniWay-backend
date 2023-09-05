@@ -29,6 +29,7 @@ public class TitleDto {
     private TitleType type;
     private int views;
     private double rating;
+    private int userRating;
     private String backgroundUrl;
     private List<CategoryDto> categories;
     private List<GenreDto> genres;
@@ -118,6 +119,7 @@ public class TitleDto {
                         .map(GenreDto::toDto)
                         .toList()
                 )
+                .userRating(userTitle.getRating())
                 .readingStatus(userTitle.getReadingStatus())
                 .build();
     }
