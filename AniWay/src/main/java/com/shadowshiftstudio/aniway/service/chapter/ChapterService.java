@@ -2,18 +2,21 @@ package com.shadowshiftstudio.aniway.service.chapter;
 
 import com.shadowshiftstudio.aniway.dto.chapter.ChapterImageDto;
 import com.shadowshiftstudio.aniway.dto.chapter.CreateChapterRequest;
-import com.shadowshiftstudio.aniway.dto.team.TeamCardDto;
-import com.shadowshiftstudio.aniway.dto.team.TeamDto;
 import com.shadowshiftstudio.aniway.entity.team.TeamEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.ChapterEntity;
 import com.shadowshiftstudio.aniway.entity.chapter.ChapterImageEntity;
 import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
+import com.shadowshiftstudio.aniway.entity.user.UserChapter;
+import com.shadowshiftstudio.aniway.entity.user.UserEntity;
+import com.shadowshiftstudio.aniway.entity.user.keys.UserChapterKey;
 import com.shadowshiftstudio.aniway.exception.chapter.ChapterImageNotFoundException;
 import com.shadowshiftstudio.aniway.exception.chapter.ChapterNotFoundException;
 import com.shadowshiftstudio.aniway.exception.team.TeamNotFoundException;
 import com.shadowshiftstudio.aniway.exception.title.TitleNotFoundException;
+import com.shadowshiftstudio.aniway.exception.user.UserNotFoundException;
 import com.shadowshiftstudio.aniway.repository.chapter.ChapterImageRepository;
 import com.shadowshiftstudio.aniway.repository.chapter.ChapterRepository;
+import com.shadowshiftstudio.aniway.repository.chapter.UserChapterRepository;
 import com.shadowshiftstudio.aniway.repository.team.TeamRepository;
 import com.shadowshiftstudio.aniway.repository.title.TitleRepository;
 import com.shadowshiftstudio.aniway.repository.user.UserRepository;
@@ -26,13 +29,14 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class ChapterService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserChapterRepository userChapterRepository;
 
     @Autowired
     private TitleRepository titleRepository;
@@ -98,9 +102,24 @@ public class ChapterService {
         return "Image was save on path: " + finalPath;
 
     }
-    public List<ChapterImageDto> getChapterImages(Long id) throws ChapterNotFoundException, ChapterImageNotFoundException {
+    public List<ChapterImageDto> getChapterImages(Long id, String username) throws ChapterNotFoundException, ChapterImageNotFoundException, UserNotFoundException {
+        ChapterEntity chapter = chapterRepository.findById(id).orElseThrow(() -> new ChapterNotFoundException("Chapter not found"));
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        UserChapter userChapter = userChapterRepository.findByUserAndChapter(user, chapter).orElse(UserChapter.builder()
+                        .user(user)
+                        .chapter(chapter)
+                        .id(UserChapterKey.builder()
+                                .userId(user.getId())
+                                .chapterId(chapter.getId())
+                                .build())
+                .build());
+
+        userChapter.setRead(true);
+        chapterRepository.save(chapter.addUserChapter(userChapter));
+
         List<ChapterImageDto> images = chapterImageRepository
-                .findByImageChapter(chapterRepository.findById(id).orElseThrow(() -> new ChapterNotFoundException("Chapter not found")))
+                .findByImageChapter(chapter)
                 .stream()
                 .map(ChapterImageDto::toDto)
                 .toList();
@@ -109,5 +128,24 @@ public class ChapterService {
             throw new ChapterImageNotFoundException("Images not found");
 
         return images;
+    }
+
+    public String likeChapter(Long chapterId, String username) throws UserNotFoundException, ChapterNotFoundException {
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
+        ChapterEntity chapter = chapterRepository.findById(chapterId).orElseThrow(() -> new ChapterNotFoundException("Chapter not found"));
+
+        UserChapter userChapter = userChapterRepository.findByUserAndChapter(user, chapter).orElse(UserChapter.builder()
+                        .user(user)
+                        .chapter(chapter)
+                        .id(UserChapterKey.builder()
+                                .userId(user.getId())
+                                .chapterId(chapter.getId())
+                                .build())
+                .build());
+
+        userChapter.setLiked(true);
+        chapterRepository.save(chapter.addUserChapter(userChapter));
+
+        return "Chapter was liked";
     }
 }

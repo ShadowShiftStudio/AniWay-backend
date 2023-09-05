@@ -39,9 +39,19 @@ public class ChapterController {
 
 
     @GetMapping("/images")
-    public ResponseEntity getChapterImages(@RequestParam Long id) {
+    public ResponseEntity getChapterImages(@RequestParam Long id, @RequestParam String username) {
         try {
-            return ResponseEntity.ok(chapterService.getChapterImages(id));
+            return ResponseEntity.ok(chapterService.getChapterImages(id, username));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/like")
+    public ResponseEntity likeChapter(@RequestParam(name = "title_id") Long titleId,
+                                      @RequestParam String username) {
+        try {
+            return ResponseEntity.ok(chapterService.likeChapter(titleId, username));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

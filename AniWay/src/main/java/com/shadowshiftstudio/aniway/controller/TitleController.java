@@ -22,9 +22,9 @@ public class TitleController {
     private CommentService commentService;
 
     @GetMapping("/{id}")
-    public ResponseEntity getTitle(@PathVariable Long id) {
+    public ResponseEntity getTitle(@PathVariable Long id, @RequestParam String username) {
         try {
-            return ResponseEntity.ok(titleService.getTitle(id));
+            return ResponseEntity.ok(titleService.getTitle(id, username));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -101,6 +101,15 @@ public class TitleController {
     public ResponseEntity getTeams(@RequestParam Long titleId) {
         try {
             return ResponseEntity.ok(titleService.getTeams(titleId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity searchTitles(@RequestParam String name) {
+        try {
+            return ResponseEntity.ok(titleService.searchTitles(name));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

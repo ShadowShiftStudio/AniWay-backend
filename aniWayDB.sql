@@ -108,8 +108,7 @@ CREATE TABLE "titles" (
   "background_image_url" varchar(300),
   "description" text[],
   "status" title_status,
-  "type" title_type,
-  "views" integer
+  "type" title_type
 );
 
 CREATE TABLE "chapter_images" (

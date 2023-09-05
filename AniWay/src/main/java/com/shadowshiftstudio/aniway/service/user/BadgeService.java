@@ -25,15 +25,7 @@ public class BadgeService {
     private UserRepository userRepository;
 
     public BadgeDto getBadge(Long id) throws BadgeNotFoundException {
-        Optional<BadgeEntity> badgeOptional = badgeRepository.findById(id);
-        BadgeEntity badge;
-
-        if (badgeOptional.isPresent())
-            badge = badgeOptional.get();
-        else
-            throw new BadgeNotFoundException("Badge not found");
-
-        return BadgeDto.toDto(badge);
+        return BadgeDto.toDto(badgeRepository.findById(id).orElseThrow(() -> new BadgeNotFoundException("Badge not found")));
     }
 
     public String createBadge(CreateBadgeRequest request) throws BadgeAlreadyExistsException {

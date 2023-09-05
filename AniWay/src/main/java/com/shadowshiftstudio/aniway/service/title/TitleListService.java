@@ -1,12 +1,10 @@
 package com.shadowshiftstudio.aniway.service.title;
 
 import com.shadowshiftstudio.aniway.dto.title.TitleCardDto;
-import com.shadowshiftstudio.aniway.dto.title.TitleDto;
 import com.shadowshiftstudio.aniway.entity.title.TitleEntity;
 import com.shadowshiftstudio.aniway.enums.AgeRating;
 import com.shadowshiftstudio.aniway.enums.TitleStatus;
 import com.shadowshiftstudio.aniway.enums.TitleType;
-import com.shadowshiftstudio.aniway.exception.title.TitleNotFoundException;
 import com.shadowshiftstudio.aniway.exception.title.TitlesNotFoundException;
 import com.shadowshiftstudio.aniway.repository.title.TitleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
 import jakarta.persistence.criteria.Predicate;
-import java.util.stream.Collectors;
 
 @Service
 public class TitleListService {

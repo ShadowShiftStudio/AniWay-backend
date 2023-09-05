@@ -11,10 +11,7 @@ import com.shadowshiftstudio.aniway.entity.user.keys.UserTitleKey;
 import com.shadowshiftstudio.aniway.enums.ReadingStatus;
 import com.shadowshiftstudio.aniway.exception.chapter.ChapterNotFoundException;
 import com.shadowshiftstudio.aniway.exception.team.TeamNotFoundException;
-import com.shadowshiftstudio.aniway.exception.title.CategoryNotFoundException;
-import com.shadowshiftstudio.aniway.exception.title.GenreNotFoundException;
-import com.shadowshiftstudio.aniway.exception.title.TitleNotFoundException;
-import com.shadowshiftstudio.aniway.exception.title.TitlesNotFoundException;
+import com.shadowshiftstudio.aniway.exception.title.*;
 import com.shadowshiftstudio.aniway.exception.user.UserNotFoundException;
 import com.shadowshiftstudio.aniway.repository.chapter.ChapterRepository;
 import com.shadowshiftstudio.aniway.repository.team.TeamRepository;
@@ -55,20 +52,29 @@ public class TitleService {
     @Autowired
     private TeamRepository teamRepository;
 
-    public TitleDto getTitle(Long id) throws TitleNotFoundException {
-        Optional<TitleEntity> titleOptional = titleRepository.findById(id);
-        TitleEntity titleEntity;
+    public TitleDto getTitle(Long id, String username) throws TitleNotFoundException, UserNotFoundException {
+        TitleEntity title = titleRepository.findById(id).orElseThrow(() -> new TitleNotFoundException("Title not found"));
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        if (titleOptional.isPresent())
-            titleEntity = titleOptional.get();
-        else
-            throw new TitleNotFoundException("Title not found");
+        Optional<UserTitle> userTitleOptional = userTitleRepository.findByUserAndTitle(user, title);
+        if (userTitleOptional.isEmpty()) {
+            UserTitle userTitle = UserTitle
+                    .builder()
+                    .user(user)
+                    .title(title)
+                    .id(UserTitleKey
+                            .builder()
+                            .titleId(title.getId())
+                            .userId(user.getId())
+                            .build())
+                    .build();
+            titleRepository.save(title.addTitleInfo(userTitle));
+            return TitleDto.toDto(userTitle);
+        }
 
-        titleEntity.setViews(titleEntity.getViews() + 1);
-        titleRepository.save(titleEntity);
-
-        return TitleDto.toDto(titleEntity);
+        return TitleDto.toDto(userTitleOptional.get());
     }
+
     public Set<TeamCardDto> getTeams(Long titleId) throws TitleNotFoundException {
         TitleEntity title = titleRepository
                 .findById(titleId)
@@ -81,6 +87,7 @@ public class TitleService {
                 .map(TeamCardDto::toDto)
                 .collect(Collectors.toSet());
     }
+
     public String createTitle(CreateTitleRequest request) throws GenreNotFoundException, CategoryNotFoundException {
         List<Long> genresIds = request.getGenres_ids();
         List<Long> categoryIds = request.getCategory_ids();
@@ -128,11 +135,12 @@ public class TitleService {
         return "Title was successfully deleted";
     }
 
-    public List<TitleDto> getUserTitlesByReadingStatus(String username, ReadingStatus readingStatus) throws UserNotFoundException, TitlesNotFoundException {
+    public List<TitleDto> getUserTitlesByReadingStatus(String username, ReadingStatus readingStatus) throws
+            UserNotFoundException, TitlesNotFoundException {
         List<TitleDto> titles = userTitleRepository.findAllByUserAndReadingStatus(
-                userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found")),
-                readingStatus
-        )
+                        userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found")),
+                        readingStatus
+                )
                 .stream()
                 .map(UserTitle::getTitle)
                 .map(TitleDto::toDto)
@@ -145,7 +153,7 @@ public class TitleService {
     }
 
     private void addGenres(TitleEntity entity, List<Long> genresIds) throws GenreNotFoundException {
-        for(Long id : genresIds) {
+        for (Long id : genresIds) {
             entity.addGenre(genreRespository
                     .findById(id)
                     .orElseThrow(() -> new GenreNotFoundException("Genre not found"))
@@ -171,7 +179,8 @@ public class TitleService {
         return "Title was successfully rated";
     }
 
-    public String setTitleReadingStatus(SetTitleReadingStatusRequest request) throws UserNotFoundException, TitleNotFoundException {
+    public String setTitleReadingStatus(SetTitleReadingStatusRequest request) throws
+            UserNotFoundException, TitleNotFoundException {
         UserTitle userTitle = getUserTitleByUsernameAndTitle(request.getUsername(), request.getTitleId());
 
         userTitle.setReadingStatus(request.getStatus());
@@ -180,7 +189,8 @@ public class TitleService {
         return "Title was successfully added to reading category";
     }
 
-    private UserTitle getUserTitleByUsernameAndTitle(String username, Long titleId) throws UserNotFoundException, TitleNotFoundException {
+    private UserTitle getUserTitleByUsernameAndTitle(String username, Long titleId) throws
+            UserNotFoundException, TitleNotFoundException {
         UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
         TitleEntity title = titleRepository.findById(titleId).orElseThrow(() -> new TitleNotFoundException("Title not found"));
 
@@ -198,7 +208,8 @@ public class TitleService {
                         .build());
     }
 
-    public List<ChapterDto> getChapters(Long id, Long teamId) throws TitleNotFoundException, ChapterNotFoundException, TeamNotFoundException {
+    public List<ChapterDto> getChapters(Long id, Long teamId) throws
+            TitleNotFoundException, ChapterNotFoundException, TeamNotFoundException {
         List<ChapterDto> chapters = chapterRepository
                 .findAllByTitleAndTeam(
                         titleRepository.findById(id).orElseThrow(() -> new TitleNotFoundException("Title not found")),
@@ -212,6 +223,18 @@ public class TitleService {
             throw new ChapterNotFoundException("Chapters not found");
 
         return chapters;
+    }
+
+    public List<TitleCardDto> searchTitles(String name) throws NoTitlesFoundException {
+        List<TitleEntity> titles = titleRepository
+                .findAllByNameIsLikeOrOriginalNameIsLike(name, name);
+
+        if (titles.isEmpty())
+            throw new NoTitlesFoundException("No titles found");
+
+        return titles.stream()
+                .map(TitleCardDto::toDto)
+                .toList();
     }
 
     /*public List<TeamCardDto> getTeams(Long id) throws TitleNotFoundException {

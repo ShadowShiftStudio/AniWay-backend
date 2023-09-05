@@ -19,7 +19,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="chapters")
+@Table(name = "chapters")
 public class ChapterEntity {
     @Id
     @GeneratedValue
@@ -41,7 +41,7 @@ public class ChapterEntity {
     private int volume;
     private int views;
 
-    @Column(name="number_of_pages")
+    @Column(name = "number_of_pages")
     private int numberOfPages;
 
     @OneToMany(mappedBy = "commentsChapter")
@@ -58,4 +58,10 @@ public class ChapterEntity {
 
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    public ChapterEntity addUserChapter(UserChapter userChapter) {
+        chaptersInfo.add(userChapter);
+        userChapter.setChapter(this);
+        return this;
+    }
 }
